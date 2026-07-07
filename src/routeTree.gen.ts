@@ -9,38 +9,173 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProfilRouteImport } from './routes/profil'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAdminReglagesRouteImport } from './routes/_authenticated/admin.reglages'
+import { Route as AuthenticatedAdminProjetsNouveauRouteImport } from './routes/_authenticated/admin.projets.nouveau'
+import { Route as AuthenticatedAdminProjetsIdRouteImport } from './routes/_authenticated/admin.projets.$id'
 
+const ProfilRoute = ProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProjetsSlugRoute = ProjetsSlugRouteImport.update({
+  id: '/projets/$slug',
+  path: '/projets/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminReglagesRoute =
+  AuthenticatedAdminReglagesRouteImport.update({
+    id: '/reglages',
+    path: '/reglages',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminProjetsNouveauRoute =
+  AuthenticatedAdminProjetsNouveauRouteImport.update({
+    id: '/projets/nouveau',
+    path: '/projets/nouveau',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminProjetsIdRoute =
+  AuthenticatedAdminProjetsIdRouteImport.update({
+    id: '/projets/$id',
+    path: '/projets/$id',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/profil': typeof ProfilRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/projets/$slug': typeof ProjetsSlugRoute
+  '/admin/reglages': typeof AuthenticatedAdminReglagesRoute
+  '/admin/projets/$id': typeof AuthenticatedAdminProjetsIdRoute
+  '/admin/projets/nouveau': typeof AuthenticatedAdminProjetsNouveauRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/profil': typeof ProfilRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/projets/$slug': typeof ProjetsSlugRoute
+  '/admin/reglages': typeof AuthenticatedAdminReglagesRoute
+  '/admin/projets/$id': typeof AuthenticatedAdminProjetsIdRoute
+  '/admin/projets/nouveau': typeof AuthenticatedAdminProjetsNouveauRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRouteWithChildren
+  '/profil': typeof ProfilRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/projets/$slug': typeof ProjetsSlugRoute
+  '/_authenticated/admin/reglages': typeof AuthenticatedAdminReglagesRoute
+  '/_authenticated/admin/projets/$id': typeof AuthenticatedAdminProjetsIdRoute
+  '/_authenticated/admin/projets/nouveau': typeof AuthenticatedAdminProjetsNouveauRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/profil'
+    | '/admin'
+    | '/auth/reset-password'
+    | '/projets/$slug'
+    | '/admin/reglages'
+    | '/admin/projets/$id'
+    | '/admin/projets/nouveau'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/profil'
+    | '/admin'
+    | '/auth/reset-password'
+    | '/projets/$slug'
+    | '/admin/reglages'
+    | '/admin/projets/$id'
+    | '/admin/projets/nouveau'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/profil'
+    | '/_authenticated/admin'
+    | '/auth/reset-password'
+    | '/projets/$slug'
+    | '/_authenticated/admin/reglages'
+    | '/_authenticated/admin/projets/$id'
+    | '/_authenticated/admin/projets/nouveau'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRouteWithChildren
+  ProfilRoute: typeof ProfilRoute
+  ProjetsSlugRoute: typeof ProjetsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/profil': {
+      id: '/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof ProfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +183,94 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/projets/$slug': {
+      id: '/projets/$slug'
+      path: '/projets/$slug'
+      fullPath: '/projets/$slug'
+      preLoaderRoute: typeof ProjetsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/reglages': {
+      id: '/_authenticated/admin/reglages'
+      path: '/reglages'
+      fullPath: '/admin/reglages'
+      preLoaderRoute: typeof AuthenticatedAdminReglagesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/projets/nouveau': {
+      id: '/_authenticated/admin/projets/nouveau'
+      path: '/projets/nouveau'
+      fullPath: '/admin/projets/nouveau'
+      preLoaderRoute: typeof AuthenticatedAdminProjetsNouveauRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/projets/$id': {
+      id: '/_authenticated/admin/projets/$id'
+      path: '/projets/$id'
+      fullPath: '/admin/projets/$id'
+      preLoaderRoute: typeof AuthenticatedAdminProjetsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminReglagesRoute: typeof AuthenticatedAdminReglagesRoute
+  AuthenticatedAdminProjetsIdRoute: typeof AuthenticatedAdminProjetsIdRoute
+  AuthenticatedAdminProjetsNouveauRoute: typeof AuthenticatedAdminProjetsNouveauRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminReglagesRoute: AuthenticatedAdminReglagesRoute,
+  AuthenticatedAdminProjetsIdRoute: AuthenticatedAdminProjetsIdRoute,
+  AuthenticatedAdminProjetsNouveauRoute: AuthenticatedAdminProjetsNouveauRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+interface AuthRouteChildren {
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRouteWithChildren,
+  ProfilRoute: ProfilRoute,
+  ProjetsSlugRoute: ProjetsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

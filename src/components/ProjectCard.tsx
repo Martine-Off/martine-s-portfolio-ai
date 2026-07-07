@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { resolveAccentColor } from "@/lib/utils/status";
+
 
 export interface ProjectCardData {
   id: string;
@@ -8,8 +10,9 @@ export interface ProjectCardData {
   tagline: string | null;
   project_type: string;
   status_label: string | null;
-  accent_color: string;
+  accent_color: string | null;
   cover_image_url: string | null;
+
   cover_image_alt_text: string | null;
   cover_image_position: string;
   tags: string[];
@@ -22,8 +25,9 @@ interface Props {
 }
 
 export function ProjectCard({ project, variant = "grid", linkable = true }: Props) {
-  const accent = project.accent_color || "#65BFF1";
+  const accent = resolveAccentColor(project.accent_color, project.status_label);
   const hasImage = !!project.cover_image_url;
+
 
   const inner = (
     <article

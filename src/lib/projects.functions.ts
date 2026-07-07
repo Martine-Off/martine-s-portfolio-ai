@@ -112,7 +112,7 @@ const projectSchema = z.object({
   tagline: z.string().nullable().optional(),
   project_type: z.enum(["poc_perso", "production_client", "formation_donnees", "mission_courte", "profil"]),
   status_label: z.string().nullable().optional(),
-  accent_color: z.string().default("#65BFF1"),
+  accent_color: z.string().nullable().optional(),
   cover_image_url: z.string().nullable().optional(),
   cover_image_alt_text: z.string().nullable().optional(),
   cover_image_position: z.string().default("center"),
@@ -126,7 +126,7 @@ const projectSchema = z.object({
 
 const blockSchema = z.object({
   id: z.string().uuid().optional().nullable(),
-  block_type: z.enum(["text", "video", "image", "quote", "heading"]),
+  block_type: z.enum(["text", "video", "image", "quote", "heading", "liste", "comparatif"]),
   content: z.string().nullable().optional(),
   media_url: z.string().nullable().optional(),
   alt_text: z.string().nullable().optional(),
@@ -174,7 +174,7 @@ export const saveProject = createServerFn({ method: "POST" })
       tagline: project.tagline ?? null,
       project_type: project.project_type,
       status_label: project.status_label ?? null,
-      accent_color: project.accent_color || "#65BFF1",
+      accent_color: project.accent_color && project.accent_color.trim() ? project.accent_color : null,
       cover_image_url: project.cover_image_url ?? null,
       cover_image_alt_text: project.cover_image_alt_text ?? null,
       cover_image_position: project.cover_image_position || "center",

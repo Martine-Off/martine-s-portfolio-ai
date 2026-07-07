@@ -3,20 +3,25 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { getProjectByIdAdmin, saveProject } from "@/lib/projects.functions";
 import { toast } from "sonner";
+import { ImageUpload } from "@/components/ImageUpload";
+import { STATUS_OPTIONS, resolveAccentColor } from "@/lib/utils/status";
 
 export const Route = createFileRoute("/_authenticated/admin/projets/$id")({
   component: EditProject,
 });
 
+type BlockType = "text" | "video" | "image" | "quote" | "heading" | "liste" | "comparatif";
 type Block = {
   id?: string;
-  block_type: "text" | "video" | "image" | "quote" | "heading";
+  block_type: BlockType;
   content: string | null;
   media_url: string | null;
   alt_text: string | null;
   caption: string | null;
   display_order: number;
 };
+
+type Category = { label: string; items: string[] };
 
 function EditProject() {
   const { id } = useParams({ from: "/_authenticated/admin/projets/$id" });
@@ -34,7 +39,7 @@ function EditProject() {
     tagline: "",
     project_type: "poc_perso",
     status_label: "",
-    accent_color: "#65BFF1",
+    accent_color: "",
     cover_image_url: "",
     cover_image_alt_text: "",
     cover_image_position: "center",
@@ -46,6 +51,7 @@ function EditProject() {
   });
   const [tagsStr, setTagsStr] = useState("");
   const [blocks, setBlocks] = useState<Block[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     if (isNew) return;
@@ -55,16 +61,19 @@ function EditProject() {
           ...res.project,
           tagline: res.project.tagline ?? "",
           status_label: res.project.status_label ?? "",
+          accent_color: res.project.accent_color ?? "",
           cover_image_url: res.project.cover_image_url ?? "",
           cover_image_alt_text: res.project.cover_image_alt_text ?? "",
           summary: res.project.summary ?? "",
           external_url: res.project.external_url ?? "",
         });
         setTagsStr(res.project.tags.join(", "));
+        const cats = (res.project.tags_categorises as Category[] | null) ?? [];
+        setCategories(Array.isArray(cats) ? cats : []);
         setBlocks(
           res.blocks.map((b) => ({
             id: b.id,
-            block_type: b.block_type as Block["block_type"],
+            block_type: b.block_type as BlockType,
             content: b.content,
             media_url: b.media_url,
             alt_text: b.alt_text,
@@ -84,7 +93,11 @@ function EditProject() {
       const tags = tagsStr.split(",").map((t) => t.trim()).filter(Boolean);
       const res = await save({
         data: {
-          project: { ...form, tags },
+          project: {
+            ...form,
+            tags,
+            tags_categorises: form.project_type === "profil" ? categories : null,
+          },
           blocks: blocks.map((b, i) => ({ ...b, display_order: i })),
         },
       });
@@ -97,12 +110,18 @@ function EditProject() {
     }
   }
 
-  function addBlock(type: Block["block_type"]) {
+  function addBlock(type: BlockType) {
+    const defaults: Partial<Block> = {};
+    if (type === "comparatif") defaults.content = "Colonne A: point 1, point 2 || Colonne B: point 3, point 4";
+    if (type === "liste") defaults.content = "Premier item\nDeuxième item";
     setBlocks([
       ...blocks,
-      { block_type: type, content: "", media_url: "", alt_text: "", caption: "", display_order: blocks.length },
+      { block_type: type, content: defaults.content ?? "", media_url: "", alt_text: "", caption: "", display_order: blocks.length },
     ]);
   }
+
+  const previewAccent = resolveAccentColor(form.accent_color, form.status_label);
+  const isAutoAccent = !form.accent_color;
 
   if (loading) return <div className="p-8">Chargement…</div>;
 
@@ -134,17 +153,42 @@ function EditProject() {
             <option value="profil">Profil</option>
           </select>
         </Field>
-        <Field label="Statut (badge)">
-          <input value={form.status_label} onChange={(e) => setForm({ ...form, status_label: e.target.value })} className={inputCls} placeholder="Livré, En cours…" />
+        <Field label="Statut">
+          <select value={form.status_label} onChange={(e) => setForm({ ...form, status_label: e.target.value })} className={inputCls}>
+            <option value="">— Aucun —</option>
+            {STATUS_OPTIONS.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
         </Field>
-        <Field label="Couleur d'accent (hex)">
-          <div className="flex gap-2">
-            <input type="color" value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className="h-10 w-16" />
-            <input value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className={inputCls} />
+        <Field label="Couleur d'accent">
+          <div className="flex items-center gap-2">
+            <input type="color" value={previewAccent} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className="h-10 w-16" />
+            <input value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className={inputCls} placeholder="(auto d'après le statut)" />
+            <button
+              type="button"
+              onClick={() => setForm({ ...form, accent_color: "" })}
+              className="whitespace-nowrap rounded-md border border-border px-3 py-2 text-xs hover:bg-muted"
+            >
+              Réinitialiser
+            </button>
+          </div>
+          <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+            <span
+              className="inline-flex items-center rounded-full px-3 py-1 font-medium"
+              style={{ backgroundColor: `${previewAccent}22`, color: previewAccent }}
+            >
+              {form.status_label || "Aperçu"}
+            </span>
+            <span>{isAutoAccent ? "Couleur dérivée automatiquement du statut" : "Couleur personnalisée"}</span>
           </div>
         </Field>
-        <Field label="URL image de couverture">
-          <input value={form.cover_image_url} onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })} className={inputCls} />
+        <Field label="Image de couverture">
+          <ImageUpload
+            value={form.cover_image_url}
+            onChange={(url) => setForm({ ...form, cover_image_url: url })}
+            pathPrefix="covers"
+          />
         </Field>
         <Field label="Texte alternatif de l'image">
           <input value={form.cover_image_alt_text} onChange={(e) => setForm({ ...form, cover_image_alt_text: e.target.value })} className={inputCls} />
@@ -169,10 +213,64 @@ function EditProject() {
           <span className="text-sm text-foreground">Publié</span>
         </label>
 
+        {form.project_type === "profil" && (
+          <div className="mt-8 rounded-md border border-border bg-card p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="font-serif text-xl font-bold text-foreground">Tags catégorisés</h2>
+              <button
+                type="button"
+                onClick={() => setCategories([...categories, { label: "Nouvelle catégorie", items: [] }])}
+                className="rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted"
+              >
+                + Catégorie
+              </button>
+            </div>
+            <div className="space-y-3">
+              {categories.map((cat, ci) => (
+                <div key={ci} className="rounded border border-border bg-background p-3">
+                  <div className="mb-2 flex items-center gap-2">
+                    <input
+                      value={cat.label}
+                      onChange={(e) => {
+                        const c = [...categories];
+                        c[ci] = { ...c[ci], label: e.target.value };
+                        setCategories(c);
+                      }}
+                      placeholder="Nom de la catégorie"
+                      className={inputCls}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setCategories(categories.filter((_, i) => i !== ci))}
+                      className="rounded border border-border px-2 py-1 text-xs text-destructive"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <input
+                    value={cat.items.join(", ")}
+                    onChange={(e) => {
+                      const items = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
+                      const c = [...categories];
+                      c[ci] = { ...c[ci], items };
+                      setCategories(c);
+                    }}
+                    placeholder="Tag 1, Tag 2, Tag 3"
+                    className={inputCls}
+                  />
+                </div>
+              ))}
+              {categories.length === 0 && (
+                <p className="text-sm text-muted-foreground">Aucune catégorie. Ajoutez-en une.</p>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="mt-8">
           <h2 className="mb-3 font-serif text-xl font-bold text-foreground">Blocs de contenu</h2>
-          <div className="mb-3 flex gap-2">
-            {(["heading", "text", "quote", "image", "video"] as const).map((t) => (
+          <div className="mb-3 flex flex-wrap gap-2">
+            {(["heading", "text", "quote", "liste", "comparatif", "image", "video"] as const).map((t) => (
               <button key={t} type="button" onClick={() => addBlock(t)} className="rounded-md border border-border bg-card px-3 py-1.5 text-xs hover:bg-muted">
                 + {t}
               </button>
@@ -196,9 +294,34 @@ function EditProject() {
                 {(b.block_type === "text" || b.block_type === "quote" || b.block_type === "heading") && (
                   <textarea rows={b.block_type === "heading" ? 1 : 3} value={b.content ?? ""} onChange={(e) => { const c = [...blocks]; c[i].content = e.target.value; setBlocks(c); }} className={inputCls} />
                 )}
-                {(b.block_type === "image" || b.block_type === "video") && (
+                {b.block_type === "liste" && (
                   <>
-                    <input placeholder="URL" value={b.media_url ?? ""} onChange={(e) => { const c = [...blocks]; c[i].media_url = e.target.value; setBlocks(c); }} className={`${inputCls} mb-2`} />
+                    <p className="mb-1 text-xs text-muted-foreground">Un item par ligne.</p>
+                    <textarea rows={4} value={b.content ?? ""} onChange={(e) => { const c = [...blocks]; c[i].content = e.target.value; setBlocks(c); }} className={inputCls} />
+                  </>
+                )}
+                {b.block_type === "comparatif" && (
+                  <>
+                    <p className="mb-1 text-xs text-muted-foreground">
+                      Format : <code>Colonne A: point 1, point 2 || Colonne B: point 3, point 4</code>
+                    </p>
+                    <textarea rows={3} value={b.content ?? ""} onChange={(e) => { const c = [...blocks]; c[i].content = e.target.value; setBlocks(c); }} className={inputCls} />
+                  </>
+                )}
+                {b.block_type === "image" && (
+                  <>
+                    <ImageUpload
+                      value={b.media_url}
+                      onChange={(url) => { const c = [...blocks]; c[i].media_url = url; setBlocks(c); }}
+                      pathPrefix="blocks"
+                    />
+                    <input placeholder="Texte alternatif" value={b.alt_text ?? ""} onChange={(e) => { const c = [...blocks]; c[i].alt_text = e.target.value; setBlocks(c); }} className={`${inputCls} mb-2 mt-2`} />
+                    <input placeholder="Légende" value={b.caption ?? ""} onChange={(e) => { const c = [...blocks]; c[i].caption = e.target.value; setBlocks(c); }} className={inputCls} />
+                  </>
+                )}
+                {b.block_type === "video" && (
+                  <>
+                    <input placeholder="URL vidéo (YouTube, Loom, Arcade)" value={b.media_url ?? ""} onChange={(e) => { const c = [...blocks]; c[i].media_url = e.target.value; setBlocks(c); }} className={`${inputCls} mb-2`} />
                     <input placeholder="Texte alternatif" value={b.alt_text ?? ""} onChange={(e) => { const c = [...blocks]; c[i].alt_text = e.target.value; setBlocks(c); }} className={`${inputCls} mb-2`} />
                     <input placeholder="Légende" value={b.caption ?? ""} onChange={(e) => { const c = [...blocks]; c[i].caption = e.target.value; setBlocks(c); }} className={inputCls} />
                   </>

@@ -37,6 +37,20 @@ function AuthPage() {
     toast.success("Email de réinitialisation envoyé");
   }
 
+  async function signInWithGoogle() {
+    setBusy(true);
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      setBusy(false);
+      return toast.error(result.error.message ?? "Erreur de connexion Google");
+    }
+    if (result.redirected) return;
+    toast.success("Connecté");
+    navigate({ to: "/admin" });
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-lg border border-border bg-card p-8">

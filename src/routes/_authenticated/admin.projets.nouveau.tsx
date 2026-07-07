@@ -25,7 +25,7 @@ function NewProject() {
           project: {
             title,
             project_type: type as any,
-            accent_color: "#65BFF1",
+            accent_color: null,
             cover_image_position: "center",
             tags: [],
             published: false,

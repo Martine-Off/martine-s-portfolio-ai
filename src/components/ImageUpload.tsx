@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { createSignedUpload, getSignedReadUrl } from "@/lib/projects.functions";
+import { createSignedUpload } from "@/lib/projects.functions";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 interface Props {
@@ -16,7 +17,6 @@ export function ImageUpload({ value, onChange, pathPrefix = "uploads", label = "
   const [busy, setBusy] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const createUpload = useServerFn(createSignedUpload);
-  const readUrl = useServerFn(getSignedReadUrl);
 
   async function upload(file: File) {
     if (!file.type.startsWith("image/")) {
@@ -34,8 +34,8 @@ export function ImageUpload({ value, onChange, pathPrefix = "uploads", label = "
         body: file,
       });
       if (!res.ok) throw new Error("Échec de l'upload");
-      const read = await readUrl({ data: { path } });
-      onChange(read.signedUrl);
+      const { data } = supabase.storage.from("project-images").getPublicUrl(path);
+      onChange(data.publicUrl);
       toast.success("Image téléversée");
     } catch (err: any) {
       toast.error(err.message || "Erreur d'upload");
@@ -43,6 +43,7 @@ export function ImageUpload({ value, onChange, pathPrefix = "uploads", label = "
       setBusy(false);
     }
   }
+
 
   return (
     <div

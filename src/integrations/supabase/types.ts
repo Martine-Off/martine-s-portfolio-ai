@@ -25,6 +25,7 @@ export type Database = {
           id: string
           media_url: string | null
           project_id: string
+          title: string | null
           updated_at: string
         }
         Insert: {
@@ -37,6 +38,7 @@ export type Database = {
           id?: string
           media_url?: string | null
           project_id: string
+          title?: string | null
           updated_at?: string
         }
         Update: {
@@ -49,6 +51,7 @@ export type Database = {
           id?: string
           media_url?: string | null
           project_id?: string
+          title?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -64,6 +67,7 @@ export type Database = {
       projects: {
         Row: {
           accent_color: string | null
+          angle: string | null
           cover_image_alt_text: string | null
           cover_image_position: string
           cover_image_url: string | null
@@ -90,6 +94,7 @@ export type Database = {
         }
         Insert: {
           accent_color?: string | null
+          angle?: string | null
           cover_image_alt_text?: string | null
           cover_image_position?: string
           cover_image_url?: string | null
@@ -116,6 +121,7 @@ export type Database = {
         }
         Update: {
           accent_color?: string | null
+          angle?: string | null
           cover_image_alt_text?: string | null
           cover_image_position?: string
           cover_image_url?: string | null

@@ -345,6 +345,7 @@ function EditProject() {
           </>
         )}
 
+        {!isLight && (
         <div className="mt-8">
           <h2 className="mb-3 font-serif text-xl font-bold text-foreground">Blocs de contenu</h2>
           <div className="mb-3 flex flex-wrap gap-2">

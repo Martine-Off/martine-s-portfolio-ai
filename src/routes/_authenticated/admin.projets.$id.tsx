@@ -91,6 +91,7 @@ function EditProject() {
           photo_profil_alt_text: res.project.photo_profil_alt_text ?? "",
           role: res.project.role ?? "",
           impact: res.project.impact ?? "",
+          angle: (res.project as { angle?: string | null }).angle ?? "",
         });
         setTagsStr(res.project.tags.join(", "));
         const cats = (res.project.tags_categorises as Category[] | null) ?? [];

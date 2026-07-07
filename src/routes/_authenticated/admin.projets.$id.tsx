@@ -38,6 +38,7 @@ function EditProject() {
   const [form, setForm] = useState<any>({
     id: null,
     title: "",
+    emoji: "",
     slug: "",
     tagline: "",
     project_type: "poc_perso",

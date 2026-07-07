@@ -180,6 +180,9 @@ function EditProject() {
             </select>
           </Field>
         )}
+        <Field label="Rôle">
+          <input value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className={inputCls} placeholder="ex. Formatrice, Bénévole, Product Owner" />
+        </Field>
         <Field label="Statut">
           <select value={form.status_label} onChange={(e) => setForm({ ...form, status_label: e.target.value })} className={inputCls}>
             <option value="">— Aucun —</option>
@@ -188,53 +191,66 @@ function EditProject() {
             ))}
           </select>
         </Field>
-        <Field label="Couleur d'accent">
-          <div className="flex items-center gap-2">
-            <input type="color" value={previewAccent} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className="h-10 w-16" />
-            <input value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className={inputCls} placeholder="(auto d'après le statut)" />
-            <button
-              type="button"
-              onClick={() => setForm({ ...form, accent_color: "" })}
-              className="whitespace-nowrap rounded-md border border-border px-3 py-2 text-xs hover:bg-muted"
-            >
-              Réinitialiser
-            </button>
-          </div>
-          <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-            <span
-              className="inline-flex items-center rounded-full px-3 py-1 font-medium"
-              style={{ backgroundColor: `${previewAccent}22`, color: previewAccent }}
-            >
-              {form.status_label || "Aperçu"}
-            </span>
-            <span>{isAutoAccent ? "Couleur dérivée automatiquement du statut" : "Couleur personnalisée"}</span>
-          </div>
-        </Field>
-        <Field label="Image de couverture">
-          <ImageUpload
-            value={form.cover_image_url}
-            onChange={(url) => setForm({ ...form, cover_image_url: url })}
-            pathPrefix="covers"
-          />
-        </Field>
-        <Field label="Texte alternatif de l'image">
-          <input value={form.cover_image_alt_text} onChange={(e) => setForm({ ...form, cover_image_alt_text: e.target.value })} className={inputCls} />
-        </Field>
-        <Field label="Position de l'image (ex. center, top left)">
-          <input value={form.cover_image_position} onChange={(e) => setForm({ ...form, cover_image_position: e.target.value })} className={inputCls} />
-        </Field>
-        <Field label="Tags (séparés par des virgules)">
+        {!isLight && (
+          <Field label="Couleur d'accent">
+            <div className="flex items-center gap-2">
+              <input type="color" value={previewAccent} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className="h-10 w-16" />
+              <input value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className={inputCls} placeholder="(auto d'après le statut)" />
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, accent_color: "" })}
+                className="whitespace-nowrap rounded-md border border-border px-3 py-2 text-xs hover:bg-muted"
+              >
+                Réinitialiser
+              </button>
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+              <span
+                className="inline-flex items-center rounded-full px-3 py-1 font-medium"
+                style={{ backgroundColor: `${previewAccent}22`, color: previewAccent }}
+              >
+                {form.status_label || "Aperçu"}
+              </span>
+              <span>{isAutoAccent ? "Couleur dérivée automatiquement du statut" : "Couleur personnalisée"}</span>
+            </div>
+          </Field>
+        )}
+        {!isLight && (
+          <>
+            <Field label="Image de couverture">
+              <ImageUpload
+                value={form.cover_image_url}
+                onChange={(url) => setForm({ ...form, cover_image_url: url })}
+                pathPrefix="covers"
+              />
+            </Field>
+            <Field label="Texte alternatif de l'image">
+              <input value={form.cover_image_alt_text} onChange={(e) => setForm({ ...form, cover_image_alt_text: e.target.value })} className={inputCls} />
+            </Field>
+            <Field label="Position de l'image (ex. center, top left)">
+              <input value={form.cover_image_position} onChange={(e) => setForm({ ...form, cover_image_position: e.target.value })} className={inputCls} />
+            </Field>
+          </>
+        )}
+        <Field label={isLight ? "Stack (tags séparés par des virgules)" : "Tags (séparés par des virgules)"}>
           <input value={tagsStr} onChange={(e) => setTagsStr(e.target.value)} className={inputCls} placeholder="IA, n8n, Automatisation" />
         </Field>
-        <Field label="Résumé">
-          <textarea rows={3} value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} className={inputCls} />
+        <Field label="Impact">
+          <textarea rows={2} value={form.impact} onChange={(e) => setForm({ ...form, impact: e.target.value })} className={inputCls} placeholder="ex. 30 apprenants formés, +40% de conversion" />
         </Field>
-        <Field label="Lien vers le dépôt (GitHub, Gamma, etc.)">
-          <input value={form.repo_url} onChange={(e) => setForm({ ...form, repo_url: e.target.value })} className={inputCls} placeholder="https://…" />
-        </Field>
-        <Field label="Note si pas de lien">
-          <input value={form.repo_note} onChange={(e) => setForm({ ...form, repo_note: e.target.value })} className={inputCls} placeholder="Anonymisé, dossier disponible sur demande" />
-        </Field>
+        {!isLight && (
+          <>
+            <Field label="Résumé">
+              <textarea rows={3} value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} className={inputCls} />
+            </Field>
+            <Field label="Lien vers le dépôt (GitHub, Gamma, etc.)">
+              <input value={form.repo_url} onChange={(e) => setForm({ ...form, repo_url: e.target.value })} className={inputCls} placeholder="https://…" />
+            </Field>
+            <Field label="Note si pas de lien">
+              <input value={form.repo_note} onChange={(e) => setForm({ ...form, repo_note: e.target.value })} className={inputCls} placeholder="Anonymisé, dossier disponible sur demande" />
+            </Field>
+          </>
+        )}
         <Field label="Ordre d'affichage">
           <input type="number" value={form.display_order} onChange={(e) => setForm({ ...form, display_order: Number(e.target.value) })} className={inputCls} />
         </Field>

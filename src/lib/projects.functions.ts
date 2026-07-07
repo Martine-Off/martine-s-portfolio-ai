@@ -85,6 +85,23 @@ export const listAllProjects = createServerFn({ method: "GET" })
     return data ?? [];
   });
 
+export const listStatusLabels = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { data, error } = await context.supabase
+      .from("projects")
+      .select("status_label")
+      .not("status_label", "is", null);
+    if (error) throw new Error(error.message);
+    const set = new Set<string>();
+    for (const row of data ?? []) {
+      const v = (row.status_label ?? "").trim();
+      if (v) set.add(v);
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b, "fr"));
+  });
+
 export const getProjectByIdAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ id: z.string() }).parse(data))

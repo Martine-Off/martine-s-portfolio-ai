@@ -1,21 +1,10 @@
 import { createFileRoute, useNavigate, useParams, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { getProjectByIdAdmin, saveProject } from "@/lib/projects.functions";
+import { getProjectByIdAdmin, saveProject, listStatusLabels } from "@/lib/projects.functions";
 import { toast } from "sonner";
 import { ImageUpload } from "@/components/ImageUpload";
 import { resolveAccentColor } from "@/lib/utils/status";
-
-const STATUS_SUGGESTIONS = [
-  "Terminé",
-  "Déployé",
-  "MVP",
-  "En production",
-  "En cours",
-  "POC",
-  "Faite",
-  "Produit",
-];
 
 export const Route = createFileRoute("/_authenticated/admin/projets/$id")({
   component: EditProject,
@@ -41,6 +30,8 @@ function EditProject() {
   const isNew = id === "nouveau";
   const fetchProj = useServerFn(getProjectByIdAdmin);
   const save = useServerFn(saveProject);
+  const fetchStatuses = useServerFn(listStatusLabels);
+  const [statusSuggestions, setStatusSuggestions] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(!isNew);
   const [busy, setBusy] = useState(false);
@@ -71,6 +62,10 @@ function EditProject() {
   const [tagsStr, setTagsStr] = useState("");
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    fetchStatuses().then((list) => setStatusSuggestions(list ?? [])).catch(() => {});
+  }, [fetchStatuses]);
 
   useEffect(() => {
     if (isNew) return;
@@ -210,7 +205,7 @@ function EditProject() {
             placeholder="Libre — ex. POC validé, MVP en déploiement, Faite"
           />
           <datalist id="status-suggestions">
-            {STATUS_SUGGESTIONS.map((s) => (
+            {statusSuggestions.map((s: string) => (
               <option key={s} value={s} />
             ))}
           </datalist>

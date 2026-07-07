@@ -214,6 +214,7 @@ export const saveProject = createServerFn({ method: "POST" })
       role: project.role ?? null,
       impact: project.impact ?? null,
       angle: project.angle ?? null,
+      emoji: project.emoji && project.emoji.trim() ? project.emoji.trim() : null,
       published: project.published,
       display_order: project.display_order,
     };

@@ -227,6 +227,7 @@ export const saveProject = createServerFn({ method: "POST" })
       const rows = blocks.map((b, i) => ({
         project_id: projectId!,
         block_type: b.block_type,
+        title: b.title ?? null,
         content: b.content ?? null,
         media_url: b.media_url ?? null,
         alt_text: b.alt_text ?? null,

@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   listAllProjects,
   deleteProject,
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 function AdminPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const fetchList = useServerFn(listAllProjects);
   const fetchAdmin = useServerFn(checkIsAdmin);
   const del = useServerFn(deleteProject);
@@ -30,8 +31,10 @@ function AdminPage() {
   });
 
   async function signOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
     await supabase.auth.signOut();
-    router.navigate({ to: "/" });
+    router.navigate({ to: "/", replace: true });
   }
 
   if (adminQ.isLoading) return <div className="p-8">Chargement…</div>;

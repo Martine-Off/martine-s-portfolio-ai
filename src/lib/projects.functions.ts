@@ -110,7 +110,8 @@ const projectSchema = z.object({
   title: z.string().min(1),
   slug: z.string().optional(),
   tagline: z.string().nullable().optional(),
-  project_type: z.enum(["poc_perso", "production_client", "formation_donnees", "mission_courte", "profil"]),
+  project_type: z.enum(["poc_perso", "production_client", "poc_ecole", "formation_mission", "profil"]),
+  mission_type: z.enum(["formation", "mission", "benevolat"]).nullable().optional(),
   status_label: z.string().nullable().optional(),
   accent_color: z.string().nullable().optional(),
   cover_image_url: z.string().nullable().optional(),
@@ -119,7 +120,10 @@ const projectSchema = z.object({
   tags: z.array(z.string()).default([]),
   tags_categorises: z.any().nullable().optional(),
   summary: z.string().nullable().optional(),
-  external_url: z.string().nullable().optional(),
+  repo_url: z.string().nullable().optional(),
+  repo_note: z.string().nullable().optional(),
+  photo_profil_url: z.string().nullable().optional(),
+  photo_profil_alt_text: z.string().nullable().optional(),
   published: z.boolean().default(false),
   display_order: z.number().default(0),
 });
@@ -141,7 +145,6 @@ async function ensureUniqueSlug(
 ): Promise<string> {
   let candidate = base;
   let n = 2;
-  // Loop until unique
   while (true) {
     const query = supabase.from("projects").select("id").eq("slug", candidate).limit(1);
     const { data } = await query;
@@ -173,6 +176,7 @@ export const saveProject = createServerFn({ method: "POST" })
       slug,
       tagline: project.tagline ?? null,
       project_type: project.project_type,
+      mission_type: project.project_type === "formation_mission" ? (project.mission_type ?? null) : null,
       status_label: project.status_label ?? null,
       accent_color: project.accent_color && project.accent_color.trim() ? project.accent_color : null,
       cover_image_url: project.cover_image_url ?? null,
@@ -181,7 +185,10 @@ export const saveProject = createServerFn({ method: "POST" })
       tags: project.tags,
       tags_categorises: project.tags_categorises ?? null,
       summary: project.summary ?? null,
-      external_url: project.external_url ?? null,
+      repo_url: project.repo_url ?? null,
+      repo_note: project.repo_note ?? null,
+      photo_profil_url: project.project_type === "profil" ? (project.photo_profil_url ?? null) : null,
+      photo_profil_alt_text: project.project_type === "profil" ? (project.photo_profil_alt_text ?? null) : null,
       published: project.published,
       display_order: project.display_order,
     };
@@ -208,7 +215,6 @@ export const saveProject = createServerFn({ method: "POST" })
       projectId = inserted.id;
     }
 
-    // Replace blocks
     await context.supabase.from("project_blocks").delete().eq("project_id", projectId!);
     if (blocks.length > 0) {
       const rows = blocks.map((b, i) => ({
@@ -267,7 +273,6 @@ export const reorderProject = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-// Signed upload URL & signed read URL for storage
 export const createSignedUpload = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ path: z.string() }).parse(data))
@@ -279,9 +284,6 @@ export const createSignedUpload = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return signed;
   });
-
-// Public bucket: read URLs are computed client-side with getPublicUrl().
-
 
 export const checkIsAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])

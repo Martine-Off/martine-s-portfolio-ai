@@ -38,6 +38,7 @@ function EditProject() {
     slug: "",
     tagline: "",
     project_type: "poc_perso",
+    mission_type: "",
     status_label: "",
     accent_color: "",
     cover_image_url: "",
@@ -45,7 +46,10 @@ function EditProject() {
     cover_image_position: "center",
     tags: [] as string[],
     summary: "",
-    external_url: "",
+    repo_url: "",
+    repo_note: "",
+    photo_profil_url: "",
+    photo_profil_alt_text: "",
     published: false,
     display_order: 0,
   });
@@ -60,12 +64,16 @@ function EditProject() {
         setForm({
           ...res.project,
           tagline: res.project.tagline ?? "",
+          mission_type: res.project.mission_type ?? "",
           status_label: res.project.status_label ?? "",
           accent_color: res.project.accent_color ?? "",
           cover_image_url: res.project.cover_image_url ?? "",
           cover_image_alt_text: res.project.cover_image_alt_text ?? "",
           summary: res.project.summary ?? "",
-          external_url: res.project.external_url ?? "",
+          repo_url: res.project.repo_url ?? "",
+          repo_note: res.project.repo_note ?? "",
+          photo_profil_url: res.project.photo_profil_url ?? "",
+          photo_profil_alt_text: res.project.photo_profil_alt_text ?? "",
         });
         setTagsStr(res.project.tags.join(", "));
         const cats = (res.project.tags_categorises as Category[] | null) ?? [];
@@ -96,6 +104,10 @@ function EditProject() {
           project: {
             ...form,
             tags,
+            mission_type:
+              form.project_type === "formation_mission" && form.mission_type
+                ? form.mission_type
+                : null,
             tags_categorises: form.project_type === "profil" ? categories : null,
           },
           blocks: blocks.map((b, i) => ({ ...b, display_order: i })),
@@ -146,13 +158,23 @@ function EditProject() {
         </Field>
         <Field label="Type">
           <select value={form.project_type} onChange={(e) => setForm({ ...form, project_type: e.target.value })} className={inputCls}>
-            <option value="poc_perso">POC personnel</option>
-            <option value="production_client">Production client</option>
-            <option value="formation_donnees">Formation donnée</option>
-            <option value="mission_courte">Mission courte</option>
+            <option value="poc_perso">Projet personnel (POC)</option>
+            <option value="production_client">Projet client</option>
+            <option value="poc_ecole">Projet réalisé en formation (POC école)</option>
+            <option value="formation_mission">Formation, mission ou bénévolat</option>
             <option value="profil">Profil</option>
           </select>
         </Field>
+        {form.project_type === "formation_mission" && (
+          <Field label="Sous-type">
+            <select value={form.mission_type} onChange={(e) => setForm({ ...form, mission_type: e.target.value })} className={inputCls}>
+              <option value="">— Sélectionner —</option>
+              <option value="formation">Formation donnée</option>
+              <option value="mission">Mission courte</option>
+              <option value="benevolat">Bénévolat</option>
+            </select>
+          </Field>
+        )}
         <Field label="Statut">
           <select value={form.status_label} onChange={(e) => setForm({ ...form, status_label: e.target.value })} className={inputCls}>
             <option value="">— Aucun —</option>
@@ -202,8 +224,11 @@ function EditProject() {
         <Field label="Résumé">
           <textarea rows={3} value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} className={inputCls} />
         </Field>
-        <Field label="URL externe">
-          <input value={form.external_url} onChange={(e) => setForm({ ...form, external_url: e.target.value })} className={inputCls} />
+        <Field label="Lien vers le dépôt (GitHub, Gamma, etc.)">
+          <input value={form.repo_url} onChange={(e) => setForm({ ...form, repo_url: e.target.value })} className={inputCls} placeholder="https://…" />
+        </Field>
+        <Field label="Note si pas de lien">
+          <input value={form.repo_note} onChange={(e) => setForm({ ...form, repo_note: e.target.value })} className={inputCls} placeholder="Anonymisé, dossier disponible sur demande" />
         </Field>
         <Field label="Ordre d'affichage">
           <input type="number" value={form.display_order} onChange={(e) => setForm({ ...form, display_order: Number(e.target.value) })} className={inputCls} />
@@ -214,57 +239,89 @@ function EditProject() {
         </label>
 
         {form.project_type === "profil" && (
-          <div className="mt-8 rounded-md border border-border bg-card p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="font-serif text-xl font-bold text-foreground">Tags catégorisés</h2>
-              <button
-                type="button"
-                onClick={() => setCategories([...categories, { label: "Nouvelle catégorie", items: [] }])}
-                className="rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted"
-              >
-                + Catégorie
-              </button>
-            </div>
-            <div className="space-y-3">
-              {categories.map((cat, ci) => (
-                <div key={ci} className="rounded border border-border bg-background p-3">
-                  <div className="mb-2 flex items-center gap-2">
-                    <input
-                      value={cat.label}
-                      onChange={(e) => {
-                        const c = [...categories];
-                        c[ci] = { ...c[ci], label: e.target.value };
-                        setCategories(c);
-                      }}
-                      placeholder="Nom de la catégorie"
-                      className={inputCls}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setCategories(categories.filter((_, i) => i !== ci))}
-                      className="rounded border border-border px-2 py-1 text-xs text-destructive"
-                    >
-                      ×
-                    </button>
-                  </div>
-                  <input
-                    value={cat.items.join(", ")}
-                    onChange={(e) => {
-                      const items = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
-                      const c = [...categories];
-                      c[ci] = { ...c[ci], items };
-                      setCategories(c);
-                    }}
-                    placeholder="Tag 1, Tag 2, Tag 3"
-                    className={inputCls}
+          <>
+            <div className="mt-8 rounded-md border border-border bg-card p-4">
+              <h2 className="mb-3 font-serif text-xl font-bold text-foreground">Photo de profil</h2>
+              <div className="flex items-start gap-4">
+                {form.photo_profil_url && (
+                  <img
+                    src={form.photo_profil_url}
+                    alt="Aperçu photo de profil"
+                    className="h-24 w-24 flex-shrink-0 rounded-full border border-border object-cover"
+                  />
+                )}
+                <div className="flex-1">
+                  <ImageUpload
+                    value={form.photo_profil_url}
+                    onChange={(url) => setForm({ ...form, photo_profil_url: url })}
+                    pathPrefix="profil"
+                    label="Choisir la photo de profil"
                   />
                 </div>
-              ))}
-              {categories.length === 0 && (
-                <p className="text-sm text-muted-foreground">Aucune catégorie. Ajoutez-en une.</p>
-              )}
+              </div>
+              <div className="mt-3">
+                <label className="mb-1 block text-sm font-medium text-foreground">Texte alternatif</label>
+                <input
+                  value={form.photo_profil_alt_text}
+                  onChange={(e) => setForm({ ...form, photo_profil_alt_text: e.target.value })}
+                  className={inputCls}
+                  placeholder='ex. "Photo de profil de Martine Desmaroux"'
+                />
+              </div>
             </div>
-          </div>
+
+            <div className="mt-4 rounded-md border border-border bg-card p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className="font-serif text-xl font-bold text-foreground">Tags catégorisés</h2>
+                <button
+                  type="button"
+                  onClick={() => setCategories([...categories, { label: "Nouvelle catégorie", items: [] }])}
+                  className="rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted"
+                >
+                  + Catégorie
+                </button>
+              </div>
+              <div className="space-y-3">
+                {categories.map((cat, ci) => (
+                  <div key={ci} className="rounded border border-border bg-background p-3">
+                    <div className="mb-2 flex items-center gap-2">
+                      <input
+                        value={cat.label}
+                        onChange={(e) => {
+                          const c = [...categories];
+                          c[ci] = { ...c[ci], label: e.target.value };
+                          setCategories(c);
+                        }}
+                        placeholder="Nom de la catégorie"
+                        className={inputCls}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setCategories(categories.filter((_, i) => i !== ci))}
+                        className="rounded border border-border px-2 py-1 text-xs text-destructive"
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <input
+                      value={cat.items.join(", ")}
+                      onChange={(e) => {
+                        const items = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
+                        const c = [...categories];
+                        c[ci] = { ...c[ci], items };
+                        setCategories(c);
+                      }}
+                      placeholder="Tag 1, Tag 2, Tag 3"
+                      className={inputCls}
+                    />
+                  </div>
+                ))}
+                {categories.length === 0 && (
+                  <p className="text-sm text-muted-foreground">Aucune catégorie. Ajoutez-en une.</p>
+                )}
+              </div>
+            </div>
+          </>
         )}
 
         <div className="mt-8">
@@ -292,7 +349,14 @@ function EditProject() {
                   </div>
                 </div>
                 {(b.block_type === "text" || b.block_type === "quote" || b.block_type === "heading") && (
-                  <textarea rows={b.block_type === "heading" ? 1 : 3} value={b.content ?? ""} onChange={(e) => { const c = [...blocks]; c[i].content = e.target.value; setBlocks(c); }} className={inputCls} />
+                  <>
+                    {b.block_type === "text" && (
+                      <p className="mb-1 text-xs text-muted-foreground">
+                        Liens : <code>[texte](https://url)</code>
+                      </p>
+                    )}
+                    <textarea rows={b.block_type === "heading" ? 1 : 3} value={b.content ?? ""} onChange={(e) => { const c = [...blocks]; c[i].content = e.target.value; setBlocks(c); }} className={inputCls} />
+                  </>
                 )}
                 {b.block_type === "liste" && (
                   <>

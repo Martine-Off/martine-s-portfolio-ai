@@ -37,16 +37,19 @@ function ProfilPage() {
     | Array<{ label: string; items: string[] }>
     | null;
 
+  const photoUrl = profile?.project.photo_profil_url;
+  const photoAlt = profile?.project.photo_profil_alt_text;
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader heroTitle={settings?.hero_title ?? ""} />
 
       <div className="mx-auto max-w-4xl px-6 py-16 md:py-24">
         <div className="flex flex-col gap-8 md:flex-row md:items-start">
-          {settings?.profile_photo_url && (
+          {photoUrl && (
             <img
-              src={settings.profile_photo_url}
-              alt={settings.profile_photo_alt_text || "Photo de profil de Martine Desmaroux"}
+              src={photoUrl}
+              alt={photoAlt || "Photo de profil de Martine Desmaroux"}
               className="h-40 w-40 flex-shrink-0 rounded-full border border-border object-cover md:h-56 md:w-56"
             />
           )}
@@ -56,18 +59,6 @@ function ProfilPage() {
             </h1>
             {profile?.project.tagline && (
               <p className="mt-4 text-lg text-muted-foreground">{profile.project.tagline}</p>
-            )}
-            {settings?.bahut_url && (
-              <p className="mt-4">
-                <a
-                  href={settings.bahut_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-accent hover:underline"
-                >
-                  Le Bahut ↗
-                </a>
-              </p>
             )}
           </div>
         </div>

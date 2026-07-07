@@ -217,7 +217,7 @@ function ImportPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl p-8">
+    <div className="mx-auto max-w-5xl p-4 md:p-8">
       <Link to="/admin" className="mb-4 inline-block text-sm text-muted-foreground hover:text-foreground">
         ← Retour
       </Link>

@@ -1,21 +1,10 @@
 import { createFileRoute, useNavigate, useParams, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { getProjectByIdAdmin, saveProject } from "@/lib/projects.functions";
+import { getProjectByIdAdmin, saveProject, listStatusLabels } from "@/lib/projects.functions";
 import { toast } from "sonner";
 import { ImageUpload } from "@/components/ImageUpload";
 import { resolveAccentColor } from "@/lib/utils/status";
-
-const STATUS_SUGGESTIONS = [
-  "Terminé",
-  "Déployé",
-  "MVP",
-  "En production",
-  "En cours",
-  "POC",
-  "Faite",
-  "Produit",
-];
 
 export const Route = createFileRoute("/_authenticated/admin/projets/$id")({
   component: EditProject,

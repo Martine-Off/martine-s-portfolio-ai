@@ -3,6 +3,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { getSiteSettings, saveSiteSettings } from "@/lib/settings.functions";
 import { toast } from "sonner";
+import { ImageUpload } from "@/components/ImageUpload";
+
 
 export const Route = createFileRoute("/_authenticated/admin/reglages")({
   component: SettingsPage,

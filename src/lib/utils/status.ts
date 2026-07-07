@@ -15,9 +15,12 @@ const ORANGE = "#ECC28F";
 export function getAutoAccentColor(status?: string | null): string {
   const s = (status ?? "").trim().toLowerCase();
   if (!s) return BLUE;
-  if (s === "terminé" || s === "termine" || s === "déployé" || s === "deploye" || s === "en production") return GREEN;
-  if (s === "mvp") return BLUE;
-  if (s === "en cours") return ORANGE;
+  const green = ["déployé", "deploye", "production", "faite", "produit", "terminé", "termine"];
+  const blue = ["mvp"];
+  const orange = ["poc", "en cours", "cadrage", "audit"];
+  for (const kw of green) if (s.includes(kw)) return GREEN;
+  for (const kw of blue) if (s.includes(kw)) return BLUE;
+  for (const kw of orange) if (s.includes(kw)) return ORANGE;
   return BLUE;
 }
 

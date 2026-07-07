@@ -63,7 +63,7 @@ export type Database = {
       }
       projects: {
         Row: {
-          accent_color: string
+          accent_color: string | null
           cover_image_alt_text: string | null
           cover_image_position: string
           cover_image_url: string | null
@@ -83,7 +83,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          accent_color?: string
+          accent_color?: string | null
           cover_image_alt_text?: string | null
           cover_image_position?: string
           cover_image_url?: string | null
@@ -103,7 +103,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          accent_color?: string
+          accent_color?: string | null
           cover_image_alt_text?: string | null
           cover_image_position?: string
           cover_image_url?: string | null
@@ -223,7 +223,14 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
-      block_type: "text" | "video" | "image" | "quote" | "heading"
+      block_type:
+        | "text"
+        | "video"
+        | "image"
+        | "quote"
+        | "heading"
+        | "liste"
+        | "comparatif"
       project_type:
         | "poc_perso"
         | "production_client"
@@ -358,7 +365,15 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
-      block_type: ["text", "video", "image", "quote", "heading"],
+      block_type: [
+        "text",
+        "video",
+        "image",
+        "quote",
+        "heading",
+        "liste",
+        "comparatif",
+      ],
       project_type: [
         "poc_perso",
         "production_client",

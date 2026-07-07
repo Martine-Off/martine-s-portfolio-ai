@@ -25,8 +25,9 @@ interface Props {
 }
 
 export function ProjectCard({ project, variant = "grid", linkable = true }: Props) {
-  const accent = project.accent_color || "#65BFF1";
+  const accent = resolveAccentColor(project.accent_color, project.status_label);
   const hasImage = !!project.cover_image_url;
+
 
   const inner = (
     <article

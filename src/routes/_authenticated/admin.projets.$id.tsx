@@ -201,7 +201,7 @@ function EditProject() {
             placeholder="Libre — ex. POC validé, MVP en déploiement, Faite"
           />
           <datalist id="status-suggestions">
-            {STATUS_SUGGESTIONS.map((s) => (
+            {statusSuggestions.map((s: string) => (
               <option key={s} value={s} />
             ))}
           </datalist>

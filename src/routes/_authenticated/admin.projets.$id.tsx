@@ -38,6 +38,7 @@ function EditProject() {
   const [form, setForm] = useState<any>({
     id: null,
     title: "",
+    emoji: "",
     slug: "",
     tagline: "",
     project_type: "poc_perso",
@@ -87,6 +88,7 @@ function EditProject() {
           role: res.project.role ?? "",
           impact: res.project.impact ?? "",
           angle: (res.project as { angle?: string | null }).angle ?? "",
+          emoji: (res.project as { emoji?: string | null }).emoji ?? "",
         });
         setTagsStr(res.project.tags.join(", "));
         const cats = (res.project.tags_categorises as Category[] | null) ?? [];
@@ -162,6 +164,9 @@ function EditProject() {
       </h1>
 
       <form onSubmit={onSubmit} className="space-y-4">
+        <Field label="Emoji">
+          <input value={form.emoji ?? ""} onChange={(e) => setForm({ ...form, emoji: e.target.value })} className={inputCls} placeholder="ex. 🚀" maxLength={8} />
+        </Field>
         <Field label="Titre">
           <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputCls} />
         </Field>

@@ -125,6 +125,12 @@ function AdminPage() {
             Réglages du site
           </Link>
           <Link
+            to="/admin/import"
+            className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-muted"
+          >
+            Importer en masse
+          </Link>
+          <Link
             to="/admin/projets/nouveau"
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
           >

@@ -88,6 +88,7 @@ function ProjectPage() {
             id: project.id,
             slug: project.slug,
             title: project.title,
+            emoji: (project as { emoji?: string | null }).emoji ?? null,
             tagline: project.tagline,
             project_type: project.project_type,
             status_label: project.status_label,

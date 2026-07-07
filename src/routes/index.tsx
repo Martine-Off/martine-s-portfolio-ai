@@ -29,6 +29,7 @@ type CondensedItem = {
   tagline: string | null;
   slug: string;
   role: string | null;
+  angle: string | null;
   status_label: string | null;
   tags: string[];
   impact: string | null;

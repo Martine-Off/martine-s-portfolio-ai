@@ -164,6 +164,9 @@ function EditProject() {
       </h1>
 
       <form onSubmit={onSubmit} className="space-y-4">
+        <Field label="Emoji">
+          <input value={form.emoji ?? ""} onChange={(e) => setForm({ ...form, emoji: e.target.value })} className={inputCls} placeholder="ex. 🚀" maxLength={8} />
+        </Field>
         <Field label="Titre">
           <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputCls} />
         </Field>

@@ -114,55 +114,58 @@ function AdminPage() {
   ) as Record<FilterTab, number>;
 
   return (
-    <div className="mx-auto max-w-6xl p-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="font-serif text-3xl font-bold text-foreground">Administration</h1>
-        <div className="flex gap-2">
+    <div className="mx-auto max-w-6xl p-4 md:p-8">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="font-serif text-2xl font-bold text-foreground md:text-3xl">Administration</h1>
+        <div className="flex flex-wrap gap-2">
           <Link
             to="/admin/reglages"
-            className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-muted"
+            className="min-h-11 inline-flex items-center rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-muted"
           >
             Réglages du site
           </Link>
           <Link
             to="/admin/import"
-            className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-muted"
+            className="min-h-11 inline-flex items-center rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-muted"
           >
             Importer en masse
           </Link>
           <Link
             to="/admin/projets/nouveau"
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+            className="min-h-11 inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
           >
             + Nouveau projet
           </Link>
-          <button onClick={signOut} className="rounded-md border border-border px-4 py-2 text-sm">
+          <button onClick={signOut} className="min-h-11 rounded-md border border-border px-4 py-2 text-sm">
             Déconnexion
           </button>
         </div>
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        {TABS.map((tab) => {
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={[
-                "rounded-md border px-4 py-2 text-sm transition-colors",
-                isActive
-                  ? "border-accent bg-accent text-accent-foreground"
-                  : "border-border bg-card text-foreground hover:bg-muted",
-              ].join(" ")}
-            >
-              {tab.label} ({counts[tab.id]})
-            </button>
-          );
-        })}
+      <div className="mb-4 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:overflow-visible sm:px-0">
+        <div className="flex gap-2 whitespace-nowrap sm:flex-wrap sm:whitespace-normal">
+          {TABS.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={[
+                  "min-h-11 shrink-0 rounded-md border px-4 py-2 text-sm transition-colors",
+                  isActive
+                    ? "border-accent bg-accent text-accent-foreground"
+                    : "border-border bg-card text-foreground hover:bg-muted",
+                ].join(" ")}
+              >
+                {tab.label} ({counts[tab.id]})
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-border bg-card">
+      {/* Desktop: table */}
+      <div className="hidden overflow-hidden rounded-lg border border-border bg-card md:block">
         <table className="w-full text-sm">
           <thead className="border-b border-border bg-muted text-left">
             <tr>
@@ -242,6 +245,76 @@ function AdminPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Mobile: cards */}
+      <div className="space-y-3 md:hidden">
+        {visibleProjects.map((p, index) => (
+          <div key={p.id} className="rounded-lg border border-border bg-card p-4">
+            <div className="mb-2 flex items-start justify-between gap-2">
+              <h3 className="min-w-0 break-words font-medium text-foreground">{p.title}</h3>
+              <span className="shrink-0 text-xs text-muted-foreground">
+                {p.published ? "Publié" : "Brouillon"}
+              </span>
+            </div>
+            <p className="mb-3 text-xs text-muted-foreground">
+              {p.project_type}
+              {p.mission_type ? ` / ${p.mission_type}` : ""}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                to="/admin/projets/$id"
+                params={{ id: p.id }}
+                className="min-h-11 inline-flex items-center rounded-md border border-border bg-background px-3 py-2 text-sm text-accent"
+              >
+                Modifier
+              </Link>
+              <button
+                onClick={async () => {
+                  await toggle({ data: { id: p.id, published: !p.published } });
+                  toast.success(p.published ? "Dépublié" : "Publié");
+                  listQ.refetch();
+                }}
+                className="min-h-11 rounded-md border border-border bg-background px-3 py-2 text-sm"
+              >
+                {p.published ? "Dépublier" : "Publier"}
+              </button>
+              <button
+                onClick={() => handleMove(p, "up")}
+                disabled={index === 0}
+                className="min-h-11 min-w-11 rounded-md border border-border bg-background px-3 py-2 text-sm disabled:opacity-40"
+                aria-label="Monter"
+              >
+                ↑
+              </button>
+              <button
+                onClick={() => handleMove(p, "down")}
+                disabled={index === visibleProjects.length - 1}
+                className="min-h-11 min-w-11 rounded-md border border-border bg-background px-3 py-2 text-sm disabled:opacity-40"
+                aria-label="Descendre"
+              >
+                ↓
+              </button>
+              <button
+                onClick={async () => {
+                  if (!confirm(`Supprimer "${p.title}" ?`)) return;
+                  await del({ data: { id: p.id } });
+                  toast.success("Supprimé");
+                  listQ.refetch();
+                }}
+                className="min-h-11 rounded-md border border-border bg-background px-3 py-2 text-sm text-destructive"
+              >
+                Supprimer
+              </button>
+            </div>
+          </div>
+        ))}
+        {visibleProjects.length === 0 && (
+          <p className="rounded-lg border border-border bg-card p-6 text-center text-muted-foreground">
+            Aucun projet dans cette catégorie.
+          </p>
+        )}
+      </div>
     </div>
+
   );
 }

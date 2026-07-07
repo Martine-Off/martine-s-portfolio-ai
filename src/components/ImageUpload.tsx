@@ -60,33 +60,36 @@ export function ImageUpload({ value, onChange, pathPrefix = "uploads", label = "
       {value ? (
         <div className="space-y-2">
           <img src={value} alt="Aperçu" className="max-h-48 rounded border border-border object-contain" />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
               disabled={busy}
-              className="rounded border border-border px-3 py-1 text-xs hover:bg-muted disabled:opacity-50"
+              className="min-h-11 rounded border border-border px-3 py-2 text-sm hover:bg-muted disabled:opacity-50"
             >
               {busy ? "…" : "Changer l'image"}
             </button>
             <button
               type="button"
               onClick={() => onChange("")}
-              className="rounded border border-border px-3 py-1 text-xs text-destructive hover:bg-muted"
+              className="min-h-11 rounded border border-border px-3 py-2 text-sm text-destructive hover:bg-muted"
             >
               Retirer
             </button>
           </div>
+
         </div>
       ) : (
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={busy}
-          className="w-full rounded px-3 py-6 text-sm text-muted-foreground hover:bg-muted disabled:opacity-50"
+          className="min-h-11 w-full rounded px-3 py-6 text-sm text-muted-foreground hover:bg-muted disabled:opacity-50"
         >
-          {busy ? "Envoi…" : `${label} (ou glisser-déposer)`}
+          {busy ? "Envoi…" : label}
+          <span className="mt-1 hidden text-xs opacity-60 sm:block">ou glisser-déposer</span>
         </button>
+
       )}
       <input
         ref={inputRef}

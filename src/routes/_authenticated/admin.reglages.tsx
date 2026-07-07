@@ -50,7 +50,7 @@ function SettingsPage() {
   const upd = (k: string) => (e: any) => setS({ ...s, [k]: e.target.value });
 
   return (
-    <div className="mx-auto max-w-3xl p-8">
+    <div className="mx-auto max-w-3xl p-4 md:p-8">
       <Link to="/admin" className="mb-4 inline-block text-sm text-muted-foreground hover:text-foreground">← Retour</Link>
       <h1 className="mb-6 font-serif text-3xl font-bold text-foreground">Réglages du site</h1>
       <form onSubmit={submit} className="space-y-4">
@@ -101,16 +101,18 @@ function SettingsPage() {
                       setTools(c);
                     }}
                     placeholder="Nom de la catégorie (ex. IA)"
-                    className={cls}
+                    className={`${cls} min-w-0 flex-1`}
                   />
                   <button
                     type="button"
                     onClick={() => setTools(tools.filter((_, i) => i !== ci))}
-                    className="rounded border border-border px-2 py-1 text-xs text-destructive"
+                    className="min-h-11 min-w-11 shrink-0 rounded border border-border text-destructive"
+                    aria-label="Supprimer la catégorie"
                   >
                     ×
                   </button>
                 </div>
+
                 <input
                   value={cat.items.join(", ")}
                   onChange={(e) => {
@@ -132,9 +134,10 @@ function SettingsPage() {
 
         <F label="Pied de page"><input value={s.footer_text} onChange={upd("footer_text")} className={cls} /></F>
 
-        <button type="submit" disabled={busy} className="rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50">
+        <button type="submit" disabled={busy} className="min-h-11 w-full rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 sm:w-auto">
           {busy ? "…" : "Enregistrer"}
         </button>
+
       </form>
     </div>
   );

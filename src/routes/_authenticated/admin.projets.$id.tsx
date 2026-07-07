@@ -155,7 +155,7 @@ function EditProject() {
   if (loading) return <div className="p-8">Chargement…</div>;
 
   return (
-    <div className="mx-auto max-w-4xl p-8">
+    <div className="mx-auto max-w-4xl p-4 md:p-8">
       <Link to="/admin" className="mb-4 inline-block text-sm text-muted-foreground hover:text-foreground">
         ← Retour
       </Link>
@@ -217,17 +217,18 @@ function EditProject() {
         </Field>
         {!isLight && (
           <Field label="Couleur d'accent">
-            <div className="flex items-center gap-2">
-              <input type="color" value={previewAccent} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className="h-10 w-16" />
-              <input value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className={inputCls} placeholder="(auto d'après le statut)" />
+            <div className="flex flex-wrap items-center gap-2">
+              <input type="color" value={previewAccent} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className="h-11 w-16 shrink-0" />
+              <input value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className={`${inputCls} min-w-0 flex-1`} placeholder="(auto d'après le statut)" />
               <button
                 type="button"
                 onClick={() => setForm({ ...form, accent_color: "" })}
-                className="whitespace-nowrap rounded-md border border-border px-3 py-2 text-xs hover:bg-muted"
+                className="min-h-11 whitespace-nowrap rounded-md border border-border px-3 py-2 text-xs hover:bg-muted"
               >
                 Réinitialiser
               </button>
             </div>
+
             <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
               <span
                 className="inline-flex items-center rounded-full px-3 py-1 font-medium"
@@ -287,7 +288,7 @@ function EditProject() {
           <>
             <div className="mt-8 rounded-md border border-border bg-card p-4">
               <h2 className="mb-3 font-serif text-xl font-bold text-foreground">Photo de profil</h2>
-              <div className="flex items-start gap-4">
+              <div className="flex flex-col items-start gap-4 sm:flex-row">
                 {form.photo_profil_url && (
                   <img
                     src={form.photo_profil_url}
@@ -338,16 +339,18 @@ function EditProject() {
                           setCategories(c);
                         }}
                         placeholder="Nom de la catégorie"
-                        className={inputCls}
+                        className={`${inputCls} min-w-0 flex-1`}
                       />
                       <button
                         type="button"
                         onClick={() => setCategories(categories.filter((_, i) => i !== ci))}
-                        className="rounded border border-border px-2 py-1 text-xs text-destructive"
+                        className="min-h-11 min-w-11 shrink-0 rounded border border-border text-destructive"
+                        aria-label="Supprimer la catégorie"
                       >
                         ×
                       </button>
                     </div>
+
                     <input
                       value={cat.items.join(", ")}
                       onChange={(e) => {
@@ -384,16 +387,17 @@ function EditProject() {
               <div key={i} className="rounded-md border border-border bg-card p-4">
                 <div className="mb-2 flex items-center justify-between">
                   <span className="text-xs font-medium uppercase text-muted-foreground">{b.block_type}</span>
-                  <div className="flex gap-2 text-xs">
+                  <div className="flex gap-1">
                     {i > 0 && (
-                      <button type="button" onClick={() => { const c = [...blocks]; [c[i - 1], c[i]] = [c[i], c[i - 1]]; setBlocks(c); }} className="text-accent">↑</button>
+                      <button type="button" onClick={() => { const c = [...blocks]; [c[i - 1], c[i]] = [c[i], c[i - 1]]; setBlocks(c); }} className="min-h-11 min-w-11 rounded-md border border-border px-2 text-accent hover:bg-muted" aria-label="Monter">↑</button>
                     )}
                     {i < blocks.length - 1 && (
-                      <button type="button" onClick={() => { const c = [...blocks]; [c[i + 1], c[i]] = [c[i], c[i + 1]]; setBlocks(c); }} className="text-accent">↓</button>
+                      <button type="button" onClick={() => { const c = [...blocks]; [c[i + 1], c[i]] = [c[i], c[i + 1]]; setBlocks(c); }} className="min-h-11 min-w-11 rounded-md border border-border px-2 text-accent hover:bg-muted" aria-label="Descendre">↓</button>
                     )}
-                    <button type="button" onClick={() => setBlocks(blocks.filter((_, j) => j !== i))} className="text-destructive">×</button>
+                    <button type="button" onClick={() => setBlocks(blocks.filter((_, j) => j !== i))} className="min-h-11 min-w-11 rounded-md border border-border px-2 text-destructive hover:bg-muted" aria-label="Supprimer">×</button>
                   </div>
                 </div>
+
                 {b.block_type !== "heading" && (
                   <input
                     placeholder="Titre du bloc (optionnel)"
@@ -451,9 +455,10 @@ function EditProject() {
         )}
 
 
-        <button type="submit" disabled={busy} className="rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50">
+        <button type="submit" disabled={busy} className="min-h-11 w-full rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 sm:w-auto">
           {busy ? "…" : "Enregistrer"}
         </button>
+
       </form>
     </div>
   );

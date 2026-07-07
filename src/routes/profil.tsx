@@ -5,29 +5,47 @@ import { getSiteSettings } from "@/lib/settings.functions";
 import { BlockRenderer } from "@/components/BlockRenderer";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { PageState } from "@/components/PageState";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const profileQuery = queryOptions({ queryKey: ["profile"], queryFn: () => getProfilePage() });
 
 export const Route = createFileRoute("/profil")({
-  head: () => ({
-    meta: [
-      { title: "Profil — Martine Desmaroux" },
-      { name: "description", content: "Parcours et compétences de Martine Desmaroux, cheffe de projet IA." },
-      { property: "og:title", content: "Profil — Martine Desmaroux" },
-      { property: "og:description", content: "Parcours et compétences de Martine Desmaroux, cheffe de projet IA." },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const photo = (loaderData as { photo?: string | null } | undefined)?.photo;
+    return {
+      meta: [
+        { title: "Profil — Martine Desmaroux" },
+        { name: "description", content: "Parcours et compétences de Martine Desmaroux, cheffe de projet IA." },
+        { property: "og:title", content: "Profil — Martine Desmaroux" },
+        { property: "og:description", content: "Parcours et compétences de Martine Desmaroux, cheffe de projet IA." },
+        { property: "og:image", content: photo || "/og-default.jpg" },
+      ],
+    };
+  },
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData(settingsQuery),
       context.queryClient.ensureQueryData(profileQuery),
     ]);
+    const profile = context.queryClient.getQueryData<Awaited<ReturnType<typeof getProfilePage>>>(["profile"]);
+    return { photo: profile?.project?.photo_profil_url ?? null };
   },
   component: ProfilPage,
-  errorComponent: ({ error }) => <div className="p-8">{error.message}</div>,
-  notFoundComponent: () => <div className="p-8">404</div>,
+  errorComponent: ({ error, reset }) => (
+    <PageState
+      variant="error"
+      title="Impossible de charger le profil"
+      message={error.message}
+      primary={{ label: "Réessayer", onClick: reset }}
+      secondary={{ label: "Accueil", to: "/" }}
+    />
+  ),
+  notFoundComponent: () => (
+    <PageState variant="notfound" title="Profil introuvable" primary={{ label: "Retour à l'accueil", to: "/" }} />
+  ),
 });
+
 
 function ProfilPage() {
   const { data: settings } = useSuspenseQuery(settingsQuery);

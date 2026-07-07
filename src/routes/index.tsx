@@ -5,11 +5,29 @@ import { listPublishedProjects } from "@/lib/projects.functions";
 import { ProjectCard } from "@/components/ProjectCard";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { PageState } from "@/components/PageState";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const projectsQuery = queryOptions({ queryKey: ["projects", "public"], queryFn: () => listPublishedProjects() });
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Martine Desmaroux — Cheffe de projet IA" },
+      {
+        name: "description",
+        content:
+          "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions courtes.",
+      },
+      { property: "og:title", content: "Martine Desmaroux — Cheffe de projet IA" },
+      {
+        property: "og:description",
+        content: "Portfolio de Martine Desmaroux, cheffe de projet IA en reconversion.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: "/og-default.jpg" },
+    ],
+  }),
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData(settingsQuery),
@@ -17,11 +35,19 @@ export const Route = createFileRoute("/")({
     ]);
   },
   component: HomePage,
-  errorComponent: ({ error }) => (
-    <div className="p-8 text-foreground">Erreur : {error.message}</div>
+  errorComponent: ({ error, reset }) => (
+    <PageState
+      variant="error"
+      title="Impossible de charger l'accueil"
+      message={error.message}
+      primary={{ label: "Réessayer", onClick: reset }}
+    />
   ),
-  notFoundComponent: () => <div className="p-8">404</div>,
+  notFoundComponent: () => (
+    <PageState variant="notfound" title="Page introuvable" primary={{ label: "Retour à l'accueil", to: "/" }} />
+  ),
 });
+
 
 type CondensedItem = {
   id: string;

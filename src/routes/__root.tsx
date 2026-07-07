@@ -9,30 +9,21 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
+import { PageState } from "@/components/PageState";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 
+
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="font-serif text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page introuvable</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Cette page n'existe pas ou a été déplacée.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
-          >
-            Retour à l'accueil
-          </Link>
-        </div>
-      </div>
-    </div>
+    <PageState
+      variant="notfound"
+      title="Page introuvable"
+      message="Cette page n'existe pas ou a été déplacée."
+      primary={{ label: "Retour à l'accueil", to: "/" }}
+    />
   );
 }
 
@@ -44,35 +35,16 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="font-serif text-2xl font-semibold text-foreground">
-          Cette page n'a pas pu être chargée
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Une erreur est survenue. Vous pouvez réessayer ou revenir à l'accueil.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
-          >
-            Réessayer
-          </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            Accueil
-          </a>
-        </div>
-      </div>
-    </div>
+    <PageState
+      variant="error"
+      title="Cette page n'a pas pu être chargée"
+      message="Une erreur est survenue. Vous pouvez réessayer ou revenir à l'accueil."
+      primary={{ label: "Réessayer", onClick: () => { router.invalidate(); reset(); } }}
+      secondary={{ label: "Accueil", to: "/" }}
+    />
   );
 }
+
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
@@ -93,7 +65,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Portfolio de Martine Desmaroux, cheffe de projet IA en reconversion.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "/og-default.jpg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Martine Desmaroux — Cheffe de Projet IA" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "/og-default.jpg" },
+
     ],
     links: [
       { rel: "stylesheet", href: appCss },

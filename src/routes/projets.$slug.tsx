@@ -6,6 +6,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { BlockRenderer } from "@/components/BlockRenderer";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { PageState } from "@/components/PageState";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 
@@ -18,14 +19,23 @@ const projectQuery = (slug: string) =>
 export const Route = createFileRoute("/projets/$slug")({
   head: ({ loaderData }) => {
     const p = (loaderData as { project?: { project: { title: string; tagline: string | null; cover_image_url: string | null } } } | undefined)?.project?.project;
-    if (!p) return { meta: [{ title: "Projet introuvable" }] };
+    if (!p) {
+      return {
+        meta: [
+          { title: "Projet introuvable" },
+          { name: "robots", content: "noindex" },
+        ],
+      };
+    }
+    const image = p.cover_image_url || "/og-default.jpg";
     return {
       meta: [
         { title: `${p.title} — Martine Desmaroux` },
         { name: "description", content: p.tagline ?? p.title },
         { property: "og:title", content: p.title },
         { property: "og:description", content: p.tagline ?? "" },
-        ...(p.cover_image_url ? [{ property: "og:image", content: p.cover_image_url }] : []),
+        { property: "og:type", content: "article" },
+        { property: "og:image", content: image },
       ],
     };
   },
@@ -36,18 +46,25 @@ export const Route = createFileRoute("/projets/$slug")({
     return { project };
   },
   component: ProjectPage,
-  errorComponent: ({ error }) => <div className="p-8">{error.message}</div>,
+  errorComponent: ({ error, reset }) => (
+    <PageState
+      variant="error"
+      title="Impossible de charger ce projet"
+      message={error.message}
+      primary={{ label: "Réessayer", onClick: reset }}
+      secondary={{ label: "Accueil", to: "/" }}
+    />
+  ),
   notFoundComponent: () => (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="font-serif text-4xl text-foreground">Projet introuvable</h1>
-        <Link to="/" className="mt-4 inline-block text-accent hover:underline">
-          Retour à l'accueil
-        </Link>
-      </div>
-    </div>
+    <PageState
+      variant="notfound"
+      title="Projet introuvable"
+      message="Ce projet n'existe pas ou n'est plus publié."
+      primary={{ label: "Retour à l'accueil", to: "/" }}
+    />
   ),
 });
+
 
 function ProjectPage() {
   const { slug } = Route.useParams();

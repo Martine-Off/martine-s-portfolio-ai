@@ -280,17 +280,8 @@ export const createSignedUpload = createServerFn({ method: "POST" })
     return signed;
   });
 
-export const getSignedReadUrl = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => z.object({ path: z.string() }).parse(data))
-  .handler(async ({ data, context }) => {
-    await assertAdmin(context);
-    const { data: signed, error } = await context.supabase.storage
-      .from("project-images")
-      .createSignedUrl(data.path, 60 * 60 * 24 * 365 * 10); // 10 years
-    if (error) throw new Error(error.message);
-    return signed;
-  });
+// Public bucket: read URLs are computed client-side with getPublicUrl().
+
 
 export const checkIsAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])

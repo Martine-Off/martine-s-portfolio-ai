@@ -98,6 +98,7 @@ function EditProject() {
           res.blocks.map((b) => ({
             id: b.id,
             block_type: b.block_type as BlockType,
+            title: (b as { title?: string | null }).title ?? null,
             content: b.content,
             media_url: b.media_url,
             alt_text: b.alt_text,

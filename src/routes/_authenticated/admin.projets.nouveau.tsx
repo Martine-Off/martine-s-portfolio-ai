@@ -54,10 +54,10 @@ function NewProject() {
         <div>
           <label className="mb-1 block text-sm font-medium text-foreground">Type</label>
           <select value={type} onChange={(e) => setType(e.target.value)} className="w-full rounded-md border border-border bg-background px-3 py-2">
-            <option value="poc_perso">POC personnel</option>
-            <option value="production_client">Production client</option>
-            <option value="formation_donnees">Formation donnée</option>
-            <option value="mission_courte">Mission courte</option>
+            <option value="poc_perso">Projet personnel (POC)</option>
+            <option value="production_client">Projet client</option>
+            <option value="poc_ecole">Projet réalisé en formation (POC école)</option>
+            <option value="formation_mission">Formation, mission ou bénévolat</option>
             <option value="profil">Profil</option>
           </select>
         </div>

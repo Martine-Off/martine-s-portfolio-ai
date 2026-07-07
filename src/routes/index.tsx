@@ -23,15 +23,42 @@ export const Route = createFileRoute("/")({
   notFoundComponent: () => <div className="p-8">404</div>,
 });
 
+function CondensedList({ title, items }: { title: string; items: Array<{ id: string; title: string; tagline: string | null; slug: string }> }) {
+  if (items.length === 0) return null;
+  return (
+    <section className="mx-auto max-w-6xl px-6 py-16">
+      <h2 className="mb-6 font-serif text-3xl font-bold text-foreground md:text-4xl">{title}</h2>
+      <ul className="divide-y divide-border rounded-lg border border-border bg-card">
+        {items.map((p) => (
+          <li key={p.id} className="p-5">
+            <h3 className="font-serif text-lg font-bold text-foreground">{p.title}</h3>
+            {p.tagline && <p className="mt-1 text-sm text-muted-foreground">{p.tagline}</p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 function HomePage() {
   const { data: settings } = useSuspenseQuery(settingsQuery);
   const { data: projects } = useSuspenseQuery(projectsQuery);
 
   const featured = projects.filter(
-    (p) => p.project_type === "poc_perso" || p.project_type === "production_client",
+    (p) =>
+      p.project_type === "poc_perso" ||
+      p.project_type === "production_client" ||
+      p.project_type === "poc_ecole",
   );
-  const formations = projects.filter((p) => p.project_type === "formation_donnees");
-  const missions = projects.filter((p) => p.project_type === "mission_courte");
+  const formations = projects.filter(
+    (p) => p.project_type === "formation_mission" && p.mission_type === "formation",
+  );
+  const missions = projects.filter(
+    (p) => p.project_type === "formation_mission" && (p.mission_type === "mission" || p.mission_type === null),
+  );
+  const benevolat = projects.filter(
+    (p) => p.project_type === "formation_mission" && p.mission_type === "benevolat",
+  );
   const tools = (settings?.tools_json ?? []) as Array<{ category: string; items: string[] }>;
 
   return (
@@ -90,33 +117,9 @@ function HomePage() {
         </section>
       )}
 
-      {/* Formations */}
-      {formations.length > 0 && (
-        <section className="mx-auto max-w-6xl px-6 py-16">
-          <h2 className="mb-8 font-serif text-3xl font-bold text-foreground md:text-4xl">
-            {settings?.formations_section_title}
-          </h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {formations.map((p) => (
-              <ProjectCard key={p.id} project={p} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Missions courtes */}
-      {missions.length > 0 && (
-        <section className="mx-auto max-w-6xl px-6 py-16">
-          <h2 className="mb-8 font-serif text-3xl font-bold text-foreground md:text-4xl">
-            {settings?.missions_section_title}
-          </h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {missions.map((p) => (
-              <ProjectCard key={p.id} project={p} />
-            ))}
-          </div>
-        </section>
-      )}
+      <CondensedList title={settings?.formations_section_title ?? "Formations données"} items={formations} />
+      <CondensedList title={settings?.missions_section_title ?? "Autres missions courtes"} items={missions} />
+      <CondensedList title={settings?.benevolat_section_title ?? "Bénévolat"} items={benevolat} />
 
       {/* Outils & compétences */}
       {tools.length > 0 && (

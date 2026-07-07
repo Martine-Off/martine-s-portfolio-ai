@@ -93,18 +93,20 @@ function ProjectPage() {
           ))}
         </div>
 
-        {project.external_url && (
+        {project.repo_url ? (
           <div className="mt-10">
             <a
-              href={project.external_url}
+              href={project.repo_url}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              Voir le projet ↗
+              Voir le dépôt ↗
             </a>
           </div>
-        )}
+        ) : project.repo_note ? (
+          <p className="mt-10 text-sm italic text-muted-foreground">{project.repo_note}</p>
+        ) : null}
       </div>
 
       <SiteFooter

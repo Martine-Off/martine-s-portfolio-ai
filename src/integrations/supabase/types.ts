@@ -69,10 +69,14 @@ export type Database = {
           cover_image_url: string | null
           created_at: string
           display_order: number
-          external_url: string | null
           id: string
+          mission_type: string | null
+          photo_profil_alt_text: string | null
+          photo_profil_url: string | null
           project_type: Database["public"]["Enums"]["project_type"]
           published: boolean
+          repo_note: string | null
+          repo_url: string | null
           slug: string
           status_label: string | null
           summary: string | null
@@ -89,10 +93,14 @@ export type Database = {
           cover_image_url?: string | null
           created_at?: string
           display_order?: number
-          external_url?: string | null
           id?: string
+          mission_type?: string | null
+          photo_profil_alt_text?: string | null
+          photo_profil_url?: string | null
           project_type: Database["public"]["Enums"]["project_type"]
           published?: boolean
+          repo_note?: string | null
+          repo_url?: string | null
           slug: string
           status_label?: string | null
           summary?: string | null
@@ -109,10 +117,14 @@ export type Database = {
           cover_image_url?: string | null
           created_at?: string
           display_order?: number
-          external_url?: string | null
           id?: string
+          mission_type?: string | null
+          photo_profil_alt_text?: string | null
+          photo_profil_url?: string | null
           project_type?: Database["public"]["Enums"]["project_type"]
           published?: boolean
+          repo_note?: string | null
+          repo_url?: string | null
           slug?: string
           status_label?: string | null
           summary?: string | null
@@ -126,7 +138,7 @@ export type Database = {
       }
       site_settings: {
         Row: {
-          bahut_url: string | null
+          benevolat_section_title: string
           contact_email: string
           cover_image_alt_text: string | null
           cover_image_url: string | null
@@ -139,14 +151,12 @@ export type Database = {
           id: number
           linkedin_url: string | null
           missions_section_title: string
-          profile_photo_alt_text: string | null
-          profile_photo_url: string | null
           tools_json: Json
           tools_section_title: string
           updated_at: string
         }
         Insert: {
-          bahut_url?: string | null
+          benevolat_section_title?: string
           contact_email?: string
           cover_image_alt_text?: string | null
           cover_image_url?: string | null
@@ -159,14 +169,12 @@ export type Database = {
           id?: number
           linkedin_url?: string | null
           missions_section_title?: string
-          profile_photo_alt_text?: string | null
-          profile_photo_url?: string | null
           tools_json?: Json
           tools_section_title?: string
           updated_at?: string
         }
         Update: {
-          bahut_url?: string | null
+          benevolat_section_title?: string
           contact_email?: string
           cover_image_alt_text?: string | null
           cover_image_url?: string | null
@@ -179,8 +187,6 @@ export type Database = {
           id?: number
           linkedin_url?: string | null
           missions_section_title?: string
-          profile_photo_alt_text?: string | null
-          profile_photo_url?: string | null
           tools_json?: Json
           tools_section_title?: string
           updated_at?: string
@@ -234,8 +240,8 @@ export type Database = {
       project_type:
         | "poc_perso"
         | "production_client"
-        | "formation_donnees"
-        | "mission_courte"
+        | "poc_ecole"
+        | "formation_mission"
         | "profil"
     }
     CompositeTypes: {
@@ -377,8 +383,8 @@ export const Constants = {
       project_type: [
         "poc_perso",
         "production_client",
-        "formation_donnees",
-        "mission_courte",
+        "poc_ecole",
+        "formation_mission",
         "profil",
       ],
     },

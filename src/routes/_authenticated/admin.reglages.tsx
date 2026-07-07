@@ -10,12 +10,14 @@ export const Route = createFileRoute("/_authenticated/admin/reglages")({
   component: SettingsPage,
 });
 
+type ToolCat = { category: string; items: string[] };
+
 function SettingsPage() {
   const fetch = useServerFn(getSiteSettings);
   const save = useServerFn(saveSiteSettings);
   const [s, setS] = useState<any>(null);
   const [busy, setBusy] = useState(false);
-  const [toolsStr, setToolsStr] = useState("");
+  const [tools, setTools] = useState<ToolCat[]>([]);
 
   useEffect(() => {
     fetch().then((data) => {
@@ -23,12 +25,10 @@ function SettingsPage() {
         ...data,
         cover_image_url: data?.cover_image_url ?? "",
         cover_image_alt_text: data?.cover_image_alt_text ?? "",
-        profile_photo_url: data?.profile_photo_url ?? "",
-        profile_photo_alt_text: data?.profile_photo_alt_text ?? "",
         linkedin_url: data?.linkedin_url ?? "",
-        bahut_url: data?.bahut_url ?? "",
       });
-      setToolsStr(JSON.stringify(data?.tools_json ?? [], null, 2));
+      const initial = (data?.tools_json ?? []) as ToolCat[];
+      setTools(Array.isArray(initial) ? initial : []);
     });
   }, [fetch]);
 
@@ -38,7 +38,6 @@ function SettingsPage() {
     e.preventDefault();
     setBusy(true);
     try {
-      const tools = JSON.parse(toolsStr);
       await save({ data: { ...s, tools_json: tools } });
       toast.success("Réglages enregistrés");
     } catch (err: any) {
@@ -70,30 +69,66 @@ function SettingsPage() {
           <input value={s.cover_image_alt_text} onChange={upd("cover_image_alt_text")} className={cls} placeholder="Laissé vide : le titre du hero sera utilisé" />
         </F>
 
-        <F label="Photo de profil">
-          <ImageUpload
-            value={s.profile_photo_url}
-            onChange={(url) => setS({ ...s, profile_photo_url: url })}
-            pathPrefix="site/profile"
-          />
-        </F>
-
-        <F label="Texte alternatif de la photo de profil">
-          <input value={s.profile_photo_alt_text} onChange={upd("profile_photo_alt_text")} className={cls} placeholder='Laissé vide : "Photo de profil de Martine Desmaroux"' />
-        </F>
-
         <F label="Email de contact"><input type="email" value={s.contact_email} onChange={upd("contact_email")} className={cls} /></F>
         <F label="LinkedIn"><input value={s.linkedin_url} onChange={upd("linkedin_url")} className={cls} /></F>
-        <F label="URL Le Bahut"><input value={s.bahut_url} onChange={upd("bahut_url")} className={cls} /></F>
 
         <F label="Titre section projets phares"><input value={s.featured_section_title} onChange={upd("featured_section_title")} className={cls} /></F>
-        <F label="Titre section formations"><input value={s.formations_section_title} onChange={upd("formations_section_title")} className={cls} /></F>
+        <F label="Titre section formations données"><input value={s.formations_section_title} onChange={upd("formations_section_title")} className={cls} /></F>
         <F label="Titre section missions courtes"><input value={s.missions_section_title} onChange={upd("missions_section_title")} className={cls} /></F>
+        <F label="Titre section bénévolat"><input value={s.benevolat_section_title} onChange={upd("benevolat_section_title")} className={cls} /></F>
         <F label="Titre section outils"><input value={s.tools_section_title} onChange={upd("tools_section_title")} className={cls} /></F>
 
-        <F label='Outils (JSON : [{"category":"...","items":["..."]}])'>
-          <textarea rows={10} value={toolsStr} onChange={(e) => setToolsStr(e.target.value)} className={`${cls} font-mono text-xs`} />
-        </F>
+        <div className="rounded-md border border-border bg-card p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="font-serif text-lg font-bold text-foreground">Outils & compétences</h2>
+            <button
+              type="button"
+              onClick={() => setTools([...tools, { category: "", items: [] }])}
+              className="rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted"
+            >
+              + Catégorie
+            </button>
+          </div>
+          <div className="space-y-3">
+            {tools.map((cat, ci) => (
+              <div key={ci} className="rounded border border-border bg-background p-3">
+                <div className="mb-2 flex items-center gap-2">
+                  <input
+                    value={cat.category}
+                    onChange={(e) => {
+                      const c = [...tools];
+                      c[ci] = { ...c[ci], category: e.target.value };
+                      setTools(c);
+                    }}
+                    placeholder="Nom de la catégorie (ex. IA)"
+                    className={cls}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setTools(tools.filter((_, i) => i !== ci))}
+                    className="rounded border border-border px-2 py-1 text-xs text-destructive"
+                  >
+                    ×
+                  </button>
+                </div>
+                <input
+                  value={cat.items.join(", ")}
+                  onChange={(e) => {
+                    const items = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
+                    const c = [...tools];
+                    c[ci] = { ...c[ci], items };
+                    setTools(c);
+                  }}
+                  placeholder="Tag 1, Tag 2, Tag 3 (séparés par une virgule)"
+                  className={cls}
+                />
+              </div>
+            ))}
+            {tools.length === 0 && (
+              <p className="text-sm text-muted-foreground">Aucune catégorie. Ajoutez-en une.</p>
+            )}
+          </div>
+        </div>
 
         <F label="Pied de page"><input value={s.footer_text} onChange={upd("footer_text")} className={cls} /></F>
 

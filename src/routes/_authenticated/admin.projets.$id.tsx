@@ -385,16 +385,17 @@ function EditProject() {
               <div key={i} className="rounded-md border border-border bg-card p-4">
                 <div className="mb-2 flex items-center justify-between">
                   <span className="text-xs font-medium uppercase text-muted-foreground">{b.block_type}</span>
-                  <div className="flex gap-2 text-xs">
+                  <div className="flex gap-1">
                     {i > 0 && (
-                      <button type="button" onClick={() => { const c = [...blocks]; [c[i - 1], c[i]] = [c[i], c[i - 1]]; setBlocks(c); }} className="text-accent">↑</button>
+                      <button type="button" onClick={() => { const c = [...blocks]; [c[i - 1], c[i]] = [c[i], c[i - 1]]; setBlocks(c); }} className="min-h-11 min-w-11 rounded-md border border-border px-2 text-accent hover:bg-muted" aria-label="Monter">↑</button>
                     )}
                     {i < blocks.length - 1 && (
-                      <button type="button" onClick={() => { const c = [...blocks]; [c[i + 1], c[i]] = [c[i], c[i + 1]]; setBlocks(c); }} className="text-accent">↓</button>
+                      <button type="button" onClick={() => { const c = [...blocks]; [c[i + 1], c[i]] = [c[i], c[i + 1]]; setBlocks(c); }} className="min-h-11 min-w-11 rounded-md border border-border px-2 text-accent hover:bg-muted" aria-label="Descendre">↓</button>
                     )}
-                    <button type="button" onClick={() => setBlocks(blocks.filter((_, j) => j !== i))} className="text-destructive">×</button>
+                    <button type="button" onClick={() => setBlocks(blocks.filter((_, j) => j !== i))} className="min-h-11 min-w-11 rounded-md border border-border px-2 text-destructive hover:bg-muted" aria-label="Supprimer">×</button>
                   </div>
                 </div>
+
                 {b.block_type !== "heading" && (
                   <input
                     placeholder="Titre du bloc (optionnel)"

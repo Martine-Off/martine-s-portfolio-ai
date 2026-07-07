@@ -50,6 +50,8 @@ function EditProject() {
     repo_note: "",
     photo_profil_url: "",
     photo_profil_alt_text: "",
+    role: "",
+    impact: "",
     published: false,
     display_order: 0,
   });

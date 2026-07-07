@@ -84,7 +84,46 @@ export function BlockRenderer({ block }: { block: Block }) {
         </figure>
       );
     }
+    case "liste": {
+      const items = (block.content ?? "")
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      if (items.length === 0) return null;
+      return (
+        <ul className="my-4 list-disc space-y-1 pl-6 text-base leading-relaxed text-foreground md:text-lg">
+          {items.map((it, i) => (
+            <li key={i}>{it}</li>
+          ))}
+        </ul>
+      );
+    }
+    case "comparatif": {
+      const raw = block.content ?? "";
+      const cols = raw.split("||").map((col) => {
+        const [title, rest] = col.split(":");
+        const items = (rest ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+        return { title: (title ?? "").trim(), items };
+      });
+      if (cols.length === 0) return null;
+      return (
+        <div className="my-6 grid gap-4 md:grid-cols-2">
+          {cols.map((c, i) => (
+            <div key={i} className="rounded-lg border border-border bg-card p-5">
+              {c.title && <h4 className="mb-2 font-bold text-foreground">{c.title}</h4>}
+              <ul className="list-disc space-y-1 pl-5 text-sm text-foreground md:text-base">
+                {c.items.map((it, j) => (
+                  <li key={j}>{it}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      );
+    }
     default:
       return null;
   }
 }
+
+

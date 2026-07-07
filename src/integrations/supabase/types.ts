@@ -73,6 +73,7 @@ export type Database = {
           cover_image_url: string | null
           created_at: string
           display_order: number
+          emoji: string | null
           id: string
           impact: string | null
           mission_type: string | null
@@ -100,6 +101,7 @@ export type Database = {
           cover_image_url?: string | null
           created_at?: string
           display_order?: number
+          emoji?: string | null
           id?: string
           impact?: string | null
           mission_type?: string | null
@@ -127,6 +129,7 @@ export type Database = {
           cover_image_url?: string | null
           created_at?: string
           display_order?: number
+          emoji?: string | null
           id?: string
           impact?: string | null
           mission_type?: string | null

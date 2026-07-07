@@ -33,8 +33,8 @@ function AdminPage() {
   async function signOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
+    await router.navigate({ to: "/", replace: true });
     await supabase.auth.signOut();
-    router.navigate({ to: "/", replace: true });
   }
 
   if (adminQ.isLoading) return <div className="p-8">Chargement…</div>;

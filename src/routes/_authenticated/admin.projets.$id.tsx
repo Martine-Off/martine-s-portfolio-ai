@@ -155,7 +155,7 @@ function EditProject() {
   if (loading) return <div className="p-8">Chargement…</div>;
 
   return (
-    <div className="mx-auto max-w-4xl p-8">
+    <div className="mx-auto max-w-4xl p-4 md:p-8">
       <Link to="/admin" className="mb-4 inline-block text-sm text-muted-foreground hover:text-foreground">
         ← Retour
       </Link>

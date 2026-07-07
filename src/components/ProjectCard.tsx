@@ -7,6 +7,7 @@ export interface ProjectCardData {
   id: string;
   slug: string;
   title: string;
+  emoji?: string | null;
   tagline: string | null;
   project_type: string;
   status_label: string | null;

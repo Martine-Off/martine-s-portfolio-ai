@@ -25,6 +25,7 @@ type BlockType = "text" | "video" | "image" | "quote" | "heading" | "liste" | "c
 type Block = {
   id?: string;
   block_type: BlockType;
+  title: string | null;
   content: string | null;
   media_url: string | null;
   alt_text: string | null;

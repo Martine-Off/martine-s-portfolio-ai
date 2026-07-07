@@ -61,9 +61,10 @@ function NewProject() {
             <option value="profil">Profil</option>
           </select>
         </div>
-        <button type="submit" disabled={busy} className="rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50">
+        <button type="submit" disabled={busy} className="min-h-11 w-full rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 sm:w-auto">
           {busy ? "…" : "Créer et modifier"}
         </button>
+
       </form>
     </div>
   );

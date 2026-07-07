@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { resolveAccentColor } from "@/lib/utils/status";
+
 
 export interface ProjectCardData {
   id: string;

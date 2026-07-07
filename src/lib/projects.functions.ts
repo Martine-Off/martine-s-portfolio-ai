@@ -195,6 +195,7 @@ export const saveProject = createServerFn({ method: "POST" })
       photo_profil_alt_text: project.project_type === "profil" ? (project.photo_profil_alt_text ?? null) : null,
       role: project.role ?? null,
       impact: project.impact ?? null,
+      angle: project.angle ?? null,
       published: project.published,
       display_order: project.display_order,
     };

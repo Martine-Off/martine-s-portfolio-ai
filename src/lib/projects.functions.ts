@@ -126,7 +126,7 @@ const projectSchema = z.object({
 
 const blockSchema = z.object({
   id: z.string().uuid().optional().nullable(),
-  block_type: z.enum(["text", "video", "image", "quote", "heading"]),
+  block_type: z.enum(["text", "video", "image", "quote", "heading", "liste", "comparatif"]),
   content: z.string().nullable().optional(),
   media_url: z.string().nullable().optional(),
   alt_text: z.string().nullable().optional(),

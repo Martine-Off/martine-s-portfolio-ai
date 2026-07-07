@@ -44,7 +44,7 @@ function NewProject() {
   }
 
   return (
-    <div className="mx-auto max-w-lg p-8">
+    <div className="mx-auto max-w-lg p-4 md:p-8">
       <h1 className="mb-6 font-serif text-3xl font-bold text-foreground">Nouveau projet</h1>
       <form onSubmit={submit} className="space-y-4">
         <div>

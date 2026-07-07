@@ -76,6 +76,8 @@ function EditProject() {
           repo_note: res.project.repo_note ?? "",
           photo_profil_url: res.project.photo_profil_url ?? "",
           photo_profil_alt_text: res.project.photo_profil_alt_text ?? "",
+          role: res.project.role ?? "",
+          impact: res.project.impact ?? "",
         });
         setTagsStr(res.project.tags.join(", "));
         const cats = (res.project.tags_categorises as Category[] | null) ?? [];

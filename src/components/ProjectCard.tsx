@@ -71,6 +71,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             variant === "grid" ? "text-xl" : "text-3xl md:text-4xl",
           )}
         >
+          {project.emoji ? <span className="mr-1.5">{project.emoji}</span> : null}
           {project.title}
         </h3>
         {project.tagline && (

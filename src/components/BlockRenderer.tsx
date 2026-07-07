@@ -31,23 +31,35 @@ function renderInlineMarkdown(text: string): React.ReactNode[] {
 interface Block {
   id: string;
   block_type: string;
+  title?: string | null;
   content: string | null;
   media_url: string | null;
   alt_text: string | null;
   caption: string | null;
 }
 
+function BlockTitle({ title }: { title?: string | null }) {
+  if (!title) return null;
+  return (
+    <h3 className="mt-6 mb-2 font-serif text-xl font-semibold text-foreground md:text-2xl">
+      {title}
+    </h3>
+  );
+}
+
 export function BlockRenderer({ block }: { block: Block }) {
+  const anchorId = `block-${block.id}`;
   switch (block.block_type) {
     case "heading":
       return (
-        <h2 className="mt-8 mb-2 font-serif text-2xl font-bold text-foreground md:text-3xl">
+        <h2 id={anchorId} className="mt-8 mb-2 scroll-mt-24 font-serif text-2xl font-bold text-foreground md:text-3xl">
           {block.content}
         </h2>
       );
     case "text":
       return (
-        <div className="prose prose-neutral max-w-none text-foreground [&_p]:my-3 [&_p]:leading-relaxed">
+        <div id={anchorId} className="scroll-mt-24 prose prose-neutral max-w-none text-foreground [&_p]:my-3 [&_p]:leading-relaxed">
+          <BlockTitle title={block.title} />
           {block.content?.split("\n\n").map((para, i) => (
             <p key={i} className="text-base leading-relaxed text-foreground md:text-lg">
               {renderInlineMarkdown(para)}
@@ -57,17 +69,21 @@ export function BlockRenderer({ block }: { block: Block }) {
       );
     case "quote":
       return (
-        <blockquote
-          className="my-6 border-l-4 pl-6 font-serif text-xl italic text-foreground md:text-2xl"
-          style={{ borderColor: "var(--decorative)" }}
-        >
-          {block.content}
-        </blockquote>
+        <div id={anchorId} className="scroll-mt-24">
+          <BlockTitle title={block.title} />
+          <blockquote
+            className="my-6 border-l-4 pl-6 font-serif text-xl italic text-foreground md:text-2xl"
+            style={{ borderColor: "var(--decorative)" }}
+          >
+            {block.content}
+          </blockquote>
+        </div>
       );
     case "image":
       if (!block.media_url) return null;
       return (
-        <figure className="my-6">
+        <figure id={anchorId} className="my-6 scroll-mt-24">
+          <BlockTitle title={block.title} />
           <img
             src={block.media_url}
             alt={block.alt_text || ""}
@@ -84,7 +100,7 @@ export function BlockRenderer({ block }: { block: Block }) {
       const embed = toEmbedUrl(block.media_url);
       if (!embed) {
         return (
-          <p className="my-4 text-sm text-muted-foreground">
+          <p id={anchorId} className="my-4 scroll-mt-24 text-sm text-muted-foreground">
             Vidéo non prise en charge :{" "}
             <a href={block.media_url} className="text-accent underline">
               {block.media_url}
@@ -93,7 +109,8 @@ export function BlockRenderer({ block }: { block: Block }) {
         );
       }
       return (
-        <figure className="my-6">
+        <figure id={anchorId} className="my-6 scroll-mt-24">
+          <BlockTitle title={block.title} />
           <div className="aspect-video w-full overflow-hidden rounded-lg border border-border bg-black">
             <iframe
               src={embed}
@@ -119,11 +136,14 @@ export function BlockRenderer({ block }: { block: Block }) {
         .filter(Boolean);
       if (items.length === 0) return null;
       return (
-        <ul className="my-4 list-disc space-y-1 pl-6 text-base leading-relaxed text-foreground md:text-lg">
-          {items.map((it, i) => (
-            <li key={i}>{it}</li>
-          ))}
-        </ul>
+        <div id={anchorId} className="scroll-mt-24">
+          <BlockTitle title={block.title} />
+          <ul className="my-4 list-disc space-y-1 pl-6 text-base leading-relaxed text-foreground md:text-lg">
+            {items.map((it, i) => (
+              <li key={i}>{renderInlineMarkdown(it)}</li>
+            ))}
+          </ul>
+        </div>
       );
     }
     case "comparatif": {
@@ -135,17 +155,20 @@ export function BlockRenderer({ block }: { block: Block }) {
       });
       if (cols.length === 0) return null;
       return (
-        <div className="my-6 grid gap-4 md:grid-cols-2">
-          {cols.map((c, i) => (
-            <div key={i} className="rounded-lg border border-border bg-card p-5">
-              {c.title && <h4 className="mb-2 font-bold text-foreground">{c.title}</h4>}
-              <ul className="list-disc space-y-1 pl-5 text-sm text-foreground md:text-base">
-                {c.items.map((it, j) => (
-                  <li key={j}>{it}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div id={anchorId} className="scroll-mt-24">
+          <BlockTitle title={block.title} />
+          <div className="my-6 grid gap-4 md:grid-cols-2">
+            {cols.map((c, i) => (
+              <div key={i} className="rounded-lg border border-border bg-card p-5">
+                {c.title && <h4 className="mb-2 font-bold text-foreground">{c.title}</h4>}
+                <ul className="list-disc space-y-1 pl-5 text-sm text-foreground md:text-base">
+                  {c.items.map((it, j) => (
+                    <li key={j}>{renderInlineMarkdown(it)}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       );
     }
@@ -153,5 +176,3 @@ export function BlockRenderer({ block }: { block: Block }) {
       return null;
   }
 }
-
-

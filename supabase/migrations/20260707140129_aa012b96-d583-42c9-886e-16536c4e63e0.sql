@@ -1,0 +1,2 @@
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS angle TEXT;
+ALTER TABLE public.project_blocks ADD COLUMN IF NOT EXISTS title TEXT;

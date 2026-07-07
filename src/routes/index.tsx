@@ -29,6 +29,7 @@ type CondensedItem = {
   tagline: string | null;
   slug: string;
   role: string | null;
+  angle: string | null;
   status_label: string | null;
   tags: string[];
   impact: string | null;
@@ -52,6 +53,7 @@ function CondensedList({ title, items }: { title: string; items: CondensedItem[]
               )}
             </div>
             {p.tagline && <p className="mt-1 text-sm text-muted-foreground">{p.tagline}</p>}
+            {p.angle && <p className="mt-0.5 text-xs text-muted-foreground">{p.angle}</p>}
             {p.tags.length > 0 && (
               <ul className="mt-2 flex flex-wrap gap-1.5">
                 {p.tags.map((t) => (

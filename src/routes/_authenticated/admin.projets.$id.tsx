@@ -4,7 +4,18 @@ import { useEffect, useState } from "react";
 import { getProjectByIdAdmin, saveProject } from "@/lib/projects.functions";
 import { toast } from "sonner";
 import { ImageUpload } from "@/components/ImageUpload";
-import { STATUS_OPTIONS, resolveAccentColor } from "@/lib/utils/status";
+import { resolveAccentColor } from "@/lib/utils/status";
+
+const STATUS_SUGGESTIONS = [
+  "Terminé",
+  "Déployé",
+  "MVP",
+  "En production",
+  "En cours",
+  "POC",
+  "Faite",
+  "Produit",
+];
 
 export const Route = createFileRoute("/_authenticated/admin/projets/$id")({
   component: EditProject,
@@ -14,6 +25,7 @@ type BlockType = "text" | "video" | "image" | "quote" | "heading" | "liste" | "c
 type Block = {
   id?: string;
   block_type: BlockType;
+  title: string | null;
   content: string | null;
   media_url: string | null;
   alt_text: string | null;
@@ -52,6 +64,7 @@ function EditProject() {
     photo_profil_alt_text: "",
     role: "",
     impact: "",
+    angle: "",
     published: false,
     display_order: 0,
   });
@@ -78,6 +91,7 @@ function EditProject() {
           photo_profil_alt_text: res.project.photo_profil_alt_text ?? "",
           role: res.project.role ?? "",
           impact: res.project.impact ?? "",
+          angle: (res.project as { angle?: string | null }).angle ?? "",
         });
         setTagsStr(res.project.tags.join(", "));
         const cats = (res.project.tags_categorises as Category[] | null) ?? [];
@@ -86,6 +100,7 @@ function EditProject() {
           res.blocks.map((b) => ({
             id: b.id,
             block_type: b.block_type as BlockType,
+            title: (b as { title?: string | null }).title ?? null,
             content: b.content,
             media_url: b.media_url,
             alt_text: b.alt_text,
@@ -132,7 +147,7 @@ function EditProject() {
     if (type === "liste") defaults.content = "Premier item\nDeuxième item";
     setBlocks([
       ...blocks,
-      { block_type: type, content: defaults.content ?? "", media_url: "", alt_text: "", caption: "", display_order: blocks.length },
+      { block_type: type, title: null, content: defaults.content ?? "", media_url: "", alt_text: "", caption: "", display_order: blocks.length },
     ]);
   }
 
@@ -183,13 +198,22 @@ function EditProject() {
         <Field label="Rôle">
           <input value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className={inputCls} placeholder="ex. Formatrice, Bénévole, Product Owner" />
         </Field>
+        <Field label="Angle">
+          <input value={form.angle ?? ""} onChange={(e) => setForm({ ...form, angle: e.target.value })} className={inputCls} placeholder="ex. Audit / poc, Cadrage / gouvernance" />
+        </Field>
         <Field label="Statut">
-          <select value={form.status_label} onChange={(e) => setForm({ ...form, status_label: e.target.value })} className={inputCls}>
-            <option value="">— Aucun —</option>
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s} value={s}>{s}</option>
+          <input
+            list="status-suggestions"
+            value={form.status_label}
+            onChange={(e) => setForm({ ...form, status_label: e.target.value })}
+            className={inputCls}
+            placeholder="Libre — ex. POC validé, MVP en déploiement, Faite"
+          />
+          <datalist id="status-suggestions">
+            {STATUS_SUGGESTIONS.map((s) => (
+              <option key={s} value={s} />
             ))}
-          </select>
+          </datalist>
         </Field>
         {!isLight && (
           <Field label="Couleur d'accent">
@@ -370,6 +394,14 @@ function EditProject() {
                     <button type="button" onClick={() => setBlocks(blocks.filter((_, j) => j !== i))} className="text-destructive">×</button>
                   </div>
                 </div>
+                {b.block_type !== "heading" && (
+                  <input
+                    placeholder="Titre du bloc (optionnel)"
+                    value={b.title ?? ""}
+                    onChange={(e) => { const c = [...blocks]; c[i].title = e.target.value; setBlocks(c); }}
+                    className={`${inputCls} mb-2`}
+                  />
+                )}
                 {(b.block_type === "text" || b.block_type === "quote" || b.block_type === "heading") && (
                   <>
                     {b.block_type === "text" && (

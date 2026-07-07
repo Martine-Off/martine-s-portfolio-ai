@@ -126,6 +126,7 @@ const projectSchema = z.object({
   photo_profil_alt_text: z.string().nullable().optional(),
   role: z.string().nullable().optional(),
   impact: z.string().nullable().optional(),
+  angle: z.string().nullable().optional(),
   published: z.boolean().default(false),
   display_order: z.number().default(0),
 });
@@ -133,6 +134,7 @@ const projectSchema = z.object({
 const blockSchema = z.object({
   id: z.string().uuid().optional().nullable(),
   block_type: z.enum(["text", "video", "image", "quote", "heading", "liste", "comparatif"]),
+  title: z.string().nullable().optional(),
   content: z.string().nullable().optional(),
   media_url: z.string().nullable().optional(),
   alt_text: z.string().nullable().optional(),
@@ -193,6 +195,7 @@ export const saveProject = createServerFn({ method: "POST" })
       photo_profil_alt_text: project.project_type === "profil" ? (project.photo_profil_alt_text ?? null) : null,
       role: project.role ?? null,
       impact: project.impact ?? null,
+      angle: project.angle ?? null,
       published: project.published,
       display_order: project.display_order,
     };
@@ -224,6 +227,7 @@ export const saveProject = createServerFn({ method: "POST" })
       const rows = blocks.map((b, i) => ({
         project_id: projectId!,
         block_type: b.block_type,
+        title: b.title ?? null,
         content: b.content ?? null,
         media_url: b.media_url ?? null,
         alt_text: b.alt_text ?? null,

@@ -126,6 +126,7 @@ const projectSchema = z.object({
   photo_profil_alt_text: z.string().nullable().optional(),
   role: z.string().nullable().optional(),
   impact: z.string().nullable().optional(),
+  angle: z.string().nullable().optional(),
   published: z.boolean().default(false),
   display_order: z.number().default(0),
 });
@@ -133,6 +134,7 @@ const projectSchema = z.object({
 const blockSchema = z.object({
   id: z.string().uuid().optional().nullable(),
   block_type: z.enum(["text", "video", "image", "quote", "heading", "liste", "comparatif"]),
+  title: z.string().nullable().optional(),
   content: z.string().nullable().optional(),
   media_url: z.string().nullable().optional(),
   alt_text: z.string().nullable().optional(),

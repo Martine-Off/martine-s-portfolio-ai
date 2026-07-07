@@ -288,7 +288,7 @@ function EditProject() {
           <>
             <div className="mt-8 rounded-md border border-border bg-card p-4">
               <h2 className="mb-3 font-serif text-xl font-bold text-foreground">Photo de profil</h2>
-              <div className="flex items-start gap-4">
+              <div className="flex flex-col items-start gap-4 sm:flex-row">
                 {form.photo_profil_url && (
                   <img
                     src={form.photo_profil_url}

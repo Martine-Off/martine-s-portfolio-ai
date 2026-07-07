@@ -138,6 +138,7 @@ function EditProject() {
 
   const previewAccent = resolveAccentColor(form.accent_color, form.status_label);
   const isAutoAccent = !form.accent_color;
+  const isLight = form.project_type === "formation_mission";
 
   if (loading) return <div className="p-8">Chargement…</div>;
 

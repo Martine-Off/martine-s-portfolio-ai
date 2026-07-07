@@ -1,0 +1,115 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { getProfilePage } from "@/lib/projects.functions";
+import { getSiteSettings } from "@/lib/settings.functions";
+import { BlockRenderer } from "@/components/BlockRenderer";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+
+const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
+const profileQuery = queryOptions({ queryKey: ["profile"], queryFn: () => getProfilePage() });
+
+export const Route = createFileRoute("/profil")({
+  head: () => ({
+    meta: [
+      { title: "Profil — Martine Desmaroux" },
+      { name: "description", content: "Parcours et compétences de Martine Desmaroux, cheffe de projet IA." },
+      { property: "og:title", content: "Profil — Martine Desmaroux" },
+      { property: "og:description", content: "Parcours et compétences de Martine Desmaroux, cheffe de projet IA." },
+    ],
+  }),
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(settingsQuery),
+      context.queryClient.ensureQueryData(profileQuery),
+    ]);
+  },
+  component: ProfilPage,
+  errorComponent: ({ error }) => <div className="p-8">{error.message}</div>,
+  notFoundComponent: () => <div className="p-8">404</div>,
+});
+
+function ProfilPage() {
+  const { data: settings } = useSuspenseQuery(settingsQuery);
+  const { data: profile } = useSuspenseQuery(profileQuery);
+
+  const categorised = (profile?.project.tags_categorises ?? null) as
+    | Array<{ label: string; items: string[] }>
+    | null;
+
+  return (
+    <div className="min-h-screen bg-background">
+      <SiteHeader heroTitle={settings?.hero_title ?? ""} />
+
+      <div className="mx-auto max-w-4xl px-6 py-16 md:py-24">
+        <div className="flex flex-col gap-8 md:flex-row md:items-start">
+          {settings?.profile_photo_url && (
+            <img
+              src={settings.profile_photo_url}
+              alt={settings.profile_photo_alt_text || "Photo de profil de Martine Desmaroux"}
+              className="h-40 w-40 flex-shrink-0 rounded-full border border-border object-cover md:h-56 md:w-56"
+            />
+          )}
+          <div>
+            <h1 className="font-serif text-4xl font-bold text-foreground md:text-5xl">
+              {profile?.project.title ?? "Profil"}
+            </h1>
+            {profile?.project.tagline && (
+              <p className="mt-4 text-lg text-muted-foreground">{profile.project.tagline}</p>
+            )}
+            {settings?.bahut_url && (
+              <p className="mt-4">
+                <a
+                  href={settings.bahut_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:underline"
+                >
+                  Le Bahut ↗
+                </a>
+              </p>
+            )}
+          </div>
+        </div>
+
+        {profile?.project.summary && (
+          <p className="mt-8 text-lg leading-relaxed text-foreground">{profile.project.summary}</p>
+        )}
+
+        {profile?.blocks && profile.blocks.length > 0 && (
+          <div className="mt-10">
+            {profile.blocks.map((b) => (
+              <BlockRenderer key={b.id} block={b} />
+            ))}
+          </div>
+        )}
+
+        {categorised && categorised.length > 0 && (
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {categorised.map((block, i) => (
+              <div key={i} className="rounded-lg border border-border bg-card p-5">
+                <h3 className="mb-3 font-serif text-lg font-bold text-foreground">{block.label}</h3>
+                <ul className="flex flex-wrap gap-1.5">
+                  {block.items.map((item) => (
+                    <li
+                      key={item}
+                      className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <SiteFooter
+        footerText={settings?.footer_text ?? ""}
+        email={settings?.contact_email ?? ""}
+        linkedinUrl={settings?.linkedin_url}
+      />
+    </div>
+  );
+}

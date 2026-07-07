@@ -145,7 +145,7 @@ function EditProject() {
     if (type === "liste") defaults.content = "Premier item\nDeuxième item";
     setBlocks([
       ...blocks,
-      { block_type: type, content: defaults.content ?? "", media_url: "", alt_text: "", caption: "", display_order: blocks.length },
+      { block_type: type, title: null, content: defaults.content ?? "", media_url: "", alt_text: "", caption: "", display_order: blocks.length },
     ]);
   }
 

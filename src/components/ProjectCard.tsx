@@ -10,8 +10,9 @@ export interface ProjectCardData {
   tagline: string | null;
   project_type: string;
   status_label: string | null;
-  accent_color: string;
+  accent_color: string | null;
   cover_image_url: string | null;
+
   cover_image_alt_text: string | null;
   cover_image_position: string;
   tags: string[];

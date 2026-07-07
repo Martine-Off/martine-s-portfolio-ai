@@ -392,6 +392,14 @@ function EditProject() {
                     <button type="button" onClick={() => setBlocks(blocks.filter((_, j) => j !== i))} className="text-destructive">×</button>
                   </div>
                 </div>
+                {b.block_type !== "heading" && (
+                  <input
+                    placeholder="Titre du bloc (optionnel)"
+                    value={b.title ?? ""}
+                    onChange={(e) => { const c = [...blocks]; c[i].title = e.target.value; setBlocks(c); }}
+                    className={`${inputCls} mb-2`}
+                  />
+                )}
                 {(b.block_type === "text" || b.block_type === "quote" || b.block_type === "heading") && (
                   <>
                     {b.block_type === "text" && (

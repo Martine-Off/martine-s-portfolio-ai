@@ -86,8 +86,8 @@ function AdminPage() {
     const swapIndex = direction === "up" ? index - 1 : index + 1;
     if (swapIndex < 0 || swapIndex >= visible.length) return;
     const other = visible[swapIndex];
-    await reorder({ data: { id: project.id, display_order: other.display_order } });
-    await reorder({ data: { id: other.id, display_order: project.display_order } });
+    const newOrder = direction === "up" ? other.display_order - 1 : other.display_order + 1;
+    await reorder({ data: { id: project.id, display_order: newOrder } });
     toast.success("Ordre mis à jour");
     listQ.refetch();
   }

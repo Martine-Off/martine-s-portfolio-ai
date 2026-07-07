@@ -64,6 +64,7 @@ function EditProject() {
     photo_profil_alt_text: "",
     role: "",
     impact: "",
+    angle: "",
     published: false,
     display_order: 0,
   });

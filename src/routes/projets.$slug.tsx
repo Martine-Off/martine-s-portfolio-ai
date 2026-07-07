@@ -56,6 +56,24 @@ function ProjectPage() {
   if (!data) return null;
   const { project, blocks } = data;
 
+  const p = project as typeof project & { role: string | null; angle: string | null };
+  type BlockWithTitle = (typeof blocks)[number] & { title: string | null };
+  const tocItems = (blocks as BlockWithTitle[])
+    .map((b) => {
+      const label = b.block_type === "heading" ? (b.content ?? "").trim() : (b.title ?? "").trim();
+      return label ? { id: `block-${b.id}`, label } : null;
+    })
+    .filter((x): x is { id: string; label: string } => x !== null);
+
+  function onTocClick(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", `#${id}`);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader heroTitle={settings?.hero_title ?? ""} />
@@ -83,13 +101,41 @@ function ProjectPage() {
           linkable={false}
         />
 
+        {(p.role || p.angle) && (
+          <div className="mt-4">
+            {p.role && <p className="text-sm text-foreground">{p.role}</p>}
+            {p.angle && <p className="text-xs text-muted-foreground">{p.angle}</p>}
+          </div>
+        )}
+
         {project.summary && (
           <p className="mt-8 text-lg leading-relaxed text-foreground">{project.summary}</p>
         )}
 
+        {tocItems.length >= 2 && (
+          <nav className="mt-8 rounded-lg border border-border bg-card p-5">
+            <p className="mb-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
+              Sommaire
+            </p>
+            <ul className="space-y-1">
+              {tocItems.map((t) => (
+                <li key={t.id}>
+                  <a
+                    href={`#${t.id}`}
+                    onClick={(e) => onTocClick(e, t.id)}
+                    className="text-accent hover:underline"
+                  >
+                    {t.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
         <div className="mt-8">
           {blocks.map((b) => (
-            <BlockRenderer key={b.id} block={b} />
+            <BlockRenderer key={b.id} block={b as BlockWithTitle} />
           ))}
         </div>
 

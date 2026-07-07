@@ -64,6 +64,10 @@ function EditProject() {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
+    fetchStatuses().then((list) => setStatusSuggestions(list ?? [])).catch(() => {});
+  }, [fetchStatuses]);
+
+  useEffect(() => {
     if (isNew) return;
     fetchProj({ data: { id } }).then((res) => {
       if (res) {

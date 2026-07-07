@@ -174,7 +174,7 @@ export const saveProject = createServerFn({ method: "POST" })
       tagline: project.tagline ?? null,
       project_type: project.project_type,
       status_label: project.status_label ?? null,
-      accent_color: project.accent_color || "#65BFF1",
+      accent_color: project.accent_color && project.accent_color.trim() ? project.accent_color : null,
       cover_image_url: project.cover_image_url ?? null,
       cover_image_alt_text: project.cover_image_alt_text ?? null,
       cover_image_position: project.cover_image_position || "center",

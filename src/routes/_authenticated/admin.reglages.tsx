@@ -59,12 +59,25 @@ function SettingsPage() {
         <F label="Sous-titre"><input value={s.hero_subtitle} onChange={upd("hero_subtitle")} className={cls} /></F>
         <F label="Introduction"><textarea rows={4} value={s.hero_intro} onChange={upd("hero_intro")} className={cls} /></F>
 
-        <F label="URL image de couverture"><input value={s.cover_image_url} onChange={upd("cover_image_url")} className={cls} /></F>
+        <F label="Image de couverture">
+          <ImageUpload
+            value={s.cover_image_url}
+            onChange={(url) => setS({ ...s, cover_image_url: url })}
+            pathPrefix="site/cover"
+          />
+        </F>
         <F label="Texte alternatif de l'image de couverture">
           <input value={s.cover_image_alt_text} onChange={upd("cover_image_alt_text")} className={cls} placeholder="Laissé vide : le titre du hero sera utilisé" />
         </F>
 
-        <F label="URL photo de profil"><input value={s.profile_photo_url} onChange={upd("profile_photo_url")} className={cls} /></F>
+        <F label="Photo de profil">
+          <ImageUpload
+            value={s.profile_photo_url}
+            onChange={(url) => setS({ ...s, profile_photo_url: url })}
+            pathPrefix="site/profile"
+          />
+        </F>
+
         <F label="Texte alternatif de la photo de profil">
           <input value={s.profile_photo_alt_text} onChange={upd("profile_photo_alt_text")} className={cls} placeholder='Laissé vide : "Photo de profil de Martine Desmaroux"' />
         </F>

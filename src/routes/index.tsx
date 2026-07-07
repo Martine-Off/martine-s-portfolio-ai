@@ -23,7 +23,18 @@ export const Route = createFileRoute("/")({
   notFoundComponent: () => <div className="p-8">404</div>,
 });
 
-function CondensedList({ title, items }: { title: string; items: Array<{ id: string; title: string; tagline: string | null; slug: string }> }) {
+type CondensedItem = {
+  id: string;
+  title: string;
+  tagline: string | null;
+  slug: string;
+  role: string | null;
+  status_label: string | null;
+  tags: string[];
+  impact: string | null;
+};
+
+function CondensedList({ title, items }: { title: string; items: CondensedItem[] }) {
   if (items.length === 0) return null;
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
@@ -31,14 +42,33 @@ function CondensedList({ title, items }: { title: string; items: Array<{ id: str
       <ul className="divide-y divide-border rounded-lg border border-border bg-card">
         {items.map((p) => (
           <li key={p.id} className="p-5">
-            <h3 className="font-serif text-lg font-bold text-foreground">{p.title}</h3>
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h3 className="font-serif text-lg font-bold text-foreground">{p.title}</h3>
+              {p.role && <span className="text-sm text-muted-foreground">— {p.role}</span>}
+              {p.status_label && (
+                <span className="rounded-full border border-border bg-background px-2 py-0.5 text-xs text-muted-foreground">
+                  {p.status_label}
+                </span>
+              )}
+            </div>
             {p.tagline && <p className="mt-1 text-sm text-muted-foreground">{p.tagline}</p>}
+            {p.tags.length > 0 && (
+              <ul className="mt-2 flex flex-wrap gap-1.5">
+                {p.tags.map((t) => (
+                  <li key={t} className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground">
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {p.impact && <p className="mt-2 text-sm text-foreground">{p.impact}</p>}
           </li>
         ))}
       </ul>
     </section>
   );
 }
+
 
 function HomePage() {
   const { data: settings } = useSuspenseQuery(settingsQuery);

@@ -1,0 +1,3 @@
+ALTER TABLE public.projects
+  ADD COLUMN IF NOT EXISTS role TEXT,
+  ADD COLUMN IF NOT EXISTS impact TEXT;

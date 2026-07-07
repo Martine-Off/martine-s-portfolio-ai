@@ -112,7 +112,7 @@ const projectSchema = z.object({
   tagline: z.string().nullable().optional(),
   project_type: z.enum(["poc_perso", "production_client", "formation_donnees", "mission_courte", "profil"]),
   status_label: z.string().nullable().optional(),
-  accent_color: z.string().default("#65BFF1"),
+  accent_color: z.string().nullable().optional(),
   cover_image_url: z.string().nullable().optional(),
   cover_image_alt_text: z.string().nullable().optional(),
   cover_image_position: z.string().default("center"),

@@ -124,6 +124,8 @@ const projectSchema = z.object({
   repo_note: z.string().nullable().optional(),
   photo_profil_url: z.string().nullable().optional(),
   photo_profil_alt_text: z.string().nullable().optional(),
+  role: z.string().nullable().optional(),
+  impact: z.string().nullable().optional(),
   published: z.boolean().default(false),
   display_order: z.number().default(0),
 });

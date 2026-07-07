@@ -16,19 +16,19 @@ const projectQuery = (slug: string) =>
   });
 
 export const Route = createFileRoute("/projets/$slug")({
-  head: ({ loaderData }) => ({
-    meta: loaderData?.project
-      ? [
-          { title: `${loaderData.project.project.title} — Martine Desmaroux` },
-          { name: "description", content: loaderData.project.project.tagline ?? loaderData.project.project.title },
-          { property: "og:title", content: loaderData.project.project.title },
-          { property: "og:description", content: loaderData.project.project.tagline ?? "" },
-          ...(loaderData.project.project.cover_image_url
-            ? [{ property: "og:image", content: loaderData.project.project.cover_image_url }]
-            : []),
-        ]
-      : [{ title: "Projet introuvable" }],
-  }),
+  head: ({ loaderData }) => {
+    const p = (loaderData as { project?: { project: { title: string; tagline: string | null; cover_image_url: string | null } } } | undefined)?.project?.project;
+    if (!p) return { meta: [{ title: "Projet introuvable" }] };
+    return {
+      meta: [
+        { title: `${p.title} — Martine Desmaroux` },
+        { name: "description", content: p.tagline ?? p.title },
+        { property: "og:title", content: p.title },
+        { property: "og:description", content: p.tagline ?? "" },
+        ...(p.cover_image_url ? [{ property: "og:image", content: p.cover_image_url }] : []),
+      ],
+    };
+  },
   loader: async ({ context, params }) => {
     await context.queryClient.ensureQueryData(settingsQuery);
     const project = await context.queryClient.ensureQueryData(projectQuery(params.slug));

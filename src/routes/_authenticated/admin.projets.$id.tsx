@@ -30,6 +30,8 @@ function EditProject() {
   const isNew = id === "nouveau";
   const fetchProj = useServerFn(getProjectByIdAdmin);
   const save = useServerFn(saveProject);
+  const fetchStatuses = useServerFn(listStatusLabels);
+  const [statusSuggestions, setStatusSuggestions] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(!isNew);
   const [busy, setBusy] = useState(false);

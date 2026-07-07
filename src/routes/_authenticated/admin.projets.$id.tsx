@@ -217,17 +217,18 @@ function EditProject() {
         </Field>
         {!isLight && (
           <Field label="Couleur d'accent">
-            <div className="flex items-center gap-2">
-              <input type="color" value={previewAccent} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className="h-10 w-16" />
-              <input value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className={inputCls} placeholder="(auto d'après le statut)" />
+            <div className="flex flex-wrap items-center gap-2">
+              <input type="color" value={previewAccent} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className="h-11 w-16 shrink-0" />
+              <input value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} className={`${inputCls} min-w-0 flex-1`} placeholder="(auto d'après le statut)" />
               <button
                 type="button"
                 onClick={() => setForm({ ...form, accent_color: "" })}
-                className="whitespace-nowrap rounded-md border border-border px-3 py-2 text-xs hover:bg-muted"
+                className="min-h-11 whitespace-nowrap rounded-md border border-border px-3 py-2 text-xs hover:bg-muted"
               >
                 Réinitialiser
               </button>
             </div>
+
             <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
               <span
                 className="inline-flex items-center rounded-full px-3 py-1 font-medium"

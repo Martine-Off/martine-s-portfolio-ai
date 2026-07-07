@@ -83,10 +83,12 @@ export function ImageUpload({ value, onChange, pathPrefix = "uploads", label = "
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={busy}
-          className="w-full rounded px-3 py-6 text-sm text-muted-foreground hover:bg-muted disabled:opacity-50"
+          className="min-h-11 w-full rounded px-3 py-6 text-sm text-muted-foreground hover:bg-muted disabled:opacity-50"
         >
-          {busy ? "Envoi…" : `${label} (ou glisser-déposer)`}
+          {busy ? "Envoi…" : label}
+          <span className="mt-1 hidden text-xs opacity-60 sm:block">ou glisser-déposer</span>
         </button>
+
       )}
       <input
         ref={inputRef}

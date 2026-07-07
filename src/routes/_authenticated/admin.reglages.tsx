@@ -101,16 +101,18 @@ function SettingsPage() {
                       setTools(c);
                     }}
                     placeholder="Nom de la catégorie (ex. IA)"
-                    className={cls}
+                    className={`${cls} min-w-0 flex-1`}
                   />
                   <button
                     type="button"
                     onClick={() => setTools(tools.filter((_, i) => i !== ci))}
-                    className="rounded border border-border px-2 py-1 text-xs text-destructive"
+                    className="min-h-11 min-w-11 shrink-0 rounded border border-border text-destructive"
+                    aria-label="Supprimer la catégorie"
                   >
                     ×
                   </button>
                 </div>
+
                 <input
                   value={cat.items.join(", ")}
                   onChange={(e) => {

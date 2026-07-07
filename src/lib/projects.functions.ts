@@ -144,6 +144,7 @@ const projectSchema = z.object({
   role: z.string().nullable().optional(),
   impact: z.string().nullable().optional(),
   angle: z.string().nullable().optional(),
+  emoji: z.string().nullable().optional(),
   published: z.boolean().default(false),
   display_order: z.number().default(0),
 });

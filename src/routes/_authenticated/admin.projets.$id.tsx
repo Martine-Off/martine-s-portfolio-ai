@@ -88,6 +88,7 @@ function EditProject() {
           role: res.project.role ?? "",
           impact: res.project.impact ?? "",
           angle: (res.project as { angle?: string | null }).angle ?? "",
+          emoji: (res.project as { emoji?: string | null }).emoji ?? "",
         });
         setTagsStr(res.project.tags.join(", "));
         const cats = (res.project.tags_categorises as Category[] | null) ?? [];

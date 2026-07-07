@@ -194,13 +194,22 @@ function EditProject() {
         <Field label="Rôle">
           <input value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className={inputCls} placeholder="ex. Formatrice, Bénévole, Product Owner" />
         </Field>
+        <Field label="Angle">
+          <input value={form.angle ?? ""} onChange={(e) => setForm({ ...form, angle: e.target.value })} className={inputCls} placeholder="ex. Audit / poc, Cadrage / gouvernance" />
+        </Field>
         <Field label="Statut">
-          <select value={form.status_label} onChange={(e) => setForm({ ...form, status_label: e.target.value })} className={inputCls}>
-            <option value="">— Aucun —</option>
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s} value={s}>{s}</option>
+          <input
+            list="status-suggestions"
+            value={form.status_label}
+            onChange={(e) => setForm({ ...form, status_label: e.target.value })}
+            className={inputCls}
+            placeholder="Libre — ex. POC validé, MVP en déploiement, Faite"
+          />
+          <datalist id="status-suggestions">
+            {STATUS_SUGGESTIONS.map((s) => (
+              <option key={s} value={s} />
             ))}
-          </select>
+          </datalist>
         </Field>
         {!isLight && (
           <Field label="Couleur d'accent">

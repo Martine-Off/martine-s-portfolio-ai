@@ -50,7 +50,7 @@ function SettingsPage() {
   const upd = (k: string) => (e: any) => setS({ ...s, [k]: e.target.value });
 
   return (
-    <div className="mx-auto max-w-3xl p-8">
+    <div className="mx-auto max-w-3xl p-4 md:p-8">
       <Link to="/admin" className="mb-4 inline-block text-sm text-muted-foreground hover:text-foreground">← Retour</Link>
       <h1 className="mb-6 font-serif text-3xl font-bold text-foreground">Réglages du site</h1>
       <form onSubmit={submit} className="space-y-4">

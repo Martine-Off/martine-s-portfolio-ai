@@ -126,15 +126,16 @@ function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border">
         {settings?.cover_image_url && (
-          <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 z-0">
             <img
               src={settings.cover_image_url}
               alt={settings.cover_image_alt_text || settings.hero_title || ""}
-              className="h-full w-full object-cover opacity-20"
+              className="h-full w-full object-cover opacity-40"
             />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background/80" />
           </div>
         )}
-        <div className="mx-auto max-w-6xl px-6 py-16 md:py-24">
+        <div className="relative z-10 mx-auto max-w-6xl px-6 py-16 md:py-24">
           <p className="mb-3 text-sm font-medium uppercase tracking-widest text-muted-foreground">
             {settings?.hero_subtitle}
           </p>

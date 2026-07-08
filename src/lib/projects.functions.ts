@@ -128,6 +128,7 @@ const projectSchema = z.object({
   slug: z.string().optional(),
   tagline: z.string().nullable().optional(),
   project_type: z.enum(["poc_perso", "production_client", "poc_ecole", "formation_mission", "profil"]),
+  project_date: z.string().nullable().optional(),
   mission_type: z.enum(["formation", "mission", "benevolat"]).nullable().optional(),
   status_label: z.string().nullable().optional(),
   accent_color: z.string().nullable().optional(),
@@ -193,6 +194,7 @@ async function persistProjectWithBlocks(
   const payload = {
     title: project.title,
     slug,
+    project_date: project.project_date ?? null,
     tagline: project.tagline ?? null,
     project_type: project.project_type,
     mission_type: project.project_type === "formation_mission" ? (project.mission_type ?? null) : null,

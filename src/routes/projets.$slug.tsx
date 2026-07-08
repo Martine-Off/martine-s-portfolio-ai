@@ -108,6 +108,7 @@ function ProjectPage() {
             emoji: (project as { emoji?: string | null }).emoji ?? null,
             tagline: project.tagline,
             project_type: project.project_type,
+            project_date: project.project_date,
             status_label: project.status_label,
             accent_color: project.accent_color,
             cover_image_url: project.cover_image_url,

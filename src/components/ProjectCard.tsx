@@ -7,6 +7,7 @@ import { resolveAccentColor } from "@/lib/utils/status";
 export interface ProjectCardData {
   id: string;
   slug: string;
+  project_date?: string | null;
   title: string;
   emoji?: string | null;
   tagline: string | null;
@@ -87,6 +88,11 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
           {project.emoji ? <span className="mr-1.5">{project.emoji}</span> : null}
           {project.title}
         </h3>
+        {project.project_date && (
+          <p className="text-sm font-medium text-muted-foreground/80">
+            {project.project_date}
+          </p>
+        )}
         {project.tagline && (
           <p className={cn("text-muted-foreground", variant === "grid" ? "text-sm" : "text-sm md:text-base")}>
             {project.tagline}

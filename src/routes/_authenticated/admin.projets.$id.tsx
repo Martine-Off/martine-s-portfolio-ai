@@ -263,8 +263,15 @@ function EditProject() {
             <Field label="Texte alternatif de l'image">
               <input value={form.cover_image_alt_text} onChange={(e) => setForm({ ...form, cover_image_alt_text: e.target.value })} className={inputCls} />
             </Field>
-            <Field label="Position de l'image (ex. center, top left)">
-              <input value={form.cover_image_position} onChange={(e) => setForm({ ...form, cover_image_position: e.target.value })} className={inputCls} />
+            <Field label="Position de l'image">
+              <CoverPositionPicker
+                imageUrl={form.cover_image_url}
+                value={form.cover_image_position || "center"}
+                onChange={(v) => setForm({ ...form, cover_image_position: v })}
+              />
+              {!form.cover_image_url && (
+                <p className="text-xs text-muted-foreground">Ajoutez une image de couverture pour définir sa position.</p>
+              )}
             </Field>
           </>
         )}

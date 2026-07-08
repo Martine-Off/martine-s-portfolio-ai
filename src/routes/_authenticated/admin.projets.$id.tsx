@@ -62,6 +62,7 @@ function EditProject() {
     tags: [] as string[],
     summary: "",
     repo_url: "",
+    repo_label: "",
     repo_note: "",
     photo_profil_url: "",
     photo_profil_alt_text: "",
@@ -93,6 +94,7 @@ function EditProject() {
           cover_image_alt_text: res.project.cover_image_alt_text ?? "",
           summary: res.project.summary ?? "",
           repo_url: res.project.repo_url ?? "",
+          repo_label: (res.project as { repo_label?: string | null }).repo_label ?? "",
           repo_note: res.project.repo_note ?? "",
           photo_profil_url: res.project.photo_profil_url ?? "",
           photo_profil_alt_text: res.project.photo_profil_alt_text ?? "",
@@ -288,6 +290,10 @@ function EditProject() {
             </Field>
             <Field label="Lien vers le dépôt (GitHub, Gamma, etc.)">
               <input value={form.repo_url} onChange={(e) => setForm({ ...form, repo_url: e.target.value })} className={inputCls} placeholder="https://…" />
+            </Field>
+            <Field label="Libellé du bouton de lien">
+              <input value={form.repo_label} onChange={(e) => setForm({ ...form, repo_label: e.target.value })} className={inputCls} placeholder="ex. Voir la présentation Gamma ↗" />
+              <p className="mt-1 text-xs text-muted-foreground">Si vide : &laquo;&nbsp;Voir le dépôt&nbsp;&raquo; pour GitHub, &laquo;&nbsp;Voir le document&nbsp;&raquo; pour les autres liens.</p>
             </Field>
             <Field label="Note si pas de lien">
               <input value={form.repo_note} onChange={(e) => setForm({ ...form, repo_note: e.target.value })} className={inputCls} placeholder="Anonymisé, dossier disponible sur demande" />

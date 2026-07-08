@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { saveProject } from "@/lib/projects.functions";
+import { saveProject, listAllProjects } from "@/lib/projects.functions";
 import { toast } from "sonner";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_authenticated/admin/projets/nouveau")({
 
 function NewProject() {
   const save = useServerFn(saveProject);
+  const fetchList = useServerFn(listAllProjects);
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [type, setType] = useState("poc_perso");
@@ -20,6 +21,8 @@ function NewProject() {
     e.preventDefault();
     setBusy(true);
     try {
+      const existing = await fetchList();
+      const maxOrder = existing.length > 0 ? Math.max(...existing.map((p: any) => p.display_order ?? 0)) : -1;
       const res = await save({
         data: {
           project: {
@@ -29,7 +32,7 @@ function NewProject() {
             cover_image_position: "center",
             tags: [],
             published: false,
-            display_order: 0,
+            display_order: maxOrder + 1,
           },
           blocks: [],
         },

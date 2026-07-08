@@ -140,7 +140,11 @@ function parseRow(raw: Record<string, string>, idx: number): ParsedRow {
       repo_note: nullify(s(raw["Repo_note"])),
       accent_color: null,
       cover_image_position: "center",
-      display_order: 0,
+      display_order: (() => {
+        const raw_ordre = s(raw["Ordre"]);
+        const parsed = parseInt(raw_ordre, 10);
+        return Number.isFinite(parsed) ? parsed : idx;
+      })(),
     },
     blocks,
     errors,

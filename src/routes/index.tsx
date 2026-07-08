@@ -151,12 +151,23 @@ function HomePage() {
             >
               À propos
             </Link>
-            <a
-              href={`mailto:${settings?.contact_email}`}
-              className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-            >
-              Me contacter
-            </a>
+            {settings?.linkedin_url ? (
+              
+                <a href={settings.linkedin_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Me contacter sur LinkedIn
+              </a>
+            ) : settings?.contact_email ? (
+              
+                <a href={`mailto:${settings.contact_email}`}
+                className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Me contacter
+              </a>
+            ) : null}
           </div>
         </div>
       </section>

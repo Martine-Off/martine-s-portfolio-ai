@@ -82,7 +82,7 @@ function ProfilPage() {
         </div>
 
         {profile?.project.summary && (
-          <p className="mt-8 text-lg leading-relaxed text-foreground">{profile.project.summary}</p>
+          <p className="mt-8 text-base leading-relaxed text-foreground">{profile.project.summary}</p>
         )}
 
         {profile?.blocks && profile.blocks.length > 0 && (

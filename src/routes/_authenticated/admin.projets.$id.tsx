@@ -396,7 +396,7 @@ function EditProject() {
           <div className="mb-3 flex flex-wrap gap-2">
             {(["heading", "text", "quote", "liste", "comparatif", "image", "video"] as const).map((t) => (
               <button key={t} type="button" onClick={() => addBlock(t)} className="rounded-md border border-border bg-card px-3 py-1.5 text-xs hover:bg-muted">
-                + {t}
+                + {BLOCK_LABELS[t] ?? t}
               </button>
             ))}
           </div>

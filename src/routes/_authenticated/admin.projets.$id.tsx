@@ -51,6 +51,7 @@ function EditProject() {
     title: "",
     emoji: "",
     slug: "",
+    project_date: "",
     tagline: "",
     project_type: "poc_perso",
     mission_type: "",
@@ -86,6 +87,7 @@ function EditProject() {
       if (res) {
         setForm({
           ...res.project,
+          project_date: res.project.project_date ?? "",
           tagline: res.project.tagline ?? "",
           mission_type: res.project.mission_type ?? "",
           status_label: res.project.status_label ?? "",
@@ -180,9 +182,14 @@ function EditProject() {
         <Field label="Emoji">
           <input value={form.emoji ?? ""} onChange={(e) => setForm({ ...form, emoji: e.target.value })} className={inputCls} placeholder="ex. 🚀" maxLength={8} />
         </Field>
-        <Field label="Titre">
-          <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputCls} />
-        </Field>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <Field label="Titre">
+            <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputCls} placeholder="Mon super projet" />
+          </Field>
+          <Field label="Date ou période">
+            <input value={form.project_date} onChange={(e) => setForm({ ...form, project_date: e.target.value })} className={inputCls} placeholder="ex. 2023 - 2024" />
+          </Field>
+        </div>
         <Field label="Slug (optionnel, généré depuis le titre)">
           <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className={inputCls} placeholder="mon-projet" />
         </Field>

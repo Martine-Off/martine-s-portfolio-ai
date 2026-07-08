@@ -81,6 +81,7 @@ export type Database = {
           photo_profil_url: string | null
           project_type: Database["public"]["Enums"]["project_type"]
           published: boolean
+          repo_label: string | null
           repo_note: string | null
           repo_url: string | null
           role: string | null
@@ -109,6 +110,7 @@ export type Database = {
           photo_profil_url?: string | null
           project_type: Database["public"]["Enums"]["project_type"]
           published?: boolean
+          repo_label?: string | null
           repo_note?: string | null
           repo_url?: string | null
           role?: string | null
@@ -137,6 +139,7 @@ export type Database = {
           photo_profil_url?: string | null
           project_type?: Database["public"]["Enums"]["project_type"]
           published?: boolean
+          repo_label?: string | null
           repo_note?: string | null
           repo_url?: string | null
           role?: string | null

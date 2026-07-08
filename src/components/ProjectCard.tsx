@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Box } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { resolveAccentColor } from "@/lib/utils/status";
 
@@ -50,10 +51,22 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
         </div>
       ) : (
         <div
-          className="h-1.5 w-full"
-          style={{ backgroundColor: accent }}
+          className={cn(
+            "relative flex w-full items-center justify-center overflow-hidden bg-card",
+            variant === "grid" ? "aspect-video" : "aspect-video md:aspect-[21/9]",
+          )}
+          style={{
+            backgroundColor: `${accent}14`,
+            borderBottom: `2px solid ${accent}`,
+          }}
           aria-hidden
-        />
+        >
+          {project.emoji ? (
+            <span className="text-5xl leading-none md:text-6xl">{project.emoji}</span>
+          ) : (
+            <Box className="opacity-40" size={64} strokeWidth={1.5} color={accent} />
+          )}
+        </div>
       )}
 
       <div className={cn("flex flex-1 flex-col gap-3 p-5", variant === "detail" && "p-6 md:p-8")}>

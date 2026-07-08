@@ -131,17 +131,17 @@ function ProjectPage() {
         )}
 
         {tocItems.length >= 2 && (
-          <nav className="mt-8 rounded-lg border border-border bg-card p-5">
-            <p className="mb-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
+          <nav className="mt-8 rounded-lg border border-border bg-card p-4">
+            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Sommaire
             </p>
-            <ul className="space-y-1">
+            <ul className="flex flex-wrap gap-2">
               {tocItems.map((t) => (
                 <li key={t.id}>
-                  <a
-                    href={`#${t.id}`}
+                  
+                    <a href={`#${t.id}`}
                     onClick={(e) => onTocClick(e, t.id)}
-                    className="text-accent hover:underline"
+                    className="inline-block rounded-full border border-border bg-background px-3 py-1 text-xs text-accent hover:bg-accent/10 hover:underline"
                   >
                     {t.label}
                   </a>
@@ -159,13 +159,13 @@ function ProjectPage() {
 
         {project.repo_url ? (
           <div className="mt-10">
-            <a
-              href={project.repo_url}
+            
+              <a href={project.repo_url}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              Voir le dépôt ↗
+              {project.repo_url.includes("github.com") ? "Voir le dépôt ↗" : "Voir le document ↗"}
             </a>
           </div>
         ) : project.repo_note ? (

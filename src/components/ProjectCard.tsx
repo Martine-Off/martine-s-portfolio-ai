@@ -81,14 +81,14 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
         <h3
           className={cn(
             "font-serif font-bold leading-tight text-foreground",
-            variant === "grid" ? "text-xl" : "text-3xl md:text-4xl",
+            variant === "grid" ? "text-xl" : "text-2xl md:text-3xl",
           )}
         >
           {project.emoji ? <span className="mr-1.5">{project.emoji}</span> : null}
           {project.title}
         </h3>
         {project.tagline && (
-          <p className={cn("text-muted-foreground", variant === "grid" ? "text-sm" : "text-base md:text-lg")}>
+          <p className={cn("text-muted-foreground", variant === "grid" ? "text-sm" : "text-sm md:text-base")}>
             {project.tagline}
           </p>
         )}

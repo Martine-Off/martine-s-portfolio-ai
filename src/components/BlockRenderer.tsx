@@ -41,7 +41,7 @@ interface Block {
 function BlockTitle({ title }: { title?: string | null }) {
   if (!title) return null;
   return (
-    <h3 className="mt-6 mb-2 font-serif text-xl font-semibold text-foreground md:text-2xl">
+    <h3 className="mt-6 mb-2 font-serif text-lg font-semibold text-foreground md:text-xl">
       {title}
     </h3>
   );
@@ -52,7 +52,7 @@ export function BlockRenderer({ block }: { block: Block }) {
   switch (block.block_type) {
     case "heading":
       return (
-        <h2 id={anchorId} className="mt-8 mb-2 scroll-mt-24 font-serif text-2xl font-bold text-foreground md:text-3xl">
+        <h2 id={anchorId} className="mt-8 mb-2 scroll-mt-24 font-serif text-xl font-bold text-foreground md:text-2xl">
           {block.content}
         </h2>
       );
@@ -61,7 +61,7 @@ export function BlockRenderer({ block }: { block: Block }) {
         <div id={anchorId} className="scroll-mt-24 prose prose-neutral max-w-none text-foreground [&_p]:my-3 [&_p]:leading-relaxed">
           <BlockTitle title={block.title} />
           {block.content?.split("\n\n").map((para, i) => (
-            <p key={i} className="text-base leading-relaxed text-foreground md:text-lg">
+            <p key={i} className="text-base leading-relaxed text-foreground">
               {renderInlineMarkdown(para)}
             </p>
           ))}
@@ -72,7 +72,7 @@ export function BlockRenderer({ block }: { block: Block }) {
         <div id={anchorId} className="scroll-mt-24">
           <BlockTitle title={block.title} />
           <blockquote
-            className="my-6 border-l-4 pl-6 font-serif text-xl italic text-foreground md:text-2xl"
+            className="my-6 border-l-4 pl-6 font-serif text-lg italic text-foreground md:text-xl"
             style={{ borderColor: "var(--decorative)" }}
           >
             {block.content}
@@ -138,7 +138,7 @@ export function BlockRenderer({ block }: { block: Block }) {
       return (
         <div id={anchorId} className="scroll-mt-24">
           <BlockTitle title={block.title} />
-          <ul className="my-4 list-disc space-y-1 pl-6 text-base leading-relaxed text-foreground md:text-lg">
+          <ul className="my-4 list-disc space-y-1 pl-6 text-base leading-relaxed text-foreground">
             {items.map((it, i) => (
               <li key={i}>{renderInlineMarkdown(it)}</li>
             ))}

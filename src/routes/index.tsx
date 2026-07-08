@@ -138,10 +138,10 @@ function HomePage() {
           <p className="mb-3 text-sm font-medium uppercase tracking-widest text-muted-foreground">
             {settings?.hero_subtitle}
           </p>
-          <h1 className="font-serif text-4xl font-bold leading-tight text-foreground md:text-6xl">
+          <h1 className="font-serif text-3xl font-bold leading-tight text-foreground md:text-5xl">
             {settings?.hero_title}
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
             {settings?.hero_intro}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -164,7 +164,7 @@ function HomePage() {
       {/* Projets phares */}
       {featured.length > 0 && (
         <section className="mx-auto max-w-6xl px-6 py-16">
-          <h2 className="mb-8 font-serif text-3xl font-bold text-foreground md:text-4xl">
+          <h2 className="mb-8 font-serif text-2xl font-bold text-foreground md:text-3xl">
             {settings?.featured_section_title}
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -182,7 +182,7 @@ function HomePage() {
       {/* Outils & compétences */}
       {tools.length > 0 && (
         <section className="mx-auto max-w-6xl px-6 py-16">
-          <h2 className="mb-8 font-serif text-3xl font-bold text-foreground md:text-4xl">
+          <h2 className="mb-8 font-serif text-2xl font-bold text-foreground md:text-3xl">
             {settings?.tools_section_title}
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

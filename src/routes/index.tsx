@@ -191,32 +191,6 @@ function HomePage() {
       <CondensedList title={settings?.missions_section_title ?? "Autres missions courtes"} items={missions} />
       <CondensedList title={settings?.benevolat_section_title ?? "Bénévolat"} items={benevolat} />
 
-      {/* Outils & compétences */}
-      {tools.length > 0 && (
-        <section className="mx-auto max-w-6xl px-6 py-16">
-          <h2 className="mb-8 font-serif text-2xl font-bold text-foreground md:text-3xl">
-            {settings?.tools_section_title}
-          </h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {tools.map((cat) => (
-              <div key={cat.category} className="rounded-lg border border-border bg-card p-5">
-                <h3 className="mb-3 font-serif text-lg font-bold text-foreground">{cat.category}</h3>
-                <ul className="flex flex-wrap gap-1.5">
-                  {cat.items.map((item) => (
-                    <li
-                      key={item}
-                      className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
       <SiteFooter
         footerText={settings?.footer_text ?? "© Martine Desmaroux"}
         email={settings?.contact_email ?? ""}

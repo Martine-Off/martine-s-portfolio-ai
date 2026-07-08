@@ -346,62 +346,63 @@ function EditProject() {
                 />
               </div>
             </div>
-
-            <div className="mt-4 rounded-md border border-border bg-card p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <h2 className="font-serif text-xl font-bold text-foreground">Tags catégorisés</h2>
-                <button
-                  type="button"
-                  onClick={() => setCategories([...categories, { label: "Nouvelle catégorie", items: [] }])}
-                  className="rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted"
-                >
-                  + Catégorie
-                </button>
-              </div>
-              <div className="space-y-3">
-                {categories.map((cat, ci) => (
-                  <div key={ci} className="rounded border border-border bg-background p-3">
-                    <div className="mb-2 flex items-center gap-2">
-                      <input
-                        value={cat.label}
-                        onChange={(e) => {
-                          const c = [...categories];
-                          c[ci] = { ...c[ci], label: e.target.value };
-                          setCategories(c);
-                        }}
-                        placeholder="Nom de la catégorie"
-                        className={`${inputCls} min-w-0 flex-1`}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setCategories(categories.filter((_, i) => i !== ci))}
-                        className="min-h-11 min-w-11 shrink-0 rounded border border-border text-destructive"
-                        aria-label="Supprimer la catégorie"
-                      >
-                        ×
-                      </button>
-                    </div>
-
-                    <input
-                      value={cat.items.join(", ")}
-                      onChange={(e) => {
-                        const items = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
-                        const c = [...categories];
-                        c[ci] = { ...c[ci], items };
-                        setCategories(c);
-                      }}
-                      placeholder="Tag 1, Tag 2, Tag 3"
-                      className={inputCls}
-                    />
-                  </div>
-                ))}
-                {categories.length === 0 && (
-                  <p className="text-sm text-muted-foreground">Aucune catégorie. Ajoutez-en une.</p>
-                )}
-              </div>
             </div>
           </>
         )}
+
+        <div className="mt-4 rounded-md border border-border bg-card p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="font-serif text-xl font-bold text-foreground">Tags catégorisés</h2>
+            <button
+              type="button"
+              onClick={() => setCategories([...categories, { label: "Nouvelle catégorie", items: [] }])}
+              className="rounded-md border border-border bg-background px-3 py-1.5 text-xs hover:bg-muted"
+            >
+              + Catégorie
+            </button>
+          </div>
+          <div className="space-y-3">
+            {categories.map((cat, ci) => (
+              <div key={ci} className="rounded border border-border bg-background p-3">
+                <div className="mb-2 flex items-center gap-2">
+                  <input
+                    value={cat.label}
+                    onChange={(e) => {
+                      const c = [...categories];
+                      c[ci] = { ...c[ci], label: e.target.value };
+                      setCategories(c);
+                    }}
+                    placeholder="Nom de la catégorie"
+                    className={`${inputCls} min-w-0 flex-1`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setCategories(categories.filter((_, i) => i !== ci))}
+                    className="min-h-11 min-w-11 shrink-0 rounded border border-border text-destructive"
+                    aria-label="Supprimer la catégorie"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <input
+                  value={cat.items.join(", ")}
+                  onChange={(e) => {
+                    const items = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
+                    const c = [...categories];
+                    c[ci] = { ...c[ci], items };
+                    setCategories(c);
+                  }}
+                  placeholder="Tag 1, Tag 2, Tag 3"
+                  className={inputCls}
+                />
+              </div>
+            ))}
+            {categories.length === 0 && (
+              <p className="text-sm text-muted-foreground">Aucune catégorie. Ajoutez-en une (ex: Outils, Technologies...).</p>
+            )}
+          </div>
+        </div>
 
         {!isLight && (
         <div className="mt-8">

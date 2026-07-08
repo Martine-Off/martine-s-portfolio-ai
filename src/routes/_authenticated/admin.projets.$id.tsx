@@ -5,6 +5,17 @@ import { getProjectByIdAdmin, saveProject, listStatusLabels } from "@/lib/projec
 import { toast } from "sonner";
 import { ImageUpload } from "@/components/ImageUpload";
 import { resolveAccentColor } from "@/lib/utils/status";
+import { CoverPositionPicker } from "@/components/CoverPositionPicker";
+
+const BLOCK_LABELS: Record<string, string> = {
+  heading: "Titre de section",
+  text: "Texte",
+  quote: "Citation",
+  liste: "Liste",
+  comparatif: "Comparatif",
+  image: "Image",
+  video: "Vidéo",
+};
 
 export const Route = createFileRoute("/_authenticated/admin/projets/$id")({
   component: EditProject,
@@ -252,8 +263,15 @@ function EditProject() {
             <Field label="Texte alternatif de l'image">
               <input value={form.cover_image_alt_text} onChange={(e) => setForm({ ...form, cover_image_alt_text: e.target.value })} className={inputCls} />
             </Field>
-            <Field label="Position de l'image (ex. center, top left)">
-              <input value={form.cover_image_position} onChange={(e) => setForm({ ...form, cover_image_position: e.target.value })} className={inputCls} />
+            <Field label="Position de l'image">
+              <CoverPositionPicker
+                imageUrl={form.cover_image_url}
+                value={form.cover_image_position || "center"}
+                onChange={(v) => setForm({ ...form, cover_image_position: v })}
+              />
+              {!form.cover_image_url && (
+                <p className="text-xs text-muted-foreground">Ajoutez une image de couverture pour définir sa position.</p>
+              )}
             </Field>
           </>
         )}
@@ -378,7 +396,7 @@ function EditProject() {
           <div className="mb-3 flex flex-wrap gap-2">
             {(["heading", "text", "quote", "liste", "comparatif", "image", "video"] as const).map((t) => (
               <button key={t} type="button" onClick={() => addBlock(t)} className="rounded-md border border-border bg-card px-3 py-1.5 text-xs hover:bg-muted">
-                + {t}
+                + {BLOCK_LABELS[t] ?? t}
               </button>
             ))}
           </div>
@@ -418,6 +436,9 @@ function EditProject() {
                 )}
                 {b.block_type === "liste" && (
                   <>
+                    <p className="mb-1 text-xs text-muted-foreground">
+                      Liens : <code>[texte](https://url)</code>
+                    </p>
                     <p className="mb-1 text-xs text-muted-foreground">Un item par ligne.</p>
                     <textarea rows={4} value={b.content ?? ""} onChange={(e) => { const c = [...blocks]; c[i].content = e.target.value; setBlocks(c); }} className={inputCls} />
                   </>

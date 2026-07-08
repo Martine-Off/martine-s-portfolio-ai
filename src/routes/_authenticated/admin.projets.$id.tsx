@@ -5,6 +5,17 @@ import { getProjectByIdAdmin, saveProject, listStatusLabels } from "@/lib/projec
 import { toast } from "sonner";
 import { ImageUpload } from "@/components/ImageUpload";
 import { resolveAccentColor } from "@/lib/utils/status";
+import { CoverPositionPicker } from "@/components/CoverPositionPicker";
+
+const BLOCK_LABELS: Record<string, string> = {
+  heading: "Titre de section",
+  text: "Texte",
+  quote: "Citation",
+  liste: "Liste",
+  comparatif: "Comparatif",
+  image: "Image",
+  video: "Vidéo",
+};
 
 export const Route = createFileRoute("/_authenticated/admin/projets/$id")({
   component: EditProject,

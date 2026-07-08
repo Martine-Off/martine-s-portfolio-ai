@@ -361,3 +361,53 @@ export const checkIsAdmin = createServerFn({ method: "GET" })
     });
     return { isAdmin: !!data };
   });
+
+export const duplicateProject = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+
+    // Lire le projet source et ses blocs
+    const { data: project, error: projErr } = await context.supabase
+      .from("projects")
+      .select("*")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (projErr) throw new Error(projErr.message);
+    if (!project) throw new Error("Projet introuvable");
+
+    const { data: blocks } = await context.supabase
+      .from("project_blocks")
+      .select("*")
+      .eq("project_id", data.id)
+      .order("display_order", { ascending: true });
+
+    // Préparer le duplicata : brouillon, nouveau slug, titre préfixé
+    const duplicateInput = {
+      ...project,
+      id: null,
+      slug: "",           // sera généré par ensureUniqueSlug
+      title: `Copie de ${project.title}`,
+      published: false,
+    };
+
+    const blockInputs = (blocks ?? []).map((b) => ({
+      block_type: b.block_type,
+      title: (b as { title?: string | null }).title ?? null,
+      content: b.content,
+      media_url: b.media_url,
+      alt_text: b.alt_text,
+      caption: b.caption,
+      display_order: b.display_order,
+    }));
+
+    const { id: newId, slug: newSlug } = await persistProjectWithBlocks(
+      context.supabase,
+      duplicateInput,
+      blockInputs,
+    );
+
+    return { ok: true, id: newId, slug: newSlug };
+  });
+

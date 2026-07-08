@@ -8,6 +8,7 @@ import {
   togglePublished,
   reorderProject,
   checkIsAdmin,
+  duplicateProject,
 } from "@/lib/projects.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -61,6 +62,7 @@ function AdminPage() {
   const del = useServerFn(deleteProject);
   const toggle = useServerFn(togglePublished);
   const reorder = useServerFn(reorderProject);
+  const duplicate = useServerFn(duplicateProject);
 
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
 
@@ -222,6 +224,17 @@ function AdminPage() {
                     </Link>
                     <button
                       onClick={async () => {
+                        const res = await duplicate({ data: { id: p.id } });
+                        toast.success("Projet dupliqué");
+                        listQ.refetch();
+                        router.navigate({ to: "/admin/projets/$id", params: { id: res.id } });
+                      }}
+                      className="text-muted-foreground hover:underline"
+                    >
+                      Dupliquer
+                    </button>
+                    <button
+                      onClick={async () => {
                         if (!confirm(`Supprimer "${p.title}" ?`)) return;
                         await del({ data: { id: p.id } });
                         toast.success("Supprimé");
@@ -268,6 +281,17 @@ function AdminPage() {
               >
                 Modifier
               </Link>
+              <button
+                onClick={async () => {
+                  const res = await duplicate({ data: { id: p.id } });
+                  toast.success("Projet dupliqué");
+                  listQ.refetch();
+                  router.navigate({ to: "/admin/projets/$id", params: { id: res.id } });
+                }}
+                className="min-h-11 rounded-md border border-border bg-background px-3 py-2 text-sm text-muted-foreground"
+              >
+                Dupliquer
+              </button>
               <button
                 onClick={async () => {
                   await toggle({ data: { id: p.id, published: !p.published } });

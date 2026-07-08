@@ -82,6 +82,8 @@ function ProjectPage() {
     })
     .filter((x): x is { id: string; label: string } => x !== null);
 
+  const categorised = project.tags_categorises as { label: string; items: string[] }[] | null;
+
   function onTocClick(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
     e.preventDefault();
     const el = document.getElementById(id);
@@ -157,6 +159,26 @@ function ProjectPage() {
             <BlockRenderer key={b.id} block={b as BlockWithTitle} />
           ))}
         </div>
+
+        {categorised && categorised.length > 0 && (
+          <div className="mt-12">
+            <h2 className="mb-6 font-serif text-2xl font-bold text-foreground md:text-3xl">Outils et compétences</h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              {categorised.map((block, i) => (
+                <div key={i} className="rounded-lg border border-border bg-card p-5">
+                  <h3 className="mb-3 font-serif text-lg font-bold text-foreground">{block.label}</h3>
+                  <ul className="flex flex-wrap gap-1.5">
+                    {block.items.map((item, j) => (
+                      <li key={j} className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {project.repo_url ? (
           <div className="mt-10">

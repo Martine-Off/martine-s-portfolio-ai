@@ -25,7 +25,7 @@ const settingsSchema = z.object({
   hero_intro: z.string().min(1),
   cover_image_url: z.string().nullable().optional(),
   cover_image_alt_text: z.string().nullable().optional(),
-  contact_email: z.string().email(),
+  contact_email: z.string().email().optional().or(z.literal("")),
   linkedin_url: z.string().nullable().optional(),
   featured_section_title: z.string().min(1),
   formations_section_title: z.string().min(1),

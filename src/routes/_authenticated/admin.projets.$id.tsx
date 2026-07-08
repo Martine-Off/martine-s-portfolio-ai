@@ -436,6 +436,9 @@ function EditProject() {
                 )}
                 {b.block_type === "liste" && (
                   <>
+                    <p className="mb-1 text-xs text-muted-foreground">
+                      Liens : <code>[texte](https://url)</code>
+                    </p>
                     <p className="mb-1 text-xs text-muted-foreground">Un item par ligne.</p>
                     <textarea rows={4} value={b.content ?? ""} onChange={(e) => { const c = [...blocks]; c[i].content = e.target.value; setBlocks(c); }} className={inputCls} />
                   </>

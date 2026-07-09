@@ -111,9 +111,11 @@ function ProfilPage() {
                   ))}
                 </ul>
               </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
+
       </div>
 
       <SiteFooter

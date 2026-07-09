@@ -11,8 +11,9 @@
  *
  * Règles d'usage :
  * - --decorative (#928DB9) : JAMAIS pour du texte ni des liens. Bordures, séparateurs,
- *   fonds de badges, accent 6px vertical uniquement.
- * - --accent (#65BFF1) : SEUL token pour liens et éléments interactifs.
+ *   fonds de badges, accent 6px vertical (sauf mise en valeur ponctuelle).
+ * - --accent (#65BFF1) : Liens, éléments interactifs, et mise en valeur de la section 
+ *   hero (photo, barre verticale, badge). Attention au contraste avec du texte blanc.
  * - --muted-foreground (#5F5A85) : texte secondaire. Contraste AA vérifié sur --background.
  */
 

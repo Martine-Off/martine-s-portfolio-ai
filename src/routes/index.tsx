@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSiteSettings } from "@/lib/settings.functions";
-import { listPublishedProjects } from "@/lib/projects.functions";
+import { listPublishedProjects, getProfilePage } from "@/lib/projects.functions";
 import { ProjectCard } from "@/components/ProjectCard";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const projectsQuery = queryOptions({ queryKey: ["projects", "public"], queryFn: () => listPublishedProjects() });
+const profileQuery = queryOptions({ queryKey: ["profile"], queryFn: () => getProfilePage() });
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -36,6 +37,7 @@ export const Route = createFileRoute("/")({
     await Promise.all([
       context.queryClient.ensureQueryData(settingsQuery),
       context.queryClient.ensureQueryData(projectsQuery),
+      context.queryClient.ensureQueryData(profileQuery),
     ]);
   },
   component: HomePage,
@@ -138,6 +140,10 @@ function CondensedList({ id, title, items }: { id: string; title: string; items:
 function HomePage() {
   const { data: settings } = useSuspenseQuery(settingsQuery);
   const { data: projects } = useSuspenseQuery(projectsQuery);
+  const { data: profile } = useSuspenseQuery(profileQuery);
+  
+  const photoUrl = profile?.project.photo_profil_url;
+  const photoAlt = profile?.project.photo_profil_alt_text;
 
   const featured = projects.filter(
     (p) =>
@@ -192,39 +198,44 @@ function HomePage() {
           </div>
         )}
         <div className="relative z-10 mx-auto max-w-6xl px-6 py-16 md:py-24">
-          <p className="mb-3 text-sm font-medium uppercase tracking-widest text-muted-foreground">
-            {settings?.hero_subtitle}
-          </p>
-          <h1 className="font-serif text-3xl font-bold leading-tight text-foreground md:text-5xl">
-            {settings?.hero_title}
-          </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
-            {settings?.hero_intro}
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              to="/profil"
-              className="flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-            >
-              Profil
-            </Link>
-            {linkedinUrl ? (
-              <a
-                href={linkedinUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                Me contacter sur LinkedIn
-              </a>
-            ) : contactEmail ? (
-              <a
-                href={`mailto:${contactEmail}`}
-                className="flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                Me contacter
-              </a>
-            ) : null}
+          <div className="flex flex-col gap-8 md:flex-row md:items-center">
+            {photoUrl && (
+              <img
+                src={photoUrl}
+                alt={photoAlt || "Photo de profil de Martine Desmaroux"}
+                className="h-40 w-40 flex-shrink-0 rounded-full border-4 border-accent object-cover md:h-56 md:w-56"
+              />
+            )}
+            <div className="border-l-4 border-accent pl-6 md:pl-8">
+              {settings?.hero_subtitle && (
+                <span className="mb-4 inline-block rounded-full bg-accent px-3 py-1 text-sm font-bold uppercase tracking-widest text-foreground">
+                  {settings.hero_subtitle}
+                </span>
+              )}
+              <h1 className="font-serif text-3xl font-bold leading-tight text-foreground md:text-5xl">
+                {settings?.hero_title}
+              </h1>
+              <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
+                {settings?.hero_intro}
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                {settings?.linkedin_url ? (
+                  <a href={settings.linkedin_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    Me contacter sur LinkedIn
+                  </a>
+                ) : settings?.contact_email ? (
+                  <a href={`mailto:${settings.contact_email}`}
+                    className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    Me contacter
+                  </a>
+                ) : null}
+              </div>
+            </div>
           </div>
         </div>
       </section>

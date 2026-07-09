@@ -123,6 +123,7 @@
   }
   html {
     font-family: var(--font-sans);
+    scroll-behavior: smooth;
   }
   body {
     background-color: var(--color-background);

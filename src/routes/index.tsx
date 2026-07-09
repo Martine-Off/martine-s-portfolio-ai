@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { PageState } from "@/components/PageState";
 import { QuickNav, type QuickNavSection } from "@/components/QuickNav";
 import { BackToTop } from "@/components/BackToTop";
+import { cn } from "@/lib/utils";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const projectsQuery = queryOptions({ queryKey: ["projects", "public"], queryFn: () => listPublishedProjects() });
@@ -64,6 +65,60 @@ type CondensedItem = {
   impact: string | null;
 };
 
+function CondensedItemRow({ p }: { p: CondensedItem }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <li className="px-4 py-1.5 md:px-5 md:py-2">
+      <div className="flex items-start justify-between gap-4">
+        <div 
+          className="flex flex-wrap items-baseline gap-x-2 gap-y-1 py-2 cursor-pointer flex-1"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <h3 className="font-serif text-base font-bold text-foreground md:text-lg">{p.title}</h3>
+          {p.role && <span className="text-sm text-muted-foreground">— {p.role}</span>}
+          {p.status_label && (
+            <span className="ml-1 rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
+              {p.status_label}
+            </span>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex min-h-[44px] shrink-0 items-center justify-end px-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+          aria-expanded={isOpen}
+        >
+          {isOpen ? "Lire moins" : "Lire plus"}
+        </button>
+      </div>
+
+      <div
+        className={cn(
+          "grid transition-all duration-300 ease-in-out",
+          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="pb-3 pt-1">
+            {p.tagline && <p className="text-sm text-muted-foreground">{p.tagline}</p>}
+            {p.tags.length > 0 && (
+              <ul className="mt-2 flex flex-wrap gap-1">
+                {p.tags.map((t) => (
+                  <li key={t} className="rounded border border-border bg-background px-1.5 py-0.5 text-[11px] text-foreground">
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {p.impact && <p className="mt-2 text-sm text-foreground">{p.impact}</p>}
+          </div>
+        </div>
+      </div>
+    </li>
+  );
+}
+
 function CondensedList({ id, title, items }: { id: string; title: string; items: CondensedItem[] }) {
   const [expanded, setExpanded] = useState(false);
   if (items.length === 0) return null;
@@ -75,28 +130,7 @@ function CondensedList({ id, title, items }: { id: string; title: string; items:
       <h2 className="mb-4 font-serif text-2xl font-bold text-foreground md:mb-6 md:text-3xl">{title}</h2>
       <ul className="divide-y divide-border rounded-lg border border-border bg-card">
         {visible.map((p) => (
-          <li key={p.id} className="px-4 py-3 md:px-5 md:py-3.5">
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <h3 className="font-serif text-base font-bold text-foreground md:text-lg">{p.title}</h3>
-              {p.role && <span className="text-sm text-muted-foreground">— {p.role}</span>}
-              {p.status_label && (
-                <span className="rounded-full border border-border bg-background px-2 py-0.5 text-xs text-muted-foreground">
-                  {p.status_label}
-                </span>
-              )}
-            </div>
-            {p.tagline && <p className="mt-1 text-sm text-muted-foreground">{p.tagline}</p>}
-            {p.tags.length > 0 && (
-              <ul className="mt-1.5 flex flex-wrap gap-1">
-                {p.tags.map((t) => (
-                  <li key={t} className="rounded border border-border bg-background px-1.5 py-0.5 text-[11px] text-foreground">
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {p.impact && <p className="mt-1.5 text-sm text-foreground">{p.impact}</p>}
-          </li>
+          <CondensedItemRow key={p.id} p={p} />
         ))}
       </ul>
       {hidden > 0 && (

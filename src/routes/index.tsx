@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSiteSettings } from "@/lib/settings.functions";
 import { listPublishedProjects } from "@/lib/projects.functions";

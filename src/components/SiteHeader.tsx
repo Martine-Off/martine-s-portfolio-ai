@@ -23,7 +23,7 @@ export function SiteHeader({ heroTitle }: { heroTitle: string }) {
           <Link
             to="/profil"
             className={cn(
-              "rounded-full border px-4 py-1.5 font-medium transition-colors",
+              "rounded-full border px-4 py-3 font-medium transition-colors",
               onProfil
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-primary text-primary hover:bg-primary hover:text-primary-foreground",

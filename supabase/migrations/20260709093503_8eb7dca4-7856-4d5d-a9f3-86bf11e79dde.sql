@@ -1,0 +1,1 @@
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS project_date TEXT, ADD COLUMN IF NOT EXISTS repo_label TEXT;

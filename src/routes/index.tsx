@@ -286,7 +286,7 @@ function HomePage() {
         <section id="contact" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-16 text-center">
           <h2 className="mb-4 font-serif text-2xl font-bold text-foreground md:text-3xl">Contact</h2>
           <p className="mx-auto mb-6 max-w-xl text-base text-muted-foreground">
-            {settings.contact_text || "Une idée de projet, une mission à me confier\u00A0? Discutons-en."}
+            {settings?.contact_text || "Une idée de projet, une mission à me confier\u00A0? Discutons-en."}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {linkedinUrl && (

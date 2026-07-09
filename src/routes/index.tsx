@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSiteSettings } from "@/lib/settings.functions";
@@ -200,20 +200,25 @@ function HomePage() {
             {settings?.hero_intro}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-
+            <Link
+              to="/profil"
+              className="flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              Profil
+            </Link>
             {settings?.linkedin_url ? (
               
                 <a href={settings.linkedin_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                className="flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
                 Me contacter sur LinkedIn
               </a>
             ) : settings?.contact_email ? (
               
                 <a href={`mailto:${settings.contact_email}`}
-                className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                className="flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
                 Me contacter
               </a>

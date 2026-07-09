@@ -3,14 +3,13 @@ import { cn } from "@/lib/utils";
 
 export function SiteHeader({ heroTitle }: { heroTitle: string }) {
   const loc = useLocation();
-  const onProfil = loc.pathname === "/profil";
   return (
     <header className="border-b border-border bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link to="/" className="font-serif text-lg font-bold text-foreground">
           {heroTitle}
         </Link>
-        <nav className="flex items-center gap-4 text-sm">
+        <nav className="flex items-center gap-6 text-sm">
           <Link
             to="/"
             className={cn(
@@ -23,10 +22,8 @@ export function SiteHeader({ heroTitle }: { heroTitle: string }) {
           <Link
             to="/profil"
             className={cn(
-              "rounded-full border px-4 py-1.5 font-medium transition-colors",
-              onProfil
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-primary text-primary hover:bg-primary hover:text-primary-foreground",
+              "rounded-full border border-[#1a1b2e] px-5 py-3 text-[#1a1b2e] transition-colors hover:bg-[#1a1b2e]/10",
+              loc.pathname === "/profil" && "bg-[#1a1b2e] text-white hover:bg-[#1a1b2e]/90",
             )}
           >
             Profil

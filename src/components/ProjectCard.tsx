@@ -39,8 +39,9 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
         variant === "grid" && "h-full border border-border hover:shadow-lg",
         variant === "detail" && "border border-border",
       )}
+      style={!hasImage ? { borderLeft: `6px solid ${accent}` } : undefined}
     >
-      {hasImage ? (
+      {hasImage && (
         <div className={cn("relative w-full overflow-hidden bg-muted", variant === "grid" ? "aspect-video" : "aspect-video md:aspect-[21/9]")}>
           <img
             src={project.cover_image_url!}
@@ -50,31 +51,17 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             loading="lazy"
           />
         </div>
-      ) : (
-        <div
-          className={cn(
-            "relative flex w-full items-center justify-center overflow-hidden bg-card",
-            variant === "grid" ? "aspect-video" : "aspect-video md:aspect-[21/9]",
-          )}
-          style={{
-            backgroundColor: `${accent}14`,
-            borderBottom: `2px solid ${accent}`,
-          }}
-          aria-hidden
-        >
-          {project.emoji ? (
-            <span className="text-5xl leading-none md:text-6xl">{project.emoji}</span>
-          ) : (
-            <Box className="opacity-40" size={64} strokeWidth={1.5} color={accent} />
-          )}
-        </div>
       )}
 
       <div className={cn("flex flex-1 flex-col gap-3 p-5", variant === "detail" && "p-6 md:p-8")}>
         {project.status_label && (
           <span
             className="inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-medium"
-            style={{ backgroundColor: `${accent}22`, color: project.project_type === "profil" ? "var(--foreground)" : accent }}
+            style={
+              !hasImage
+                ? { border: `2px solid ${accent}`, backgroundColor: "transparent", color: accent }
+                : { backgroundColor: `${accent}22`, color: project.project_type === "profil" ? "var(--foreground)" : accent }
+            }
           >
             {project.status_label}
           </span>
@@ -103,7 +90,10 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             {project.tags.map((tag) => (
               <li
                 key={tag}
-                className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground"
+                className={cn(
+                  "rounded px-2 py-0.5 text-xs text-foreground",
+                  !hasImage ? "bg-muted" : "border border-border bg-background"
+                )}
               >
                 {tag}
               </li>

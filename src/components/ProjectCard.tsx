@@ -41,7 +41,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
       )}
       style={!hasImage ? { borderLeft: `6px solid ${accent}` } : undefined}
     >
-      {hasImage && (
+      {hasImage ? (
         <div className={cn("relative w-full overflow-hidden bg-muted", variant === "grid" ? "aspect-video" : "aspect-video md:aspect-[21/9]")}>
           <img
             src={project.cover_image_url!}
@@ -50,6 +50,24 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             style={{ objectPosition: project.cover_image_position || "center" }}
             loading="lazy"
           />
+        </div>
+      ) : (
+        <div
+          className={cn(
+            "relative flex w-full items-center justify-center overflow-hidden bg-card",
+            variant === "grid" ? "aspect-video" : "aspect-video md:aspect-[21/9]",
+          )}
+          style={{
+            backgroundColor: `${accent}14`,
+            borderBottom: `2px solid ${accent}`,
+          }}
+          aria-hidden
+        >
+          {project.emoji ? (
+            <span className="text-5xl leading-none md:text-6xl">{project.emoji}</span>
+          ) : (
+            <Box className="opacity-40" size={64} strokeWidth={1.5} color={accent} />
+          )}
         </div>
       )}
 

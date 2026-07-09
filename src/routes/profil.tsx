@@ -51,9 +51,8 @@ function ProfilPage() {
   const { data: settings } = useSuspenseQuery(settingsQuery);
   const { data: profile } = useSuspenseQuery(profileQuery);
 
-  const categorised = (profile?.project.tags_categorises ?? null) as
-    | Array<{ label: string; items: string[] }>
-    | null;
+  const toolsRaw = (settings?.tools_json ?? []) as Array<{ category: string; items: { name: string; show_on_home: boolean }[] }>;
+  const tools = toolsRaw.filter((cat) => cat.items.length > 0);
 
   const photoUrl = profile?.project.photo_profil_url;
   const photoAlt = profile?.project.photo_profil_alt_text;
@@ -93,24 +92,24 @@ function ProfilPage() {
           </div>
         )}
 
-        {categorised && categorised.length > 0 && (
-          <div className="mt-12">
+        {tools.length > 0 && (
+          <div id="outils" className="mt-12 scroll-mt-20">
             <h2 className="mb-6 font-serif text-2xl font-bold text-foreground md:text-3xl">Outils et compétences</h2>
             <div className="grid gap-6 md:grid-cols-2">
-              {categorised.map((block, i) => (
+              {tools.map((group, i) => (
                 <div key={i} className="rounded-lg border border-border bg-card p-5">
-                <h3 className="mb-3 font-serif text-lg font-bold text-foreground">{block.label}</h3>
-                <ul className="flex flex-wrap gap-1.5">
-                  {block.items.map((item) => (
-                    <li
-                      key={item}
-                      className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                  <h3 className="mb-3 font-serif text-lg font-bold text-foreground">{group.category}</h3>
+                  <ul className="flex flex-wrap gap-1.5">
+                    {group.items.map((item) => (
+                      <li
+                        key={item.name}
+                        className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground"
+                      >
+                        {item.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
             </div>
           </div>

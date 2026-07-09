@@ -120,30 +120,15 @@ function CondensedItemRow({ p }: { p: CondensedItem }) {
 }
 
 function CondensedList({ id, title, items }: { id: string; title: string; items: CondensedItem[] }) {
-  const [expanded, setExpanded] = useState(false);
   if (items.length === 0) return null;
-  const INITIAL = 2;
-  const visible = expanded ? items : items.slice(0, INITIAL);
-  const hidden = items.length - INITIAL;
   return (
     <section id={id} className="mx-auto max-w-6xl scroll-mt-20 px-6 py-10 md:py-14">
       <h2 className="mb-4 font-serif text-2xl font-bold text-foreground md:mb-6 md:text-3xl">{title}</h2>
       <ul className="divide-y divide-border rounded-lg border border-border bg-card">
-        {visible.map((p) => (
+        {items.map((p) => (
           <CondensedItemRow key={p.id} p={p} />
         ))}
       </ul>
-      {hidden > 0 && (
-        <div className="mt-3 flex justify-center">
-          <button
-            type="button"
-            onClick={() => setExpanded((v) => !v)}
-            className="rounded-full border border-border bg-background px-4 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
-          >
-            {expanded ? "Voir moins" : `Voir les ${hidden} autre${hidden > 1 ? "s" : ""}`}
-          </button>
-        </div>
-      )}
     </section>
   );
 }
@@ -169,7 +154,13 @@ function HomePage() {
   const benevolat = projects.filter(
     (p) => p.project_type === "formation_mission" && p.mission_type === "benevolat",
   );
-  const tools = (settings?.tools_json ?? []) as Array<{ category: string; items: string[] }>;
+  const toolsRaw = (settings?.tools_json ?? []) as Array<{ category: string; items: { name: string; show_on_home: boolean }[] }>;
+  const tools = toolsRaw
+    .map((cat) => ({
+      category: cat.category,
+      items: cat.items.filter((i) => i.show_on_home).map((i) => i.name),
+    }))
+    .filter((cat) => cat.items.length > 0);
   const hasContact = Boolean(settings?.linkedin_url || settings?.contact_email);
 
   const navSections: QuickNavSection[] = [
@@ -270,6 +261,14 @@ function HomePage() {
                 </ul>
               </div>
             ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <a
+              href="/profil#outils"
+              className="rounded-full border border-border bg-background px-5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+            >
+              Voir tous mes outils sur mon profil →
+            </a>
           </div>
         </section>
       )}

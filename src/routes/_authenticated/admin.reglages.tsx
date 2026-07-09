@@ -10,7 +10,8 @@ export const Route = createFileRoute("/_authenticated/admin/reglages")({
   component: SettingsPage,
 });
 
-type ToolCat = { category: string; items: string[] };
+type ToolItem = { name: string; show_on_home: boolean };
+type ToolCat = { category: string; items: ToolItem[] };
 
 function SettingsPage() {
   const fetch = useServerFn(getSiteSettings);
@@ -113,17 +114,70 @@ function SettingsPage() {
                   </button>
                 </div>
 
-                <input
-                  value={cat.items.join(", ")}
-                  onChange={(e) => {
-                    const items = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
-                    const c = [...tools];
-                    c[ci] = { ...c[ci], items };
-                    setTools(c);
-                  }}
-                  placeholder="Tag 1, Tag 2, Tag 3 (séparés par une virgule)"
-                  className={cls}
-                />
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {cat.items.map((item, ii) => (
+                    <div key={ii} className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={item.show_on_home}
+                        onChange={(e) => {
+                          const c = [...tools];
+                          c[ci].items[ii].show_on_home = e.target.checked;
+                          setTools(c);
+                        }}
+                        title="Afficher sur l'accueil"
+                        className="cursor-pointer"
+                      />
+                      <span>{item.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const c = [...tools];
+                          c[ci].items = c[ci].items.filter((_, idx) => idx !== ii);
+                          setTools(c);
+                        }}
+                        className="ml-1 text-muted-foreground hover:text-destructive"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex gap-2">
+                  <input
+                    placeholder="Ajouter des tags (séparés par virgule, puis Entrée)..."
+                    className={`${cls} flex-1`}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const val = e.currentTarget.value;
+                        if (!val) return;
+                        const newItems = val.split(",").map(s => s.trim()).filter(Boolean).map(name => ({ name, show_on_home: true }));
+                        const c = [...tools];
+                        c[ci].items.push(...newItems);
+                        setTools(c);
+                        e.currentTarget.value = "";
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                       const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                       const val = input.value;
+                       if (!val) return;
+                       const newItems = val.split(",").map(s => s.trim()).filter(Boolean).map(name => ({ name, show_on_home: true }));
+                       const c = [...tools];
+                       c[ci].items.push(...newItems);
+                       setTools(c);
+                       input.value = "";
+                    }}
+                    className="rounded-md border border-border bg-background px-3 text-sm hover:bg-muted"
+                  >
+                    Ajouter
+                  </button>
+                </div>
               </div>
             ))}
             {tools.length === 0 && (

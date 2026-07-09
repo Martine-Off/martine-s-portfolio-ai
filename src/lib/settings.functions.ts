@@ -32,7 +32,7 @@ const settingsSchema = z.object({
   missions_section_title: z.string().min(1),
   benevolat_section_title: z.string().min(1),
   tools_section_title: z.string().min(1),
-  tools_json: z.array(z.object({ category: z.string(), items: z.array(z.string()) })),
+  tools_json: z.array(z.object({ category: z.string(), items: z.array(z.object({ name: z.string(), show_on_home: z.boolean() })) })),
   footer_text: z.string().min(1),
 });
 

@@ -28,6 +28,7 @@ function SettingsPage() {
         hero_subtitle: data?.hero_subtitle ?? "",
         hero_intro: data?.hero_intro ?? "",
         contact_email: data?.contact_email ?? "",
+        contact_text: data?.contact_text ?? "",
         featured_section_title: data?.featured_section_title ?? "",
         formations_section_title: data?.formations_section_title ?? "",
         missions_section_title: data?.missions_section_title ?? "",
@@ -98,6 +99,7 @@ function SettingsPage() {
         </F>
 
         <F label="Email de contact"><input type="email" value={s.contact_email} onChange={upd("contact_email")} className={cls} /></F>
+        <F label="Texte sous 'Contact'"><input value={s.contact_text} onChange={upd("contact_text")} className={cls} placeholder="Une idée de projet, une mission à me confier ? Discutons-en." /></F>
         <F label="LinkedIn"><input value={s.linkedin_url} onChange={upd("linkedin_url")} className={cls} /></F>
 
         <F label="Titre section projets phares"><input value={s.featured_section_title} onChange={upd("featured_section_title")} className={cls} /></F>

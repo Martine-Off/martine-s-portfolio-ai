@@ -26,6 +26,7 @@ const settingsSchema = z.object({
   cover_image_url: z.string().nullable().optional(),
   cover_image_alt_text: z.string().nullable().optional(),
   contact_email: z.string().email().optional().or(z.literal("")),
+  contact_text: z.string().nullable().optional(),
   linkedin_url: z.string().nullable().optional(),
   featured_section_title: z.string().min(1),
   formations_section_title: z.string().min(1),

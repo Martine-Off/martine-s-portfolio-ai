@@ -161,6 +161,7 @@ export type Database = {
         Row: {
           benevolat_section_title: string
           contact_email: string
+          contact_text: string | null
           cover_image_alt_text: string | null
           cover_image_url: string | null
           featured_section_title: string
@@ -179,6 +180,7 @@ export type Database = {
         Insert: {
           benevolat_section_title?: string
           contact_email?: string
+          contact_text?: string | null
           cover_image_alt_text?: string | null
           cover_image_url?: string | null
           featured_section_title?: string
@@ -197,6 +199,7 @@ export type Database = {
         Update: {
           benevolat_section_title?: string
           contact_email?: string
+          contact_text?: string | null
           cover_image_alt_text?: string | null
           cover_image_url?: string | null
           featured_section_title?: string

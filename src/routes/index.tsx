@@ -198,16 +198,8 @@ function HomePage() {
           </div>
         )}
         <div className="relative z-10 mx-auto max-w-6xl px-6 py-16 md:py-24">
-          <div className="flex flex-col gap-8 md:flex-row md:items-center">
-            {photoUrl && (
-              <img
-                src={photoUrl}
-                alt={photoAlt || "Photo de profil de Martine Desmaroux"}
-                className="h-40 w-40 flex-shrink-0 rounded-full border-4 border-accent object-cover md:h-56 md:w-56"
-              />
-            )}
-            <div className="border-l-4 border-accent pl-6 md:pl-8">
-              {settings?.hero_subtitle && (
+          <div className="border-l-4 border-accent pl-6 md:pl-8">
+            {settings?.hero_subtitle && (
                 <span className="mb-4 inline-block rounded-full bg-accent px-3 py-1 text-sm font-bold uppercase tracking-widest text-foreground">
                   {settings.hero_subtitle}
                 </span>
@@ -236,7 +228,6 @@ function HomePage() {
                 ) : null}
               </div>
             </div>
-          </div>
         </div>
       </section>
 

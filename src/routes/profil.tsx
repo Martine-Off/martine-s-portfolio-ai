@@ -67,7 +67,7 @@ function ProfilPage() {
             <img
               src={photoUrl}
               alt={photoAlt || "Photo de profil de Martine Desmaroux"}
-              className="h-40 w-40 flex-shrink-0 rounded-full border border-border object-cover md:h-56 md:w-56"
+              className="h-40 w-40 flex-shrink-0 rounded-full border-4 border-accent object-cover md:h-56 md:w-56"
             />
           )}
           <div>

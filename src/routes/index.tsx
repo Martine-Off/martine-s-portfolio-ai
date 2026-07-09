@@ -161,7 +161,9 @@ function HomePage() {
       items: cat.items.filter((i) => i.show_on_home).map((i) => i.name),
     }))
     .filter((cat) => cat.items.length > 0);
-  const hasContact = Boolean(settings?.linkedin_url || settings?.contact_email);
+  const linkedinUrl = settings?.linkedin_url?.trim() || null;
+  const contactEmail = settings?.contact_email?.trim() || null;
+  const hasContact = Boolean(linkedinUrl || contactEmail);
 
   const navSections: QuickNavSection[] = [
     featured.length > 0 && { id: "projets-phares", label: "Projets" },
@@ -206,18 +208,18 @@ function HomePage() {
             >
               Profil
             </Link>
-            {settings?.linkedin_url ? (
-              
-                <a href={settings.linkedin_url}
+            {linkedinUrl ? (
+              <a
+                href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
                 Me contacter sur LinkedIn
               </a>
-            ) : settings?.contact_email ? (
-              
-                <a href={`mailto:${settings.contact_email}`}
+            ) : contactEmail ? (
+              <a
+                href={`mailto:${contactEmail}`}
                 className="flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
                 Me contacter
@@ -285,9 +287,9 @@ function HomePage() {
             Une idée de projet, une mission à me confier&nbsp;? Discutons-en.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            {settings?.linkedin_url && (
+            {linkedinUrl && (
               <a
-                href={settings.linkedin_url}
+                href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
@@ -295,12 +297,12 @@ function HomePage() {
                 Me contacter sur LinkedIn
               </a>
             )}
-            {settings?.contact_email && (
+            {contactEmail && (
               <a
-                href={`mailto:${settings.contact_email}`}
+                href={`mailto:${contactEmail}`}
                 className="rounded-md border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
-                {settings.contact_email}
+                {contactEmail}
               </a>
             )}
           </div>
@@ -309,8 +311,8 @@ function HomePage() {
 
       <SiteFooter
         footerText={settings?.footer_text ?? "© Martine Desmaroux"}
-        email={settings?.contact_email ?? ""}
-        linkedinUrl={settings?.linkedin_url}
+        email={contactEmail ?? ""}
+        linkedinUrl={linkedinUrl}
       />
       <BackToTop afterId="hero" />
     </div>

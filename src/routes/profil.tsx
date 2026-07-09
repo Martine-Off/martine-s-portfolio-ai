@@ -119,8 +119,8 @@ function ProfilPage() {
 
       <SiteFooter
         footerText={settings?.footer_text ?? ""}
-        email={settings?.contact_email ?? ""}
-        linkedinUrl={settings?.linkedin_url}
+        email={settings?.contact_email?.trim() ?? ""}
+        linkedinUrl={settings?.linkedin_url?.trim() ?? null}
       />
     </div>
   );

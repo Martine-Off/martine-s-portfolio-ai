@@ -392,7 +392,8 @@ export const duplicateProject = createServerFn({ method: "POST" })
       slug: "",           // sera généré par ensureUniqueSlug
       title: `Copie de ${project.title}`,
       published: false,
-    };
+    } as Parameters<typeof persistProjectWithBlocks>[1];
+
 
     const blockInputs = (blocks ?? []).map((b) => ({
       block_type: b.block_type,

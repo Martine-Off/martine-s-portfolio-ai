@@ -346,8 +346,8 @@ function EditProject() {
                 />
               </div>
             </div>
-            </div>
           </>
+
         )}
 
         <div className="mt-4 rounded-md border border-border bg-card p-4">

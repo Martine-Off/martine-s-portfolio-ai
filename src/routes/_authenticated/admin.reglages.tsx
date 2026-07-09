@@ -38,8 +38,14 @@ function SettingsPage() {
         cover_image_alt_text: data?.cover_image_alt_text ?? "",
         linkedin_url: data?.linkedin_url ?? "",
       });
-      const initial = (data?.tools_json ?? []) as ToolCat[];
-      setTools(Array.isArray(initial) ? initial : []);
+      const initial = (data?.tools_json ?? []) as any[];
+      const normalized = Array.isArray(initial) ? initial.map(cat => ({
+         category: cat?.category || "",
+         items: Array.isArray(cat?.items) ? cat.items.map((item: any) => 
+           typeof item === 'string' ? { name: item, show_on_home: true } : item
+         ) : []
+      })) : [];
+      setTools(normalized);
     });
   }, [fetch]);
 

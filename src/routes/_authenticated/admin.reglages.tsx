@@ -24,6 +24,16 @@ function SettingsPage() {
     fetch().then((data) => {
       setS({
         ...data,
+        hero_title: data?.hero_title ?? "",
+        hero_subtitle: data?.hero_subtitle ?? "",
+        hero_intro: data?.hero_intro ?? "",
+        contact_email: data?.contact_email ?? "",
+        featured_section_title: data?.featured_section_title ?? "",
+        formations_section_title: data?.formations_section_title ?? "",
+        missions_section_title: data?.missions_section_title ?? "",
+        benevolat_section_title: data?.benevolat_section_title ?? "",
+        tools_section_title: data?.tools_section_title ?? "",
+        footer_text: data?.footer_text ?? "",
         cover_image_url: data?.cover_image_url ?? "",
         cover_image_alt_text: data?.cover_image_alt_text ?? "",
         linkedin_url: data?.linkedin_url ?? "",
@@ -42,7 +52,18 @@ function SettingsPage() {
       await save({ data: { ...s, tools_json: tools } });
       toast.success("Réglages enregistrés");
     } catch (err: any) {
-      toast.error(err.message || "Erreur");
+      console.error("Erreur de sauvegarde:", err);
+      if (err.message && err.message.includes("[\"")) {
+         // Try to parse Zod error if it's a JSON string
+         try {
+           const parsed = JSON.parse(err.message);
+           toast.error(`Erreur de validation : ${parsed[0]?.path?.join('.')} - ${parsed[0]?.message}`);
+         } catch {
+           toast.error(err.message);
+         }
+      } else {
+         toast.error(err.message || "Erreur");
+      }
     } finally {
       setBusy(false);
     }

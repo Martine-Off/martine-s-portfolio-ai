@@ -162,12 +162,7 @@ function HomePage() {
             {settings?.hero_intro}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              to="/profil"
-              className="rounded-md border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-            >
-              À propos
-            </Link>
+
             {settings?.linkedin_url ? (
               
                 <a href={settings.linkedin_url}

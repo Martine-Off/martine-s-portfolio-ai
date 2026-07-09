@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSiteSettings } from "@/lib/settings.functions";
 import { listPublishedProjects } from "@/lib/projects.functions";
@@ -62,15 +63,19 @@ type CondensedItem = {
 };
 
 function CondensedList({ title, items }: { title: string; items: CondensedItem[] }) {
+  const [expanded, setExpanded] = useState(false);
   if (items.length === 0) return null;
+  const INITIAL = 2;
+  const visible = expanded ? items : items.slice(0, INITIAL);
+  const hidden = items.length - INITIAL;
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16">
-      <h2 className="mb-6 font-serif text-3xl font-bold text-foreground md:text-4xl">{title}</h2>
+    <section className="mx-auto max-w-6xl px-6 py-10 md:py-14">
+      <h2 className="mb-4 font-serif text-2xl font-bold text-foreground md:mb-6 md:text-3xl">{title}</h2>
       <ul className="divide-y divide-border rounded-lg border border-border bg-card">
-        {items.map((p) => (
-          <li key={p.id} className="p-5">
+        {visible.map((p) => (
+          <li key={p.id} className="px-4 py-3 md:px-5 md:py-3.5">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <h3 className="font-serif text-lg font-bold text-foreground">{p.title}</h3>
+              <h3 className="font-serif text-base font-bold text-foreground md:text-lg">{p.title}</h3>
               {p.role && <span className="text-sm text-muted-foreground">— {p.role}</span>}
               {p.status_label && (
                 <span className="rounded-full border border-border bg-background px-2 py-0.5 text-xs text-muted-foreground">
@@ -79,23 +84,34 @@ function CondensedList({ title, items }: { title: string; items: CondensedItem[]
               )}
             </div>
             {p.tagline && <p className="mt-1 text-sm text-muted-foreground">{p.tagline}</p>}
-            {p.angle && <p className="mt-0.5 text-xs text-muted-foreground">{p.angle}</p>}
             {p.tags.length > 0 && (
-              <ul className="mt-2 flex flex-wrap gap-1.5">
+              <ul className="mt-1.5 flex flex-wrap gap-1">
                 {p.tags.map((t) => (
-                  <li key={t} className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground">
+                  <li key={t} className="rounded border border-border bg-background px-1.5 py-0.5 text-[11px] text-foreground">
                     {t}
                   </li>
                 ))}
               </ul>
             )}
-            {p.impact && <p className="mt-2 text-sm text-foreground">{p.impact}</p>}
+            {p.impact && <p className="mt-1.5 text-sm text-foreground">{p.impact}</p>}
           </li>
         ))}
       </ul>
+      {hidden > 0 && (
+        <div className="mt-3 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="rounded-full border border-border bg-background px-4 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+          >
+            {expanded ? "Voir moins" : `Voir les ${hidden} autre${hidden > 1 ? "s" : ""}`}
+          </button>
+        </div>
+      )}
     </section>
   );
 }
+
 
 
 function HomePage() {
@@ -146,12 +162,7 @@ function HomePage() {
             {settings?.hero_intro}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              to="/profil"
-              className="rounded-md border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-            >
-              À propos
-            </Link>
+
             {settings?.linkedin_url ? (
               
                 <a href={settings.linkedin_url}

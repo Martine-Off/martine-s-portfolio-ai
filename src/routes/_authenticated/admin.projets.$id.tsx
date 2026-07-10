@@ -260,29 +260,27 @@ function EditProject() {
             </div>
           </Field>
         )}
+        <Field label="Image de couverture">
+          <ImageUpload
+            value={form.cover_image_url}
+            onChange={(url) => setForm({ ...form, cover_image_url: url })}
+            pathPrefix="covers"
+          />
+        </Field>
+        <Field label="Texte alternatif de l'image">
+          <input value={form.cover_image_alt_text} onChange={(e) => setForm({ ...form, cover_image_alt_text: e.target.value })} className={inputCls} />
+        </Field>
         {!isLight && (
-          <>
-            <Field label="Image de couverture">
-              <ImageUpload
-                value={form.cover_image_url}
-                onChange={(url) => setForm({ ...form, cover_image_url: url })}
-                pathPrefix="covers"
-              />
-            </Field>
-            <Field label="Texte alternatif de l'image">
-              <input value={form.cover_image_alt_text} onChange={(e) => setForm({ ...form, cover_image_alt_text: e.target.value })} className={inputCls} />
-            </Field>
-            <Field label="Position de l'image">
-              <CoverPositionPicker
-                imageUrl={form.cover_image_url}
-                value={form.cover_image_position || "center"}
-                onChange={(v) => setForm({ ...form, cover_image_position: v })}
-              />
-              {!form.cover_image_url && (
-                <p className="text-xs text-muted-foreground">Ajoutez une image de couverture pour définir sa position.</p>
-              )}
-            </Field>
-          </>
+          <Field label="Position de l'image">
+            <CoverPositionPicker
+              imageUrl={form.cover_image_url}
+              value={form.cover_image_position || "center"}
+              onChange={(v) => setForm({ ...form, cover_image_position: v })}
+            />
+            {!form.cover_image_url && (
+              <p className="text-xs text-muted-foreground">Ajoutez une image de couverture pour définir sa position.</p>
+            )}
+          </Field>
         )}
         <Field label={isLight ? "Stack (tags séparés par des virgules)" : "Tags (séparés par des virgules)"}>
           <input value={tagsStr} onChange={(e) => setTagsStr(e.target.value)} className={inputCls} placeholder="IA, n8n, Automatisation" />
@@ -290,17 +288,17 @@ function EditProject() {
         <Field label="Impact">
           <textarea rows={2} value={form.impact} onChange={(e) => setForm({ ...form, impact: e.target.value })} className={inputCls} placeholder="ex. 30 apprenants formés, +40% de conversion" />
         </Field>
+        <Field label="Lien vers le dépôt / ressource externe">
+          <input value={form.repo_url} onChange={(e) => setForm({ ...form, repo_url: e.target.value })} className={inputCls} placeholder="https://…" />
+        </Field>
+        <Field label="Libellé du bouton de lien">
+          <input value={form.repo_label} onChange={(e) => setForm({ ...form, repo_label: e.target.value })} className={inputCls} placeholder="ex. Voir la présentation Gamma ↗" />
+          <p className="mt-1 text-xs text-muted-foreground">Si vide : &laquo;&nbsp;Voir le dépôt&nbsp;&raquo; pour GitHub, &laquo;&nbsp;Voir le document&nbsp;&raquo; pour les autres liens.</p>
+        </Field>
         {!isLight && (
           <>
             <Field label="Résumé">
               <textarea rows={3} value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} className={inputCls} />
-            </Field>
-            <Field label="Lien vers le dépôt (GitHub, Gamma, etc.)">
-              <input value={form.repo_url} onChange={(e) => setForm({ ...form, repo_url: e.target.value })} className={inputCls} placeholder="https://…" />
-            </Field>
-            <Field label="Libellé du bouton de lien">
-              <input value={form.repo_label} onChange={(e) => setForm({ ...form, repo_label: e.target.value })} className={inputCls} placeholder="ex. Voir la présentation Gamma ↗" />
-              <p className="mt-1 text-xs text-muted-foreground">Si vide : &laquo;&nbsp;Voir le dépôt&nbsp;&raquo; pour GitHub, &laquo;&nbsp;Voir le document&nbsp;&raquo; pour les autres liens.</p>
             </Field>
             <Field label="Note si pas de lien">
               <input value={form.repo_note} onChange={(e) => setForm({ ...form, repo_note: e.target.value })} className={inputCls} placeholder="Anonymisé, dossier disponible sur demande" />

@@ -65,6 +65,10 @@ type CondensedItem = {
   status_label: string | null;
   tags: string[];
   impact: string | null;
+  cover_image_url: string | null;
+  cover_image_alt_text: string | null;
+  repo_url: string | null;
+  repo_label: string | null;
 };
 
 function CondensedItemRow({ p }: { p: CondensedItem }) {
@@ -73,17 +77,27 @@ function CondensedItemRow({ p }: { p: CondensedItem }) {
   return (
     <li className="px-4 py-1.5 md:px-5 md:py-2">
       <div className="flex items-start justify-between gap-4">
-        <div 
-          className="flex flex-wrap items-baseline gap-x-2 gap-y-1 py-2 cursor-pointer flex-1"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <h3 className="font-serif text-base font-bold text-foreground md:text-lg">{p.title}</h3>
-          {p.role && <span className="text-sm text-muted-foreground">— {p.role}</span>}
-          {p.status_label && (
-            <span className="ml-1 rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
-              {p.status_label}
-            </span>
+        <div className="flex items-start gap-3 flex-1 min-w-0">
+          {p.cover_image_url && (
+            <img
+              src={p.cover_image_url}
+              alt={p.cover_image_alt_text || p.title}
+              className="mt-2 h-10 w-10 shrink-0 rounded-md border border-border object-cover md:h-12 md:w-12"
+              loading="lazy"
+            />
           )}
+          <div
+            className="flex flex-wrap items-baseline gap-x-2 gap-y-1 py-2 cursor-pointer flex-1 min-w-0"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <h3 className="font-serif text-base font-bold text-foreground">{p.title}</h3>
+            {p.role && <span className="text-sm text-muted-foreground">— {p.role}</span>}
+            {p.status_label && (
+              <span className="ml-1 rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
+                {p.status_label}
+              </span>
+            )}
+          </div>
         </div>
         <button
           type="button"
@@ -114,6 +128,16 @@ function CondensedItemRow({ p }: { p: CondensedItem }) {
               </ul>
             )}
             {p.impact && <p className="mt-2 text-sm text-foreground">{p.impact}</p>}
+            {p.repo_url && (
+              <a
+                href={p.repo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium text-accent transition-colors hover:bg-muted"
+              >
+                {p.repo_label?.trim() || "Voir ↗"}
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -125,7 +149,7 @@ function CondensedList({ id, title, items }: { id: string; title: string; items:
   if (items.length === 0) return null;
   return (
     <section id={id} className="mx-auto max-w-6xl scroll-mt-20 px-6 py-10 md:py-14">
-      <h2 className="mb-4 font-serif text-2xl font-bold text-foreground md:mb-6 md:text-3xl">{title}</h2>
+      <h2 className="mb-4 font-serif text-xl font-bold text-foreground md:mb-6 md:text-2xl">{title}</h2>
       <ul className="divide-y divide-border rounded-lg border border-border bg-card">
         {items.map((p) => (
           <CondensedItemRow key={p.id} p={p} />
@@ -199,12 +223,12 @@ function HomePage() {
         )}
         <div className="relative z-10 mx-auto max-w-6xl px-6 py-16 md:py-24">
           <div className="border-l-4 border-accent pl-6 md:pl-8">
-            {settings?.hero_subtitle && (
+            {(settings?.hero_subtitle || settings?.location) && (
                 <span className="mb-4 inline-block rounded-full bg-accent px-3 py-1 text-sm font-bold uppercase tracking-widest text-foreground">
-                  {settings.hero_subtitle}
+                  {[settings?.hero_subtitle, settings?.location].filter(Boolean).join(" · ")}
                 </span>
               )}
-              <h1 className="font-serif text-3xl font-bold leading-tight text-foreground md:text-5xl">
+              <h1 className="font-serif text-2xl font-bold leading-tight text-foreground md:text-4xl">
                 {settings?.hero_title}
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
@@ -215,17 +239,23 @@ function HomePage() {
                   <a href={settings.linkedin_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                    className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                   >
                     Me contacter sur LinkedIn
                   </a>
                 ) : settings?.contact_email ? (
                   <a href={`mailto:${settings.contact_email}`}
-                    className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                    className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                   >
                     Me contacter
                   </a>
                 ) : null}
+                <Link
+                  to="/profil"
+                  className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  Profil
+                </Link>
               </div>
             </div>
         </div>
@@ -234,7 +264,7 @@ function HomePage() {
       {/* Projets phares */}
       {featured.length > 0 && (
         <section id="projets-phares" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-16">
-          <h2 className="mb-8 font-serif text-2xl font-bold text-foreground md:text-3xl">
+          <h2 className="mb-8 font-serif text-xl font-bold text-foreground md:text-2xl">
             {settings?.featured_section_title}
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -251,13 +281,13 @@ function HomePage() {
 
       {tools.length > 0 && (
         <section id="outils" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-10 md:py-14">
-          <h2 className="mb-6 font-serif text-2xl font-bold text-foreground md:text-3xl">
+          <h2 className="mb-6 font-serif text-xl font-bold text-foreground md:text-2xl">
             {settings?.tools_section_title ?? "Outils et compétences"}
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
             {tools.map((group, i) => (
               <div key={i} className="rounded-lg border border-border bg-card p-5">
-                <h3 className="mb-3 font-serif text-lg font-bold text-foreground">{group.category}</h3>
+                <h3 className="mb-3 font-serif text-base font-bold text-foreground">{group.category}</h3>
                 <ul className="flex flex-wrap gap-1.5">
                   {group.items.map((item) => (
                     <li
@@ -284,7 +314,7 @@ function HomePage() {
 
       {hasContact && (
         <section id="contact" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-16 text-center">
-          <h2 className="mb-4 font-serif text-2xl font-bold text-foreground md:text-3xl">Contact</h2>
+          <h2 className="mb-4 font-serif text-xl font-bold text-foreground md:text-2xl">Contact</h2>
           <p className="mx-auto mb-6 max-w-xl text-base text-muted-foreground">
             {settings?.contact_text || "Une idée de projet, une mission à me confier\u00A0? Discutons-en."}
           </p>

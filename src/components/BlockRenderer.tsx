@@ -38,10 +38,10 @@ interface Block {
   caption: string | null;
 }
 
-function BlockTitle({ title }: { title?: string | null }) {
+function BlockTitle({ title, light }: { title?: string | null; light?: boolean }) {
   if (!title) return null;
   return (
-    <h3 className="mt-6 mb-2 font-serif text-lg font-semibold text-foreground md:text-xl">
+    <h3 className={`mt-6 mb-2 font-serif text-base text-foreground md:text-lg ${light ? 'font-normal' : 'font-semibold'}`}>
       {title}
     </h3>
   );
@@ -52,7 +52,7 @@ export function BlockRenderer({ block }: { block: Block }) {
   switch (block.block_type) {
     case "heading":
       return (
-        <h2 id={anchorId} className="mt-8 mb-2 scroll-mt-24 font-serif text-xl font-bold text-foreground md:text-2xl">
+        <h2 id={anchorId} className="mt-8 mb-2 scroll-mt-24 font-serif text-lg font-bold text-foreground md:text-xl">
           {block.content}
         </h2>
       );
@@ -70,7 +70,7 @@ export function BlockRenderer({ block }: { block: Block }) {
     case "quote":
       return (
         <div id={anchorId} className="scroll-mt-24">
-          <BlockTitle title={block.title} />
+          <BlockTitle title={block.title} light />
           <blockquote
             className="my-6 border-l-4 pl-6 font-serif text-lg italic text-foreground md:text-xl"
             style={{ borderColor: "var(--decorative)" }}

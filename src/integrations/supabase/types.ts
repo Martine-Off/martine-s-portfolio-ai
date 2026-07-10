@@ -172,6 +172,7 @@ export type Database = {
           hero_title: string
           id: number
           linkedin_url: string | null
+          location: string | null
           missions_section_title: string
           tools_json: Json
           tools_section_title: string
@@ -191,6 +192,7 @@ export type Database = {
           hero_title?: string
           id?: number
           linkedin_url?: string | null
+          location?: string | null
           missions_section_title?: string
           tools_json?: Json
           tools_section_title?: string
@@ -210,6 +212,7 @@ export type Database = {
           hero_title?: string
           id?: number
           linkedin_url?: string | null
+          location?: string | null
           missions_section_title?: string
           tools_json?: Json
           tools_section_title?: string

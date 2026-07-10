@@ -28,6 +28,7 @@ const settingsSchema = z.object({
   contact_email: z.string().email().optional().or(z.literal("")),
   contact_text: z.string().nullable().optional(),
   linkedin_url: z.string().nullable().optional(),
+  location: z.string().nullable().optional(),
   featured_section_title: z.string().min(1),
   formations_section_title: z.string().min(1),
   missions_section_title: z.string().min(1),

@@ -40,12 +40,10 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
         variant === "detail" && "border border-border",
       )}
     >
-      {!hasImage && (
-        <div 
-          className="absolute left-0 top-0 bottom-0 w-[6px] z-10" 
-          style={{ backgroundColor: accent }} 
-        />
-      )}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-[6px] z-10"
+        style={{ backgroundColor: accent }}
+      />
       {hasImage ? (
         <div className={cn("relative w-full overflow-hidden bg-muted", variant === "grid" ? "aspect-video" : "aspect-video md:aspect-[21/9]")}>
           <img

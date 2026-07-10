@@ -72,8 +72,13 @@ function ProfilPage() {
           )}
           <div>
             <h1 className="font-serif text-3xl font-bold text-foreground md:text-4xl">
-              {profile?.project.title ?? "Profil"}
+              {settings?.hero_title || profile?.project.title || "Profil"}
             </h1>
+            {settings?.hero_subtitle && (
+              <p className="mt-1 text-lg font-normal" style={{ color: "#5F5A85" }}>
+                {settings.hero_subtitle}
+              </p>
+            )}
             {profile?.project.tagline && (
               <p className="mt-4 text-base text-muted-foreground">{profile.project.tagline}</p>
             )}

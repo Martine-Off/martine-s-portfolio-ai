@@ -4,6 +4,7 @@ import { getProjectBySlug } from "@/lib/projects.functions";
 import { getSiteSettings } from "@/lib/settings.functions";
 import { ProjectCard } from "@/components/ProjectCard";
 import { BlockRenderer } from "@/components/BlockRenderer";
+import { ProjectToc } from "@/components/ProjectToc";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PageState } from "@/components/PageState";
@@ -97,107 +98,111 @@ function ProjectPage() {
     <div className="min-h-screen bg-background">
       <SiteHeader heroTitle={settings?.hero_title ?? ""} />
 
-      <div className="mx-auto max-w-4xl px-6 py-10">
-        <Link to="/" className="mb-6 inline-block text-sm text-muted-foreground hover:text-foreground">
-          ← Retour aux projets
-        </Link>
+      <div className="mx-auto max-w-6xl px-6 py-10">
+        <div className="lg:grid lg:grid-cols-[minmax(0,56rem)_240px] lg:items-start lg:gap-10">
+          <div className="mx-auto w-full max-w-4xl lg:mx-0 lg:max-w-none">
+            <Link to="/" className="mb-6 inline-block text-sm text-muted-foreground hover:text-foreground">
+              ← Retour aux projets
+            </Link>
 
-        <ProjectCard
-          project={{
-            id: project.id,
-            slug: project.slug,
-            title: project.title,
-            emoji: (project as { emoji?: string | null }).emoji ?? null,
-            tagline: project.tagline,
-            project_type: project.project_type,
-            project_date: project.project_date,
-            status_label: project.status_label,
-            accent_color: project.accent_color,
-            cover_image_url: project.cover_image_url,
-            cover_image_alt_text: project.cover_image_alt_text,
-            cover_image_position: project.cover_image_position,
-            tags: project.tags,
-          }}
-          variant="detail"
-          linkable={false}
-        />
+            <ProjectCard
+              project={{
+                id: project.id,
+                slug: project.slug,
+                title: project.title,
+                emoji: (project as { emoji?: string | null }).emoji ?? null,
+                tagline: project.tagline,
+                project_type: project.project_type,
+                project_date: project.project_date,
+                status_label: project.status_label,
+                accent_color: project.accent_color,
+                cover_image_url: project.cover_image_url,
+                cover_image_alt_text: project.cover_image_alt_text,
+                cover_image_position: project.cover_image_position,
+                tags: project.tags,
+              }}
+              variant="detail"
+              linkable={false}
+            />
 
-        {(p.role || p.angle) && (
-          <div className="mt-4">
-            {p.role && <p className="text-sm text-foreground">{p.role}</p>}
-            {p.angle && <p className="text-xs text-muted-foreground">{p.angle}</p>}
-          </div>
-        )}
+            {(p.role || p.angle) && (
+              <div className="mt-4">
+                {p.role && <p className="text-sm text-foreground">{p.role}</p>}
+                {p.angle && <p className="text-xs text-muted-foreground">{p.angle}</p>}
+              </div>
+            )}
 
-        {project.summary && (
-          <p className="mt-8 text-lg leading-relaxed text-foreground">{project.summary}</p>
-        )}
+            {project.summary && (
+              <p className="mt-8 text-lg leading-relaxed text-foreground">{project.summary}</p>
+            )}
 
-        {tocItems.length >= 2 && (
-          <nav className="mt-8 rounded-lg border border-border bg-card p-4">
-            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Sommaire
-            </p>
-            <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:overflow-visible">
-              {tocItems.map((t) => (
-                <li key={t.id}>
-                  
-                    <a href={`#${t.id}`}
-                    onClick={(e) => onTocClick(e, t.id)}
-                    className="inline-block shrink-0 rounded-full border border-border bg-background px-3 py-1 text-xs text-accent hover:bg-accent/10 hover:underline"
-                  >
-                    {t.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+            {tocItems.length >= 2 && (
+              <nav className="mt-8 rounded-lg border border-border bg-card p-4 lg:hidden">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  Sommaire
+                </p>
+                <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {tocItems.map((t) => (
+                    <li key={t.id}>
+                      <a href={`#${t.id}`}
+                        onClick={(e) => onTocClick(e, t.id)}
+                        className="inline-block shrink-0 rounded-full border border-border bg-background px-3 py-1 text-xs text-accent hover:bg-accent/10 hover:underline"
+                      >
+                        {t.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
 
-        <div className="mt-8">
-          {blocks.map((b) => (
-            <BlockRenderer key={b.id} block={b as BlockWithTitle} />
-          ))}
-        </div>
-
-        {categorised && categorised.length > 0 && (
-          <div className="mt-12">
-            <h2 className="mb-6 font-serif text-xl font-bold text-foreground md:text-2xl">Outils et compétences</h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {categorised.map((block, i) => (
-                <div key={i} className="rounded-lg border border-border bg-card p-5">
-                  <h3 className="mb-3 font-serif text-base font-bold text-foreground">{block.label}</h3>
-                  <ul className="flex flex-wrap gap-1.5">
-                    {block.items.map((item, j) => (
-                      <li key={j} className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+            <div className="mt-8">
+              {blocks.map((b) => (
+                <BlockRenderer key={b.id} block={b as BlockWithTitle} />
               ))}
             </div>
-          </div>
-        )}
 
-        {project.repo_url ? (
-          <div className="mt-10">
-            
-              <a href={project.repo_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90"
-            >
-              {project.repo_label?.trim()
-                ? project.repo_label.trim()
-                : project.repo_url.includes("github.com")
-                ? "Voir le dépôt ↗"
-                : "Voir le document ↗"}
-            </a>
+            {categorised && categorised.length > 0 && (
+              <div className="mt-12">
+                <h2 className="mb-6 font-serif text-xl font-bold text-foreground md:text-2xl">Outils et compétences</h2>
+                <div className="grid gap-6 md:grid-cols-2">
+                  {categorised.map((block, i) => (
+                    <div key={i} className="rounded-lg border border-border bg-card p-5">
+                      <h3 className="mb-3 font-serif text-base font-bold text-foreground">{block.label}</h3>
+                      <ul className="flex flex-wrap gap-1.5">
+                        {block.items.map((item, j) => (
+                          <li key={j} className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground">
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {project.repo_url ? (
+              <div className="mt-10">
+                <a href={project.repo_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90"
+                >
+                  {project.repo_label?.trim()
+                    ? project.repo_label.trim()
+                    : project.repo_url.includes("github.com")
+                    ? "Voir le dépôt ↗"
+                    : "Voir le document ↗"}
+                </a>
+              </div>
+            ) : project.repo_note ? (
+              <p className="mt-10 text-sm italic text-muted-foreground">{project.repo_note}</p>
+            ) : null}
           </div>
-        ) : project.repo_note ? (
-          <p className="mt-10 text-sm italic text-muted-foreground">{project.repo_note}</p>
-        ) : null}
+
+          <ProjectToc sections={tocItems} className="hidden lg:block" />
+        </div>
       </div>
 
       <SiteFooter

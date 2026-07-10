@@ -98,9 +98,9 @@ function ProjectPage() {
     <div className="min-h-screen bg-background">
       <SiteHeader heroTitle={settings?.hero_title ?? ""} />
 
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        <div className="lg:grid lg:grid-cols-[minmax(0,56rem)_240px] lg:items-start lg:gap-10">
-          <div className="mx-auto w-full max-w-4xl lg:mx-0 lg:max-w-none">
+      <div className="mx-auto max-w-[76.5rem] px-6 py-10">
+        <div className="xl:grid xl:grid-cols-[minmax(0,56rem)_240px] xl:items-start xl:gap-10">
+          <div className="mx-auto w-full max-w-4xl xl:mx-0 xl:max-w-none">
             <Link to="/" className="mb-6 inline-block text-sm text-muted-foreground hover:text-foreground">
               ← Retour aux projets
             </Link>
@@ -137,16 +137,16 @@ function ProjectPage() {
             )}
 
             {tocItems.length >= 2 && (
-              <nav className="mt-8 rounded-lg border border-border bg-card p-4 lg:hidden">
+              <nav className="mt-8 rounded-lg border border-border bg-card p-4 xl:hidden">
                 <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   Sommaire
                 </p>
-                <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:overflow-visible">
                   {tocItems.map((t) => (
-                    <li key={t.id}>
+                    <li key={t.id} className="shrink-0">
                       <a href={`#${t.id}`}
                         onClick={(e) => onTocClick(e, t.id)}
-                        className="inline-block shrink-0 rounded-full border border-border bg-background px-3 py-1 text-xs text-accent hover:bg-accent/10 hover:underline"
+                        className="inline-block whitespace-nowrap rounded-full border border-border bg-background px-3 py-1 text-xs text-accent hover:bg-accent/10 hover:underline"
                       >
                         {t.label}
                       </a>
@@ -201,7 +201,7 @@ function ProjectPage() {
             ) : null}
           </div>
 
-          <ProjectToc sections={tocItems} className="hidden lg:block" />
+          <ProjectToc sections={tocItems} className="hidden xl:block" />
         </div>
       </div>
 

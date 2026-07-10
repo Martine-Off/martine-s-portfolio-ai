@@ -8,6 +8,8 @@ import { ProjectToc } from "@/components/ProjectToc";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PageState } from "@/components/PageState";
+import { safeHref } from "@/lib/utils/safe-url";
+
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 
@@ -182,23 +184,27 @@ function ProjectPage() {
               </div>
             )}
 
-            {project.repo_url ? (
+            {(() => {
+              const safeRepo = safeHref(project.repo_url);
+              return safeRepo ? (
               <div className="mt-10">
-                <a href={project.repo_url}
+                <a href={safeRepo}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90"
                 >
                   {project.repo_label?.trim()
                     ? project.repo_label.trim()
-                    : project.repo_url.includes("github.com")
+                    : safeRepo.includes("github.com")
                     ? "Voir le dépôt ↗"
                     : "Voir le document ↗"}
                 </a>
               </div>
             ) : project.repo_note ? (
               <p className="mt-10 text-sm italic text-muted-foreground">{project.repo_note}</p>
-            ) : null}
+            ) : null;
+            })()}
+
           </div>
 
           <ProjectToc sections={tocItems} className="hidden xl:block" />

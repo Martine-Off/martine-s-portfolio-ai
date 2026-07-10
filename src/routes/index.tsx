@@ -10,6 +10,7 @@ import { PageState } from "@/components/PageState";
 import { QuickNav, type QuickNavSection } from "@/components/QuickNav";
 import { BackToTop } from "@/components/BackToTop";
 import { cn } from "@/lib/utils";
+import { renderInlineMarkdown } from "@/lib/utils/inline-markdown";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const projectsQuery = queryOptions({ queryKey: ["projects", "public"], queryFn: () => listPublishedProjects() });
@@ -316,7 +317,9 @@ function HomePage() {
         <section id="contact" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-16 text-center">
           <h2 className="mb-4 font-serif text-xl font-bold text-foreground md:text-2xl">Contact</h2>
           <p className="mx-auto mb-6 max-w-xl text-base text-muted-foreground">
-            {settings?.contact_text || "Une idée de projet, une mission à me confier\u00A0? Discutons-en."}
+            {settings?.contact_text
+              ? renderInlineMarkdown(settings.contact_text)
+              : "Une idée de projet, une mission à me confier\u00A0? Discutons-en."}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {linkedinUrl && (

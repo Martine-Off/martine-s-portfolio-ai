@@ -71,11 +71,11 @@ function ProfilPage() {
             />
           )}
           <div>
-            <h1 className="font-serif text-4xl font-bold text-foreground md:text-5xl">
+            <h1 className="font-serif text-3xl font-bold text-foreground md:text-4xl">
               {profile?.project.title ?? "Profil"}
             </h1>
             {profile?.project.tagline && (
-              <p className="mt-4 text-lg text-muted-foreground">{profile.project.tagline}</p>
+              <p className="mt-4 text-base text-muted-foreground">{profile.project.tagline}</p>
             )}
           </div>
         </div>
@@ -94,11 +94,11 @@ function ProfilPage() {
 
         {tools.length > 0 && (
           <div id="outils" className="mt-12 scroll-mt-20">
-            <h2 className="mb-6 font-serif text-2xl font-bold text-foreground md:text-3xl">Outils et compétences</h2>
+            <h2 className="mb-6 font-serif text-xl font-bold text-foreground md:text-2xl">Outils et compétences</h2>
             <div className="grid gap-6 md:grid-cols-2">
               {tools.map((group, i) => (
                 <div key={i} className="rounded-lg border border-border bg-card p-5">
-                  <h3 className="mb-3 font-serif text-lg font-bold text-foreground">{group.category}</h3>
+                  <h3 className="mb-3 font-serif text-base font-bold text-foreground">{group.category}</h3>
                   <ul className="flex flex-wrap gap-1.5">
                     {group.items.map((item) => (
                       <li

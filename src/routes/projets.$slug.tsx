@@ -138,13 +138,13 @@ function ProjectPage() {
             <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Sommaire
             </p>
-            <ul className="flex flex-wrap gap-2">
+            <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:overflow-visible">
               {tocItems.map((t) => (
                 <li key={t.id}>
                   
                     <a href={`#${t.id}`}
                     onClick={(e) => onTocClick(e, t.id)}
-                    className="inline-block rounded-full border border-border bg-background px-3 py-1 text-xs text-accent hover:bg-accent/10 hover:underline"
+                    className="inline-block shrink-0 rounded-full border border-border bg-background px-3 py-1 text-xs text-accent hover:bg-accent/10 hover:underline"
                   >
                     {t.label}
                   </a>
@@ -162,11 +162,11 @@ function ProjectPage() {
 
         {categorised && categorised.length > 0 && (
           <div className="mt-12">
-            <h2 className="mb-6 font-serif text-2xl font-bold text-foreground md:text-3xl">Outils et compétences</h2>
+            <h2 className="mb-6 font-serif text-xl font-bold text-foreground md:text-2xl">Outils et compétences</h2>
             <div className="grid gap-6 md:grid-cols-2">
               {categorised.map((block, i) => (
                 <div key={i} className="rounded-lg border border-border bg-card p-5">
-                  <h3 className="mb-3 font-serif text-lg font-bold text-foreground">{block.label}</h3>
+                  <h3 className="mb-3 font-serif text-base font-bold text-foreground">{block.label}</h3>
                   <ul className="flex flex-wrap gap-1.5">
                     {block.items.map((item, j) => (
                       <li key={j} className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground">

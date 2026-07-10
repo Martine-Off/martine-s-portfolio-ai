@@ -8,6 +8,8 @@ import { ProjectToc } from "@/components/ProjectToc";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PageState } from "@/components/PageState";
+import { safeHref } from "@/lib/utils/safe-url";
+
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 

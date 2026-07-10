@@ -129,16 +129,20 @@ function CondensedItemRow({ p }: { p: CondensedItem }) {
               </ul>
             )}
             {p.impact && <p className="mt-2 text-sm text-foreground">{p.impact}</p>}
-            {p.repo_url && (
+            {(() => {
+              const safeRepo = safeHref(p.repo_url);
+              return safeRepo ? (
               <a
-                href={p.repo_url}
+                href={safeRepo}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 inline-flex items-center rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium text-accent transition-colors hover:bg-muted"
               >
                 {p.repo_label?.trim() || "Voir ↗"}
               </a>
-            )}
+            ) : null;
+            })()}
+
           </div>
         </div>
       </div>
@@ -237,14 +241,15 @@ function HomePage() {
                 {settings?.hero_intro}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                {settings?.linkedin_url ? (
-                  <a href={settings.linkedin_url}
+                {safeHref(settings?.linkedin_url) ? (
+                  <a href={safeHref(settings?.linkedin_url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                   >
                     Me contacter sur LinkedIn
                   </a>
+
                 ) : settings?.contact_email ? (
                   <a href={`mailto:${settings.contact_email}`}
                     className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"

@@ -79,6 +79,16 @@ function SettingsPage() {
 
   const upd = (k: string) => (e: any) => setS({ ...s, [k]: e.target.value });
 
+  function moveTool(ci: number, ii: number, dir: -1 | 1) {
+    const newIndex = ii + dir;
+    if (newIndex < 0 || newIndex >= tools[ci].items.length) return;
+    const c = [...tools];
+    const items = [...c[ci].items];
+    [items[ii], items[newIndex]] = [items[newIndex], items[ii]];
+    c[ci] = { ...c[ci], items };
+    setTools(c);
+  }
+
   return (
     <div className="mx-auto max-w-3xl p-4 md:p-8">
       <Link to="/admin" className="mb-4 inline-block text-sm text-muted-foreground hover:text-foreground">← Retour</Link>
@@ -148,6 +158,16 @@ function SettingsPage() {
                 <div className="mb-3 flex flex-wrap gap-2">
                   {cat.items.map((item, ii) => (
                     <div key={ii} className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-sm">
+                      <button
+                        type="button"
+                        onClick={() => moveTool(ci, ii, -1)}
+                        disabled={ii === 0}
+                        className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                        aria-label="Déplacer avant"
+                        title="Déplacer avant"
+                      >
+                        ‹
+                      </button>
                       <input
                         type="checkbox"
                         checked={item.show_on_home}
@@ -160,6 +180,16 @@ function SettingsPage() {
                         className="cursor-pointer"
                       />
                       <span>{item.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => moveTool(ci, ii, 1)}
+                        disabled={ii === cat.items.length - 1}
+                        className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                        aria-label="Déplacer après"
+                        title="Déplacer après"
+                      >
+                        ›
+                      </button>
                       <button
                         type="button"
                         onClick={() => {

@@ -34,7 +34,7 @@ export function BlockRenderer({ block }: { block: Block }) {
         <div id={anchorId} className="scroll-mt-24 prose prose-neutral max-w-none text-foreground [&_p]:my-3 [&_p]:leading-relaxed">
           <BlockTitle title={block.title} />
           {block.content?.split("\n\n").map((para, i) => (
-            <p key={i} className="text-base leading-relaxed text-foreground">
+            <p key={i} className="whitespace-pre-line text-base leading-relaxed text-foreground">
               {renderInlineMarkdown(para)}
             </p>
           ))}
@@ -45,7 +45,7 @@ export function BlockRenderer({ block }: { block: Block }) {
         <div id={anchorId} className="scroll-mt-24">
           <BlockTitle title={block.title} light />
           <blockquote
-            className="my-6 border-l-4 pl-6 font-serif text-lg italic text-foreground md:text-xl"
+            className="my-6 whitespace-pre-line border-l-4 pl-6 font-serif text-lg italic text-foreground md:text-xl"
             style={{ borderColor: "var(--decorative)" }}
           >
             {block.content ? renderInlineMarkdown(block.content) : null}

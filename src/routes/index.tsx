@@ -11,8 +11,6 @@ import { QuickNav, type QuickNavSection } from "@/components/QuickNav";
 import { BackToTop } from "@/components/BackToTop";
 import { cn } from "@/lib/utils";
 import { renderInlineMarkdown } from "@/lib/utils/inline-markdown";
-import { safeHref } from "@/lib/utils/safe-url";
-
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const projectsQuery = queryOptions({ queryKey: ["projects", "public"], queryFn: () => listPublishedProjects() });
@@ -25,12 +23,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions courtes.",
+          "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.",
       },
       { property: "og:title", content: "Martine Desmaroux — Cheffe de projet IA" },
       {
         property: "og:description",
-        content: "Portfolio de Martine Desmaroux, cheffe de projet IA en reconversion.",
+        content: "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "/og-default.jpg" },
@@ -131,20 +129,16 @@ function CondensedItemRow({ p }: { p: CondensedItem }) {
               </ul>
             )}
             {p.impact && <p className="mt-2 text-sm text-foreground">{p.impact}</p>}
-            {(() => {
-              const safeRepo = safeHref(p.repo_url);
-              return safeRepo ? (
+            {p.repo_url && (
               <a
-                href={safeRepo}
+                href={p.repo_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 inline-flex items-center rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium text-accent transition-colors hover:bg-muted"
               >
                 {p.repo_label?.trim() || "Voir ↗"}
               </a>
-            ) : null;
-            })()}
-
+            )}
           </div>
         </div>
       </div>
@@ -243,15 +237,14 @@ function HomePage() {
                 {settings?.hero_intro}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                {safeHref(settings?.linkedin_url) ? (
-                  <a href={safeHref(settings?.linkedin_url)}
+                {settings?.linkedin_url ? (
+                  <a href={settings.linkedin_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                   >
                     Me contacter sur LinkedIn
                   </a>
-
                 ) : settings?.contact_email ? (
                   <a href={`mailto:${settings.contact_email}`}
                     className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"

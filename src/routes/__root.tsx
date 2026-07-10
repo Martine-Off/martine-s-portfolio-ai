@@ -55,14 +55,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions courtes.",
+          "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.",
       },
       { name: "author", content: "Martine Desmaroux" },
       { property: "og:title", content: "Martine Desmaroux — Cheffe de projet IA" },
       {
         property: "og:description",
         content:
-          "Portfolio de Martine Desmaroux, cheffe de projet IA en reconversion.",
+          "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "/og-default.jpg" },
@@ -72,6 +72,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: "/og-default.jpg" },
 
+      { name: "twitter:title", content: "Martine Desmaroux — Cheffe de projet IA" },
+      { name: "twitter:description", content: "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

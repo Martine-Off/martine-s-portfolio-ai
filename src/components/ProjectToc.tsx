@@ -36,7 +36,13 @@ export function ProjectToc({ sections, className }: { sections: ProjectTocSectio
   }
 
   return (
-    <nav className={cn("sticky top-24", className)} aria-label="Sommaire">
+    <nav
+      className={cn(
+        "sticky top-24 rounded-2xl border border-border bg-card p-6 shadow-[0_2px_16px_rgba(26,27,46,0.10)]",
+        className,
+      )}
+      aria-label="Sommaire"
+    >
       <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">Sommaire</p>
       <ul className="space-y-1">
         {sections.map((s) => (

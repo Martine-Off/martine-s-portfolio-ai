@@ -192,6 +192,7 @@ function HomePage() {
       items: cat.items.filter((i) => i.show_on_home).map((i) => i.name),
     }))
     .filter((cat) => cat.items.length > 0);
+  const toolsFlat = tools.flatMap((cat) => cat.items);
   const linkedinUrl = settings?.linkedin_url?.trim() || null;
   const contactEmail = settings?.contact_email?.trim() || null;
   const hasContact = Boolean(linkedinUrl || contactEmail);
@@ -285,29 +286,28 @@ function HomePage() {
           <h2 className="mb-6 font-serif text-xl font-bold text-foreground md:text-2xl">
             {settings?.tools_section_title ?? "Outils et compétences"}
           </h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            {tools.map((group, i) => (
-              <div key={i} className="rounded-lg border border-border bg-card p-5">
-                <h3 className="mb-3 font-serif text-base font-bold text-foreground">{group.category}</h3>
-                <ul className="flex flex-wrap gap-1.5">
-                  {group.items.map((item) => (
-                    <li
-                      key={item}
-                      className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+            <ul className="flex flex-wrap gap-2.5">
+              {toolsFlat.map((name, i) => (
+                <li
+                  key={name}
+                  className={cn(
+                    "rounded-full px-3.5 py-1.5 text-sm font-medium text-foreground",
+                    i % 2 === 0 ? "bg-accent" : "bg-decorative",
+                  )}
+                >
+                  {name}
+                </li>
+              ))}
+            </ul>
           </div>
           <div className="mt-8 flex justify-center">
             <a
               href="/profil#outils"
-              className="rounded-full border border-border bg-background px-5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+              className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-6 py-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-primary hover:bg-muted"
             >
-              Voir tous mes outils sur mon profil →
+              Voir tous mes outils sur mon profil
+              <span aria-hidden="true">→</span>
             </a>
           </div>
         </section>

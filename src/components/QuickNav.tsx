@@ -44,7 +44,7 @@ export function QuickNav({ sections }: { sections: QuickNavSection[] }) {
       }}
     >
       <div
-        className="mx-auto flex max-w-6xl flex-nowrap gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-6 py-2.5 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="mx-auto flex max-w-6xl touch-pan-x flex-nowrap gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-6 py-2.5 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {sections.map((s) => (
           <button

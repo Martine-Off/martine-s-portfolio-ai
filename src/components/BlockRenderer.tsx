@@ -45,7 +45,7 @@ export function BlockRenderer({ block }: { block: Block }) {
         <div id={anchorId} className="scroll-mt-24">
           <BlockTitle title={block.title} />
           <blockquote
-            className="my-6 whitespace-pre-line border-l-4 pl-6 text-base leading-relaxed italic text-foreground"
+            className="my-6 whitespace-pre-line border-l-4 pl-6 text-base leading-relaxed text-foreground"
             style={{ borderColor: "var(--decorative)" }}
           >
             {block.content ? renderInlineMarkdown(block.content) : null}

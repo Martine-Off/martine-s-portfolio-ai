@@ -35,7 +35,7 @@ export function QuickNav({ sections }: { sections: QuickNavSection[] }) {
 
   return (
     <div className="sticky top-0 z-40 border-b border-border bg-card">
-      <div className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-6 py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="mx-auto flex max-w-6xl touch-pan-x gap-2 overflow-x-auto overscroll-x-contain px-6 py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {sections.map((s) => (
           <button
             key={s.id}

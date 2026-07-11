@@ -64,7 +64,7 @@ export function BlockRenderer({ block }: { block: Block }) {
             loading="lazy"
           />
           {block.caption && (
-            <figcaption className="mt-2 text-sm text-muted-foreground">{block.caption}</figcaption>
+            <figcaption className="mt-2 whitespace-pre-line text-sm text-muted-foreground">{block.caption}</figcaption>
           )}
         </figure>
       );
@@ -94,7 +94,7 @@ export function BlockRenderer({ block }: { block: Block }) {
             />
           </div>
           {block.caption && (
-            <figcaption className="mt-2 text-sm text-muted-foreground">{block.caption}</figcaption>
+            <figcaption className="mt-2 whitespace-pre-line text-sm text-muted-foreground">{block.caption}</figcaption>
           )}
           {block.alt_text && (
             <p className="sr-only">{block.alt_text}</p>

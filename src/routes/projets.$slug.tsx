@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getProjectBySlug } from "@/lib/projects.functions";
@@ -87,6 +88,8 @@ function ProjectPage() {
 
   const categorised = project.tags_categorises as { label: string; items: string[] }[] | null;
 
+  const [tocOpen, setTocOpen] = useState(false);
+
   function onTocClick(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
     e.preventDefault();
     const el = document.getElementById(id);
@@ -94,6 +97,7 @@ function ProjectPage() {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
       history.replaceState(null, "", `#${id}`);
     }
+    setTocOpen(false);
   }
 
   return (
@@ -139,22 +143,37 @@ function ProjectPage() {
             )}
 
             {tocItems.length >= 2 && (
-              <nav className="mt-8 rounded-lg border border-border bg-card p-4 xl:hidden">
-                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Sommaire
-                </p>
-                <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:overflow-visible">
-                  {tocItems.map((t) => (
-                    <li key={t.id} className="shrink-0">
-                      <a href={`#${t.id}`}
-                        onClick={(e) => onTocClick(e, t.id)}
-                        className="inline-block whitespace-nowrap rounded-full border border-border bg-background px-3 py-1 text-xs text-accent hover:bg-accent/10 hover:underline"
-                      >
-                        {t.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+              <nav className="mt-8 rounded-lg border border-border bg-card xl:hidden" aria-label="Sommaire">
+                <button
+                  type="button"
+                  onClick={() => setTocOpen((v) => !v)}
+                  className="flex w-full items-center justify-between px-4 py-3 text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                  aria-expanded={tocOpen}
+                >
+                  <span>Sommaire</span>
+                  <span
+                    className="ml-2 transition-transform duration-200"
+                    style={{ display: "inline-block", transform: tocOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                    aria-hidden="true"
+                  >
+                    ▾
+                  </span>
+                </button>
+                {tocOpen && (
+                  <ul className="border-t border-border px-4 pb-3 pt-2">
+                    {tocItems.map((t) => (
+                      <li key={t.id}>
+                        <a
+                          href={`#${t.id}`}
+                          onClick={(e) => onTocClick(e, t.id)}
+                          className="block border-l-2 border-border py-1.5 pl-3 text-sm leading-snug text-muted-foreground transition-colors hover:border-accent hover:text-accent"
+                        >
+                          {t.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </nav>
             )}
 

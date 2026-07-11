@@ -14,7 +14,7 @@ interface Block {
 function BlockTitle({ title, light }: { title?: string | null; light?: boolean }) {
   if (!title) return null;
   return (
-    <h3 className={`mt-6 mb-2 font-serif text-base text-foreground md:text-lg ${light ? 'font-normal' : 'font-semibold'}`}>
+    <h3 className={`mt-6 mb-2 font-serif text-base text-foreground md:text-lg ${light ? 'font-normal' : 'font-bold'}`}>
       {title}
     </h3>
   );

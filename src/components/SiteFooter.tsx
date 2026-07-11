@@ -26,7 +26,7 @@ export function SiteFooter({ footerText, email, linkedinUrl }: { footerText: str
           </div>
         </div>
         <p className="mt-6 text-[13px] leading-relaxed text-muted-foreground md:mt-8">
-          Portfolio conçu et développé avec Lovable, Claude Code et Gemini Pro - architecture, design system et contenu pilotés de bout en bout.
+          Portfolio conçu et développé avec Lovable, Claude Code et Gemini Pro - architecture, design system, back-office de gestion de contenu et publication pilotés de bout en bout.
         </p>
       </div>
     </footer>

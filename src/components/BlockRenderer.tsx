@@ -43,9 +43,9 @@ export function BlockRenderer({ block }: { block: Block }) {
     case "quote":
       return (
         <div id={anchorId} className="scroll-mt-24">
-          <BlockTitle title={block.title} light />
+          <BlockTitle title={block.title} />
           <blockquote
-            className="my-6 whitespace-pre-line border-l-4 pl-6 font-serif text-lg italic text-foreground md:text-xl"
+            className="my-6 whitespace-pre-line border-l-4 pl-6 text-base leading-relaxed italic text-foreground"
             style={{ borderColor: "var(--decorative)" }}
           >
             {block.content ? renderInlineMarkdown(block.content) : null}

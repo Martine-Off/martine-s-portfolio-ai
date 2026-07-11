@@ -34,15 +34,25 @@ export function QuickNav({ sections }: { sections: QuickNavSection[] }) {
   }
 
   return (
-    <div className="sticky top-0 z-40 border-b border-border bg-card">
-      <div className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-6 py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div
+      className="sticky top-0 z-40 border-b border-border bg-card"
+      style={{
+        WebkitMaskImage:
+          "linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%)",
+        maskImage:
+          "linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%)",
+      }}
+    >
+      <div
+        className="mx-auto flex max-w-6xl flex-nowrap gap-2 overflow-x-auto overflow-y-hidden overscroll-x-contain px-6 py-2.5 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {sections.map((s) => (
           <button
             key={s.id}
             type="button"
             onClick={() => scrollToSection(s.id)}
             className={cn(
-              "shrink-0 whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
+              "min-h-[36px] shrink-0 whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
               active === s.id
                 ? "border-accent text-accent"
                 : "border-border text-muted-foreground hover:border-accent hover:text-accent",

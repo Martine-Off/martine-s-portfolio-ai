@@ -471,14 +471,14 @@ function EditProject() {
                       pathPrefix="blocks"
                     />
                     <input placeholder="Texte alternatif" value={b.alt_text ?? ""} onChange={(e) => { const c = [...blocks]; c[i].alt_text = e.target.value; setBlocks(c); }} className={`${inputCls} mb-2 mt-2`} />
-                    <input placeholder="Légende" value={b.caption ?? ""} onChange={(e) => { const c = [...blocks]; c[i].caption = e.target.value; setBlocks(c); }} className={inputCls} />
+                    <textarea rows={2} placeholder="Légende" value={b.caption ?? ""} onChange={(e) => { const c = [...blocks]; c[i].caption = e.target.value; setBlocks(c); }} className={inputCls} />
                   </>
                 )}
                 {b.block_type === "video" && (
                   <>
                     <input placeholder="URL vidéo (YouTube, Loom, Arcade)" value={b.media_url ?? ""} onChange={(e) => { const c = [...blocks]; c[i].media_url = e.target.value; setBlocks(c); }} className={`${inputCls} mb-2`} />
                     <input placeholder="Texte alternatif" value={b.alt_text ?? ""} onChange={(e) => { const c = [...blocks]; c[i].alt_text = e.target.value; setBlocks(c); }} className={`${inputCls} mb-2`} />
-                    <input placeholder="Légende" value={b.caption ?? ""} onChange={(e) => { const c = [...blocks]; c[i].caption = e.target.value; setBlocks(c); }} className={inputCls} />
+                    <textarea rows={2} placeholder="Légende" value={b.caption ?? ""} onChange={(e) => { const c = [...blocks]; c[i].caption = e.target.value; setBlocks(c); }} className={inputCls} />
                   </>
                 )}
               </div>

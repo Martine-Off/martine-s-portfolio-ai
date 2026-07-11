@@ -19,6 +19,7 @@ export interface ProjectCardData {
   cover_image_alt_text: string | null;
   cover_image_position: string;
   tags: string[];
+  impact?: string | null;
 }
 
 interface Props {
@@ -104,6 +105,12 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
         {project.tagline && (
           <p className={cn("text-muted-foreground", variant === "grid" ? "text-sm" : "text-sm md:text-base")}>
             {project.tagline}
+          </p>
+        )}
+        {project.impact && (
+          <p className={cn("font-bold flex items-start gap-1.5", variant === "grid" ? "text-sm" : "text-sm md:text-base")} style={{ color: accent }}>
+            <span aria-hidden="true">✓</span>
+            <span>{project.impact}</span>
           </p>
         )}
         {project.tags.length > 0 && (

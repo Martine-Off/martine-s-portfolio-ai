@@ -126,6 +126,7 @@ function ProjectPage() {
                 cover_image_alt_text: project.cover_image_alt_text,
                 cover_image_position: project.cover_image_position,
                 tags: project.tags,
+                impact: project.impact,
               }}
               variant="detail"
               linkable={false}

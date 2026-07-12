@@ -6,6 +6,7 @@ import { BlockRenderer } from "@/components/BlockRenderer";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PageState } from "@/components/PageState";
+import { ProjectToc } from "@/components/ProjectToc";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const profileQuery = queryOptions({ queryKey: ["profile"], queryFn: () => getProfilePage() });
@@ -57,12 +58,25 @@ function ProfilPage() {
   const photoUrl = profile?.project.photo_profil_url;
   const photoAlt = profile?.project.photo_profil_alt_text;
 
+  type BlockWithTitle = NonNullable<typeof profile>["blocks"][number] & { title: string | null };
+  const blockTocItems = (profile?.blocks as BlockWithTitle[] || [])
+    .map((b) => {
+      const label = b.block_type === "heading" ? (b.content ?? "").trim() : (b.title ?? "").trim();
+      return label ? { id: `block-${b.id}`, label } : null;
+    })
+    .filter((x): x is { id: string; label: string } => x !== null);
+
+  const toolsTocItem = tools.length > 0 ? [{ id: "outils", label: "Outils et compétences" }] : [];
+  const tocItems = [...blockTocItems, ...toolsTocItem];
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader heroTitle={settings?.hero_title ?? ""} />
 
-      <div className="mx-auto max-w-4xl px-6 py-16 md:py-24">
-        <div className="flex flex-col gap-8 md:flex-row md:items-start">
+      <div className="mx-auto max-w-[76.5rem] px-6 py-16 md:py-24">
+        <div className="lg:grid lg:grid-cols-[minmax(0,56rem)_240px] lg:items-start lg:gap-10">
+          <div className="mx-auto w-full max-w-4xl lg:mx-0 lg:max-w-none">
+            <div className="flex flex-col gap-8 md:flex-row md:items-start">
           {photoUrl && (
             <img
               src={photoUrl}
@@ -120,6 +134,12 @@ function ProfilPage() {
           </div>
         )}
 
+          </div>
+
+          {tocItems.length > 0 && (
+            <ProjectToc sections={tocItems} className="hidden lg:block" />
+          )}
+        </div>
       </div>
 
       <SiteFooter

@@ -94,14 +94,18 @@ function CondensedItemRow({ p }: { p: CondensedItem }) {
           >
             <h3 className="font-serif text-base font-bold text-foreground">{p.title}</h3>
             {p.role && <span className="text-sm text-muted-foreground">— {p.role}</span>}
-            {p.status_label && (
-              <span className="ml-1 rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
-                {p.status_label}
-              </span>
-            )}
-            {p.project_date && (
-              <span className="text-[11px] text-[#5F5A85]">
-                · {p.project_date}
+            {(p.status_label || p.project_date) && (
+              <span className="inline-flex shrink-0 items-center gap-x-2 whitespace-nowrap">
+                {p.status_label && (
+                  <span className="rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
+                    {p.status_label}
+                  </span>
+                )}
+                {p.project_date && (
+                  <span className="text-[11px] text-[#5F5A85]">
+                    · {p.project_date}
+                  </span>
+                )}
               </span>
             )}
           </div>

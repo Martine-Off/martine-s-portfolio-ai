@@ -64,6 +64,7 @@ type CondensedItem = {
   role: string | null;
   angle: string | null;
   status_label: string | null;
+  project_date: string | null;
   tags: string[];
   impact: string | null;
   cover_image_url: string | null;
@@ -96,6 +97,11 @@ function CondensedItemRow({ p }: { p: CondensedItem }) {
             {p.status_label && (
               <span className="ml-1 rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
                 {p.status_label}
+              </span>
+            )}
+            {p.project_date && (
+              <span className="text-[11px] text-[#5F5A85]">
+                · {p.project_date}
               </span>
             )}
           </div>

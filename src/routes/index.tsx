@@ -19,13 +19,13 @@ const profileQuery = queryOptions({ queryKey: ["profile"], queryFn: () => getPro
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Martine Desmaroux — Cheffe de projet IA" },
+      { title: "Martine Desmaroux - Cheffe de projet IA" },
       {
         name: "description",
         content:
           "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.",
       },
-      { property: "og:title", content: "Martine Desmaroux — Cheffe de projet IA" },
+      { property: "og:title", content: "Martine Desmaroux - Cheffe de projet IA" },
       {
         property: "og:description",
         content: "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.",

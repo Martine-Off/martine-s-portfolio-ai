@@ -139,10 +139,6 @@ function ProjectPage() {
               </div>
             )}
 
-            {project.summary && (
-              <p className="mt-8 text-lg leading-relaxed text-foreground">{project.summary}</p>
-            )}
-
             {tocItems.length >= 2 && (
               <nav className="mt-8 rounded-lg border border-border bg-card xl:hidden" aria-label="Sommaire">
                 <button

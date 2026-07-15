@@ -11,6 +11,7 @@ export interface ProjectCardData {
   title: string;
   emoji?: string | null;
   tagline: string | null;
+  summary?: string | null;
   project_type: string;
   status_label: string | null;
   accent_color: string | null;
@@ -31,6 +32,7 @@ interface Props {
 export function ProjectCard({ project, variant = "grid", linkable = true }: Props) {
   const accent = resolveAccentColor(project.accent_color, project.status_label);
   const hasImage = !!project.cover_image_url;
+  const displayText = variant === "grid" ? project.summary?.trim() || project.tagline : project.tagline;
 
 
   const inner = (
@@ -102,9 +104,9 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             {project.project_date}
           </p>
         )}
-        {project.tagline && (
+        {displayText && (
           <p className={cn("text-muted-foreground", variant === "grid" ? "text-sm" : "text-sm md:text-base")}>
-            {project.tagline}
+            {displayText}
           </p>
         )}
         {project.impact && (

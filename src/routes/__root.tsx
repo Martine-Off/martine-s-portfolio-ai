@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as TSR from "@tanstack/react-router";
 import {
   Outlet,
   Link,
+  createRootRouteWithContext,
   useRouter,
   HeadContent,
   Scripts,

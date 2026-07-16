@@ -16,30 +16,44 @@ const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () =>
 const projectsQuery = queryOptions({ queryKey: ["projects", "public"], queryFn: () => listPublishedProjects() });
 const profileQuery = queryOptions({ queryKey: ["profile"], queryFn: () => getProfilePage() });
 
+const HOME_DESCRIPTION =
+  "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.";
+
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Martine Desmaroux - Cheffe de projet IA" },
-      {
-        name: "description",
-        content:
-          "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.",
-      },
-      { property: "og:title", content: "Martine Desmaroux - Cheffe de projet IA" },
-      {
-        property: "og:description",
-        content: "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:image", content: "/og-default.jpg" },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const data = loaderData as { jobTitle: string | null; linkedinUrl: string | null } | undefined;
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Martine Desmaroux",
+      url: "/",
+      ...(data?.jobTitle ? { jobTitle: data.jobTitle } : {}),
+      ...(data?.linkedinUrl ? { sameAs: [data.linkedinUrl] } : {}),
+    };
+    return {
+      meta: [
+        { title: "Martine Desmaroux - Cheffe de projet IA" },
+        { name: "description", content: HOME_DESCRIPTION },
+        { property: "og:title", content: "Martine Desmaroux - Cheffe de projet IA" },
+        { property: "og:description", content: HOME_DESCRIPTION },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: "/og-default.jpg" },
+      ],
+      links: [{ rel: "canonical", href: "https://martine-desmaroux.lovable.app/" }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
+    };
+  },
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData(settingsQuery),
       context.queryClient.ensureQueryData(projectsQuery),
       context.queryClient.ensureQueryData(profileQuery),
     ]);
+    const settings = context.queryClient.getQueryData<Awaited<ReturnType<typeof getSiteSettings>>>(["site_settings"]);
+    return {
+      jobTitle: settings?.hero_subtitle ?? null,
+      linkedinUrl: settings?.linkedin_url?.trim() || null,
+    };
   },
   component: HomePage,
   errorComponent: ({ error, reset }) => (

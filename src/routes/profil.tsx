@@ -11,17 +11,33 @@ import { ProjectToc } from "@/components/ProjectToc";
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const profileQuery = queryOptions({ queryKey: ["profile"], queryFn: () => getProfilePage() });
 
+const DEFAULT_DESCRIPTION = "Parcours et compétences de Martine Desmaroux, cheffe de projet IA.";
+
 export const Route = createFileRoute("/profil")({
   head: ({ loaderData }) => {
-    const photo = (loaderData as { photo?: string | null } | undefined)?.photo;
+    const data = loaderData as
+      | { photo: string | null; jobTitle: string | null; linkedinUrl: string | null; bio: string | null }
+      | undefined;
+    const photo = data?.photo;
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Martine Desmaroux",
+      url: "/profil",
+      ...(data?.jobTitle ? { jobTitle: data.jobTitle } : {}),
+      ...(data?.linkedinUrl ? { sameAs: [data.linkedinUrl] } : {}),
+      description: data?.bio || DEFAULT_DESCRIPTION,
+    };
     return {
       meta: [
         { title: "Profil — Martine Desmaroux" },
-        { name: "description", content: "Parcours et compétences de Martine Desmaroux, cheffe de projet IA." },
+        { name: "description", content: DEFAULT_DESCRIPTION },
         { property: "og:title", content: "Profil — Martine Desmaroux" },
-        { property: "og:description", content: "Parcours et compétences de Martine Desmaroux, cheffe de projet IA." },
+        { property: "og:description", content: DEFAULT_DESCRIPTION },
         { property: "og:image", content: photo || "/og-default.jpg" },
       ],
+      links: [{ rel: "canonical", href: "https://martine-desmaroux.lovable.app/profil" }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
     };
   },
   loader: async ({ context }) => {
@@ -29,8 +45,14 @@ export const Route = createFileRoute("/profil")({
       context.queryClient.ensureQueryData(settingsQuery),
       context.queryClient.ensureQueryData(profileQuery),
     ]);
+    const settings = context.queryClient.getQueryData<Awaited<ReturnType<typeof getSiteSettings>>>(["site_settings"]);
     const profile = context.queryClient.getQueryData<Awaited<ReturnType<typeof getProfilePage>>>(["profile"]);
-    return { photo: profile?.project?.photo_profil_url ?? null };
+    return {
+      photo: profile?.project?.photo_profil_url ?? null,
+      jobTitle: settings?.hero_subtitle ?? null,
+      linkedinUrl: settings?.linkedin_url?.trim() || null,
+      bio: profile?.project?.summary || profile?.project?.tagline || null,
+    };
   },
   component: ProfilPage,
   errorComponent: ({ error, reset }) => (

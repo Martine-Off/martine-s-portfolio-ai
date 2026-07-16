@@ -20,9 +20,45 @@ const projectQuery = (slug: string) =>
     queryFn: () => getProjectBySlug({ data: { slug } }),
   });
 
+const FRENCH_MONTHS: Record<string, string> = {
+  janvier: "01", février: "02", fevrier: "02", mars: "03", avril: "04",
+  mai: "05", juin: "06", juillet: "07", août: "08", aout: "08",
+  septembre: "09", octobre: "10", novembre: "11", décembre: "12", decembre: "12",
+};
+
+// project_date is free text ("période : janvier – juin 2026", "octobre 2025", "depuis novembre 2025"...).
+// Convert the common "mois année" / "mois année – mois année" shapes to an ISO 8601
+// date or interval for temporalCoverage; fall back to the raw trimmed text otherwise
+// so the property is still populated even when the pattern doesn't match.
+function projectDateToTemporalCoverage(raw: string): string {
+  const cleaned = raw.replace(/^\s*(période|periode|depuis)\s*:?\s*/i, "").trim();
+  const monthYear = (m: string, y: string) => `${y}-${FRENCH_MONTHS[m.toLowerCase()]}`;
+  const rangeCrossYear = cleaned.match(/^(\p{L}+)\s+(\d{4})\s*[–-]\s*(\p{L}+)\s+(\d{4})$/u);
+  if (rangeCrossYear && FRENCH_MONTHS[rangeCrossYear[1].toLowerCase()] && FRENCH_MONTHS[rangeCrossYear[3].toLowerCase()]) {
+    return `${monthYear(rangeCrossYear[1], rangeCrossYear[2])}/${monthYear(rangeCrossYear[3], rangeCrossYear[4])}`;
+  }
+  const rangeSameYear = cleaned.match(/^(\p{L}+)\s*[–-]\s*(\p{L}+)\s+(\d{4})$/u);
+  if (rangeSameYear && FRENCH_MONTHS[rangeSameYear[1].toLowerCase()] && FRENCH_MONTHS[rangeSameYear[2].toLowerCase()]) {
+    return `${monthYear(rangeSameYear[1], rangeSameYear[3])}/${monthYear(rangeSameYear[2], rangeSameYear[3])}`;
+  }
+  const single = cleaned.match(/^(\p{L}+)\s+(\d{4})$/u);
+  if (single && FRENCH_MONTHS[single[1].toLowerCase()]) {
+    return monthYear(single[1], single[2]);
+  }
+  return cleaned;
+}
+
+type ProjectHeadData = {
+  title: string;
+  tagline: string | null;
+  cover_image_url: string | null;
+  tags: string[];
+  project_date: string | null;
+};
+
 export const Route = createFileRoute("/projets/$slug")({
-  head: ({ loaderData }) => {
-    const p = (loaderData as { project?: { project: { title: string; tagline: string | null; cover_image_url: string | null } } } | undefined)?.project?.project;
+  head: ({ loaderData, params }) => {
+    const p = (loaderData as { project?: { project: ProjectHeadData } } | undefined)?.project?.project;
     if (!p) {
       return {
         meta: [
@@ -32,6 +68,20 @@ export const Route = createFileRoute("/projets/$slug")({
       };
     }
     const image = p.cover_image_url || "/og-default.jpg";
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: p.title,
+      ...(p.tagline ? { description: p.tagline } : {}),
+      ...(p.tags.length > 0 ? { keywords: p.tags.join(", ") } : {}),
+      ...(p.project_date ? { temporalCoverage: projectDateToTemporalCoverage(p.project_date) } : {}),
+      ...(p.cover_image_url ? { image: p.cover_image_url } : {}),
+      author: {
+        "@type": "Person",
+        name: "Martine Desmaroux",
+        url: "/profil",
+      },
+    };
     return {
       meta: [
         { title: `${p.title} — Martine Desmaroux` },
@@ -41,6 +91,8 @@ export const Route = createFileRoute("/projets/$slug")({
         { property: "og:type", content: "article" },
         { property: "og:image", content: image },
       ],
+      links: [{ rel: "canonical", href: `https://martine-desmaroux.lovable.app/projets/${params.slug}` }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
     };
   },
   loader: async ({ context, params }) => {

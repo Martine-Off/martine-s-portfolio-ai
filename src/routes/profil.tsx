@@ -13,20 +13,33 @@ const profileQuery = queryOptions({ queryKey: ["profile"], queryFn: () => getPro
 
 const DEFAULT_DESCRIPTION = "Parcours et compétences de Martine Desmaroux, cheffe de projet IA.";
 
+interface SchemaPerson {
+  "@context": "https://schema.org";
+  "@type": "Person";
+  name: string;
+  url: string;
+  jobTitle: string;
+  description: string;
+  sameAs: string[];
+}
+
 export const Route = createFileRoute("/profil")({
   head: ({ loaderData }: any) => {
     const data = loaderData as
       | { photo: string | null; jobTitle: string | null; linkedinUrl: string | null; bio: string | null }
       | undefined;
     const photo = data?.photo;
-    const jsonLd = {
+    
+    const personSchema: SchemaPerson = {
       "@context": "https://schema.org",
       "@type": "Person",
       name: "Martine Desmaroux",
-      url: "/profil",
-      ...(data?.jobTitle ? { jobTitle: data.jobTitle } : {}),
-      ...(data?.linkedinUrl ? { sameAs: [data.linkedinUrl] } : {}),
-      description: data?.bio || DEFAULT_DESCRIPTION,
+      url: "https://martine-desmaroux.lovable.app",
+      jobTitle: data?.jobTitle || "Product Manager & Consultante",
+      description: data?.bio || "Portfolio professionnel de Martine Desmaroux, spécialisée en Product Management et conseil stratégique.",
+      sameAs: data?.linkedinUrl 
+        ? [data.linkedinUrl] 
+        : ["https://www.linkedin.com/in/martine-desmaroux"]
     };
     return {
       meta: [
@@ -37,7 +50,7 @@ export const Route = createFileRoute("/profil")({
         { property: "og:image", content: photo || "/og-default.jpg" },
       ],
       links: [{ rel: "canonical", href: "https://martine-desmaroux.lovable.app/profil" }],
-      scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(personSchema) }],
     };
   },
   loader: async ({ context }: any) => {

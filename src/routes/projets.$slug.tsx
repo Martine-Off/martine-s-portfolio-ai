@@ -56,6 +56,19 @@ type ProjectHeadData = {
   project_date: string | null;
 };
 
+interface SchemaCreativeWork {
+  "@context": "https://schema.org";
+  "@type": "CreativeWork";
+  name: string;
+  headline: string;
+  image: string;
+  author: {
+    "@type": "Person";
+    name: string;
+  };
+  url: string;
+}
+
 export const Route = createFileRoute("/projets/$slug")({
   head: ({ loaderData, params }: any) => {
     const p = (loaderData as { project?: { project: ProjectHeadData } } | undefined)?.project?.project;
@@ -68,19 +81,18 @@ export const Route = createFileRoute("/projets/$slug")({
       };
     }
     const image = p.cover_image_url || "/og-default.jpg";
-    const jsonLd = {
+    
+    const projectSchema: SchemaCreativeWork = {
       "@context": "https://schema.org",
       "@type": "CreativeWork",
       name: p.title,
-      ...(p.tagline ? { description: p.tagline } : {}),
-      ...(p.tags.length > 0 ? { keywords: p.tags.join(", ") } : {}),
-      ...(p.project_date ? { temporalCoverage: projectDateToTemporalCoverage(p.project_date) } : {}),
-      ...(p.cover_image_url ? { image: p.cover_image_url } : {}),
+      headline: p.tagline || p.title,
+      image: p.cover_image_url || "https://martine-desmaroux.lovable.app/og-default.jpg",
       author: {
         "@type": "Person",
-        name: "Martine Desmaroux",
-        url: "/profil",
+        name: "Martine Desmaroux"
       },
+      url: `https://martine-desmaroux.lovable.app/projets/${params.slug}`
     };
     return {
       meta: [
@@ -92,7 +104,7 @@ export const Route = createFileRoute("/projets/$slug")({
         { property: "og:image", content: image },
       ],
       links: [{ rel: "canonical", href: `https://martine-desmaroux.lovable.app/projets/${params.slug}` }],
-      scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(projectSchema) }],
     };
   },
   loader: async ({ context, params }: any) => {

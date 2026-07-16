@@ -20,7 +20,7 @@ const HOME_DESCRIPTION =
   "Portfolio de Martine Desmaroux, cheffe de projet IA. Projets d'automatisation, POCs, formations et missions IA.";
 
 export const Route = createFileRoute("/")({
-  head: ({ loaderData }) => {
+  head: ({ loaderData }: any) => {
     const data = loaderData as { jobTitle: string | null; linkedinUrl: string | null } | undefined;
     const jsonLd = {
       "@context": "https://schema.org",
@@ -43,20 +43,20 @@ export const Route = createFileRoute("/")({
       scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
     };
   },
-  loader: async ({ context }) => {
+  loader: async ({ context }: any) => {
     await Promise.all([
       context.queryClient.ensureQueryData(settingsQuery),
       context.queryClient.ensureQueryData(projectsQuery),
       context.queryClient.ensureQueryData(profileQuery),
     ]);
-    const settings = context.queryClient.getQueryData<Awaited<ReturnType<typeof getSiteSettings>>>(["site_settings"]);
+    const settings = context.queryClient.getQueryData(["site_settings"]) as Awaited<ReturnType<typeof getSiteSettings>> | undefined;
     return {
       jobTitle: settings?.hero_subtitle ?? null,
       linkedinUrl: settings?.linkedin_url?.trim() || null,
     };
   },
   component: HomePage,
-  errorComponent: ({ error, reset }) => (
+  errorComponent: ({ error, reset }: any) => (
     <PageState
       variant="error"
       title="Impossible de charger l'accueil"
@@ -195,19 +195,19 @@ function HomePage() {
   const photoAlt = profile?.project.photo_profil_alt_text;
 
   const featured = projects.filter(
-    (p) =>
+    (p: any) =>
       p.project_type === "poc_perso" ||
       p.project_type === "production_client" ||
       p.project_type === "poc_ecole",
   );
   const formations = projects.filter(
-    (p) => p.project_type === "formation_mission" && p.mission_type === "formation",
+    (p: any) => p.project_type === "formation_mission" && p.mission_type === "formation",
   );
   const missions = projects.filter(
-    (p) => p.project_type === "formation_mission" && (p.mission_type === "mission" || p.mission_type === null),
+    (p: any) => p.project_type === "formation_mission" && (p.mission_type === "mission" || p.mission_type === null),
   );
   const benevolat = projects.filter(
-    (p) => p.project_type === "formation_mission" && p.mission_type === "benevolat",
+    (p: any) => p.project_type === "formation_mission" && p.mission_type === "benevolat",
   );
   const toolsRaw = (settings?.tools_json ?? []) as Array<{ category: string; items: { name: string; show_on_home: boolean }[] }>;
   const tools = toolsRaw
@@ -294,7 +294,7 @@ function HomePage() {
             {settings?.featured_section_title}
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featured.map((p) => (
+            {featured.map((p: any) => (
               <ProjectCard key={p.id} project={p} />
             ))}
           </div>

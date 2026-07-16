@@ -57,7 +57,7 @@ type ProjectHeadData = {
 };
 
 export const Route = createFileRoute("/projets/$slug")({
-  head: ({ loaderData, params }) => {
+  head: ({ loaderData, params }: any) => {
     const p = (loaderData as { project?: { project: ProjectHeadData } } | undefined)?.project?.project;
     if (!p) {
       return {
@@ -95,14 +95,14 @@ export const Route = createFileRoute("/projets/$slug")({
       scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
     };
   },
-  loader: async ({ context, params }) => {
+  loader: async ({ context, params }: any) => {
     await context.queryClient.ensureQueryData(settingsQuery);
     const project = await context.queryClient.ensureQueryData(projectQuery(params.slug));
     if (!project) throw notFound();
     return { project };
   },
   component: ProjectPage,
-  errorComponent: ({ error, reset }) => (
+  errorComponent: ({ error, reset }: any) => (
     <PageState
       variant="error"
       title="Impossible de charger ce projet"
@@ -227,7 +227,7 @@ function ProjectPage() {
             )}
 
             <div className="mt-8">
-              {blocks.map((b) => (
+              {blocks.map((b: any) => (
                 <BlockRenderer key={b.id} block={b as BlockWithTitle} />
               ))}
             </div>

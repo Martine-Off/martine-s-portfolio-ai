@@ -14,7 +14,7 @@ const profileQuery = queryOptions({ queryKey: ["profile"], queryFn: () => getPro
 const DEFAULT_DESCRIPTION = "Parcours et compétences de Martine Desmaroux, cheffe de projet IA.";
 
 export const Route = createFileRoute("/profil")({
-  head: ({ loaderData }) => {
+  head: ({ loaderData }: any) => {
     const data = loaderData as
       | { photo: string | null; jobTitle: string | null; linkedinUrl: string | null; bio: string | null }
       | undefined;
@@ -40,13 +40,13 @@ export const Route = createFileRoute("/profil")({
       scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
     };
   },
-  loader: async ({ context }) => {
+  loader: async ({ context }: any) => {
     await Promise.all([
       context.queryClient.ensureQueryData(settingsQuery),
       context.queryClient.ensureQueryData(profileQuery),
     ]);
-    const settings = context.queryClient.getQueryData<Awaited<ReturnType<typeof getSiteSettings>>>(["site_settings"]);
-    const profile = context.queryClient.getQueryData<Awaited<ReturnType<typeof getProfilePage>>>(["profile"]);
+    const settings = context.queryClient.getQueryData(["site_settings"]) as Awaited<ReturnType<typeof getSiteSettings>> | undefined;
+    const profile = context.queryClient.getQueryData(["profile"]) as Awaited<ReturnType<typeof getProfilePage>> | undefined;
     return {
       photo: profile?.project?.photo_profil_url ?? null,
       jobTitle: settings?.hero_subtitle ?? null,
@@ -55,7 +55,7 @@ export const Route = createFileRoute("/profil")({
     };
   },
   component: ProfilPage,
-  errorComponent: ({ error, reset }) => (
+  errorComponent: ({ error, reset }: any) => (
     <PageState
       variant="error"
       title="Impossible de charger le profil"
@@ -127,7 +127,7 @@ function ProfilPage() {
 
         {profile?.blocks && profile.blocks.length > 0 && (
           <div className="mt-10">
-            {profile.blocks.map((b) => (
+            {profile.blocks.map((b: any) => (
               <BlockRenderer key={b.id} block={b} />
             ))}
           </div>

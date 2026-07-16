@@ -46,7 +46,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 
-export const Route = (createRootRouteWithContext as <T extends object>() => (options: Parameters<ReturnType<typeof createRootRouteWithContext<T>>>[0]) => ReturnType<ReturnType<typeof createRootRouteWithContext<T>>>)<{ queryClient: QueryClient }>()({
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },

@@ -87,12 +87,12 @@ export const Route = createFileRoute("/projets/$slug")({
       "@type": "CreativeWork",
       name: p.title,
       headline: p.tagline || p.title,
-      image: p.cover_image_url || "https://martine-desmaroux.lovable.app/og-default.jpg",
+      image: p.cover_image_url || "https://martine-ia.lovable.app/og-default.jpg",
       author: {
         "@type": "Person",
         name: "Martine Desmaroux"
       },
-      url: `https://martine-desmaroux.lovable.app/projets/${params.slug}`
+      url: `https://martine-ia.lovable.app/projets/${params.slug}`
     };
     return {
       meta: [
@@ -103,7 +103,7 @@ export const Route = createFileRoute("/projets/$slug")({
         { property: "og:type", content: "article" },
         { property: "og:image", content: image },
       ],
-      links: [{ rel: "canonical", href: `https://martine-desmaroux.lovable.app/projets/${params.slug}` }],
+      links: [{ rel: "canonical", href: `https://martine-ia.lovable.app/projets/${params.slug}` }],
       scripts: [{ type: "application/ld+json", children: JSON.stringify(projectSchema) }],
     };
   },

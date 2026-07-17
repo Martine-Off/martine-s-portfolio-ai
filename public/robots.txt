@@ -4,4 +4,4 @@ Allow: /
 Disallow: /admin
 Disallow: /auth
 
-Sitemap: https://martine-desmaroux.lovable.app/sitemap.xml
+Sitemap: https://martine-ia.lovable.app/sitemap.xml

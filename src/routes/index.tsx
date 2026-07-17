@@ -37,12 +37,12 @@ export const Route = createFileRoute("/")({
       "@context": "https://schema.org",
       "@type": "Person",
       name: "Martine Desmaroux",
-      url: "https://martine-desmaroux.lovable.app",
-      jobTitle: data?.jobTitle || "Product Manager & Consultante",
-      description: "Portfolio professionnel de Martine Desmaroux, spécialisée en Product Management et conseil stratégique.",
+      url: "https://martine-ia.lovable.app",
+      jobTitle: data?.jobTitle || "Cheffe de projet IA",
+      description: HOME_DESCRIPTION,
       sameAs: data?.linkedinUrl
         ? [data.linkedinUrl]
-        : ["https://www.linkedin.com/in/martine-desmaroux"]
+        : ["https://www.linkedin.com/in/martine-desmaroux-b3ba58160/"]
     };
     return {
       meta: [
@@ -53,7 +53,7 @@ export const Route = createFileRoute("/")({
         { property: "og:type", content: "website" },
         { property: "og:image", content: "/og-default.jpg" },
       ],
-      links: [{ rel: "canonical", href: "https://martine-desmaroux.lovable.app/" }],
+      links: [{ rel: "canonical", href: "https://martine-ia.lovable.app/" }],
       scripts: [{ type: "application/ld+json", children: JSON.stringify(personSchema) }],
     };
   },

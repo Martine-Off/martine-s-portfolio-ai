@@ -75,7 +75,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
         </div>
       )}
 
-      <div className={cn("flex flex-1 flex-col gap-3 p-5", variant === "detail" && "p-6 md:p-8")}>
+      <div className={cn("flex flex-1 flex-col gap-3", variant === "grid" ? "p-4" : "p-6 md:p-8")}>
         {project.status_label && (
           <span
             className="inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-medium"
@@ -98,7 +98,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
           {project.title}
         </h3>
         {project.project_date && (
-          <p className="text-sm font-medium text-muted-foreground/80">
+          <p className={cn("font-medium text-muted-foreground/80", variant === "grid" ? "text-[11px]" : "text-xs")}>
             {project.project_date}
           </p>
         )}
@@ -113,21 +113,33 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             <span>{project.impact}</span>
           </p>
         )}
-        {project.tags.length > 0 && (
-          <ul className="mt-auto flex flex-wrap gap-1.5 pt-2">
-            {project.tags.map((tag) => (
-              <li
-                key={tag}
-                className={cn(
-                  "rounded px-2 py-0.5 text-xs text-foreground",
-                  !hasImage ? "bg-muted" : "border border-border bg-background"
-                )}
-              >
-                {tag}
-              </li>
-            ))}
-          </ul>
-        )}
+        {project.tags.length > 0 && (() => {
+          const visibleTags = variant === "grid" ? project.tags.slice(0, 4) : project.tags;
+          const overflow = variant === "grid" ? project.tags.length - 4 : 0;
+          return (
+            <ul className="mt-auto flex flex-wrap gap-1.5 pt-2">
+              {visibleTags.map((tag) => (
+                <li
+                  key={tag}
+                  className={cn(
+                    "rounded px-2 py-0.5 text-xs text-foreground",
+                    !hasImage ? "bg-muted" : "border border-border bg-background"
+                  )}
+                >
+                  {tag}
+                </li>
+              ))}
+              {overflow > 0 && (
+                <li
+                  className="rounded px-2 py-0.5 text-xs text-muted-foreground/70 border border-border/50 bg-muted/50"
+                  aria-label={`${overflow} tags supplémentaires`}
+                >
+                  +{overflow}
+                </li>
+              )}
+            </ul>
+          );
+        })()}
       </div>
     </article>
   );

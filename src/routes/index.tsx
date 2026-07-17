@@ -120,7 +120,14 @@ function CondensedItemRow({ p }: { p: CondensedItem }) {
             className="flex flex-wrap items-baseline gap-x-2 gap-y-1 py-2 cursor-pointer flex-1 min-w-0"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <h3 className="font-serif text-base font-bold text-foreground">{p.title}</h3>
+            <h3 className="font-serif text-base font-bold text-foreground">
+              {p.title.split("||").map((part, i) => (
+                <span key={i}>
+                  {i > 0 && <br />}
+                  {part.trim()}
+                </span>
+              ))}
+            </h3>
             {p.role && <span className="text-sm text-muted-foreground">— {p.role}</span>}
             {(p.status_label || p.project_date) && (
               <span className="inline-flex shrink-0 items-center gap-x-2 whitespace-nowrap">

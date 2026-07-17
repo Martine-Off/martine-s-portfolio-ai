@@ -76,17 +76,26 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
       )}
 
       <div className={cn("flex flex-1 flex-col gap-3", variant === "grid" ? "p-4" : "p-6 md:p-8")}>
-        {project.status_label && (
-          <span
-            className="inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-medium"
-            style={
-              !hasImage
-                ? { border: `2px solid ${accent}`, backgroundColor: "transparent", color: accent }
-                : { backgroundColor: `${accent}22`, color: project.project_type === "profil" ? "var(--foreground)" : accent }
-            }
-          >
-            {project.status_label}
-          </span>
+        {(project.status_label || project.project_date) && (
+          <div className={cn("flex w-full items-center gap-2", project.status_label ? "justify-between" : "justify-end")}>
+            {project.status_label && (
+              <span
+                className="inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-medium"
+                style={
+                  !hasImage
+                    ? { border: `2px solid ${accent}`, backgroundColor: "transparent", color: accent }
+                    : { backgroundColor: `${accent}22`, color: project.project_type === "profil" ? "var(--foreground)" : accent }
+                }
+              >
+                {project.status_label}
+              </span>
+            )}
+            {project.project_date && (
+              <p className={cn("shrink-0 font-medium text-muted-foreground/80 text-right", variant === "grid" ? "text-[11px]" : "text-xs")}>
+                {project.project_date}
+              </p>
+            )}
+          </div>
         )}
         <h3
           className={cn(
@@ -102,11 +111,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             </span>
           ))}
         </h3>
-        {project.project_date && (
-          <p className={cn("font-medium text-muted-foreground/80", variant === "grid" ? "text-[11px]" : "text-xs")}>
-            {project.project_date}
-          </p>
-        )}
+
         {project.tagline && (
           <p className={cn("text-muted-foreground", variant === "grid" ? "text-sm" : "text-sm md:text-base")}>
             {project.tagline}

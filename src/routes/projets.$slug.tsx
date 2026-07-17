@@ -81,12 +81,13 @@ export const Route = createFileRoute("/projets/$slug")({
       };
     }
     const image = p.cover_image_url || "/og-default.jpg";
+    const cleanTitle = p.title.replace(/\|\|/g, " ").replace(/\s+/g, " ").trim();
     
     const projectSchema: SchemaCreativeWork = {
       "@context": "https://schema.org",
       "@type": "CreativeWork",
-      name: p.title,
-      headline: p.tagline || p.title,
+      name: cleanTitle,
+      headline: p.tagline || cleanTitle,
       image: p.cover_image_url || "https://martine-ia.lovable.app/og-default.jpg",
       author: {
         "@type": "Person",
@@ -96,9 +97,9 @@ export const Route = createFileRoute("/projets/$slug")({
     };
     return {
       meta: [
-        { title: `${p.title} — Martine Desmaroux` },
-        { name: "description", content: p.tagline ?? p.title },
-        { property: "og:title", content: p.title },
+        { title: `${cleanTitle} — Martine Desmaroux` },
+        { name: "description", content: p.tagline ?? cleanTitle },
+        { property: "og:title", content: cleanTitle },
         { property: "og:description", content: p.tagline ?? "" },
         { property: "og:type", content: "article" },
         { property: "og:image", content: image },

@@ -88,44 +88,36 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             {project.status_label}
           </span>
         )}
-        <div className={variant === "grid" ? "h-[2.8125rem]" : undefined}>
-          <h3
-            className={cn(
-              "font-serif font-bold leading-tight text-foreground text-balance",
-              variant === "grid" ? "text-lg" : "text-xl md:text-2xl",
-            )}
-          >
-            {project.emoji ? <span className="mr-1.5">{project.emoji}</span> : null}
-            {project.title.split("||").map((part, i) => (
-              <span key={i}>
-                {i > 0 && <br />}
-                {part.trim()}
-              </span>
-            ))}
-          </h3>
-        </div>
-        <div className={variant === "grid" ? "h-[16px]" : undefined}>
-          {project.project_date && (
-            <p className={cn("font-medium text-muted-foreground/80", variant === "grid" ? "text-[11px]" : "text-xs")}>
-              {project.project_date}
-            </p>
+        <h3
+          className={cn(
+            "font-serif font-bold leading-tight text-foreground text-balance",
+            variant === "grid" ? "text-lg" : "text-xl md:text-2xl",
           )}
-        </div>
-        <div className={variant === "grid" ? "h-[3.75rem]" : undefined}>
-          {project.tagline && (
-            <p className={cn("text-muted-foreground", variant === "grid" ? "text-sm" : "text-sm md:text-base")}>
-              {project.tagline}
-            </p>
-          )}
-        </div>
-        <div className={variant === "grid" ? "h-[2.5rem]" : undefined}>
-          {project.impact && (
-            <p className={cn("font-normal flex items-start gap-1.5", variant === "grid" ? "text-sm" : "text-sm md:text-base")} style={{ color: "#1A1B2E" }}>
-              <span aria-hidden="true">✓</span>
-              <span>{project.impact}</span>
-            </p>
-          )}
-        </div>
+        >
+          {project.emoji ? <span className="mr-1.5">{project.emoji}</span> : null}
+          {project.title.split("||").map((part, i) => (
+            <span key={i}>
+              {i > 0 && <br />}
+              {part.trim()}
+            </span>
+          ))}
+        </h3>
+        {project.project_date && (
+          <p className={cn("font-medium text-muted-foreground/80", variant === "grid" ? "text-[11px]" : "text-xs")}>
+            {project.project_date}
+          </p>
+        )}
+        {project.tagline && (
+          <p className={cn("text-muted-foreground", variant === "grid" ? "text-sm" : "text-sm md:text-base")}>
+            {project.tagline}
+          </p>
+        )}
+        {project.impact && (
+          <p className={cn("font-normal flex items-start gap-1.5", variant === "grid" ? "text-sm" : "text-sm md:text-base")} style={{ color: "#1A1B2E" }}>
+            <span aria-hidden="true">✓</span>
+            <span>{project.impact}</span>
+          </p>
+        )}
         {project.tags.length > 0 && (() => {
           const visibleTags = variant === "grid" ? project.tags.slice(0, 4) : project.tags;
           const overflow = variant === "grid" ? project.tags.length - 4 : 0;

@@ -91,7 +91,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
         <div className={variant === "grid" ? "min-h-[2.8125rem]" : undefined}>
           <h3
             className={cn(
-              "font-serif font-bold leading-tight text-foreground",
+              "font-serif font-bold leading-tight text-foreground text-balance",
               variant === "grid" ? "text-lg" : "text-xl md:text-2xl",
             )}
           >

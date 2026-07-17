@@ -29,7 +29,7 @@ export const Route = createFileRoute("/profil")({
       | { photo: string | null; jobTitle: string | null; linkedinUrl: string | null; bio: string | null }
       | undefined;
     const photo = data?.photo;
-    
+
     const personSchema: SchemaPerson = {
       "@context": "https://schema.org",
       "@type": "Person",
@@ -37,8 +37,8 @@ export const Route = createFileRoute("/profil")({
       url: "https://martine-ia.lovable.app",
       jobTitle: data?.jobTitle || "Product Manager & Consultante",
       description: data?.bio || "Portfolio professionnel de Martine Desmaroux, spécialisée en Product Management et conseil stratégique.",
-      sameAs: data?.linkedinUrl 
-        ? [data.linkedinUrl] 
+      sameAs: data?.linkedinUrl
+        ? [data.linkedinUrl]
         : ["https://www.linkedin.com/in/martine-desmaroux"]
     };
     return {
@@ -112,62 +112,62 @@ function ProfilPage() {
         <div className="lg:grid lg:grid-cols-[minmax(0,56rem)_240px] lg:items-start lg:gap-10">
           <div className="mx-auto w-full max-w-4xl lg:mx-0 lg:max-w-none">
             <div className="flex flex-col gap-8 md:flex-row md:items-start">
-          {photoUrl && (
-            <img
-              src={photoUrl}
-              alt={photoAlt || "Photo de profil de Martine Desmaroux"}
-              className="h-40 w-40 flex-shrink-0 rounded-full border-4 border-accent object-cover md:h-56 md:w-56"
-            />
-          )}
-          <div>
-            <h1 className="font-serif text-3xl font-bold text-foreground md:text-4xl">
-              {settings?.hero_title || profile?.project.title || "Profil"}
-            </h1>
-            {settings?.hero_subtitle && (
-              <p className="mt-1 text-lg font-normal" style={{ color: "#5F5A85" }}>
-                {settings.hero_subtitle}
-              </p>
-            )}
-            {profile?.project.tagline && (
-              <p className="mt-4 text-base text-muted-foreground">{profile.project.tagline}</p>
-            )}
-          </div>
-        </div>
-
-        {profile?.project.summary && (
-          <p className="mt-8 text-base leading-relaxed text-foreground">{profile.project.summary}</p>
-        )}
-
-        {profile?.blocks && profile.blocks.length > 0 && (
-          <div className="mt-10">
-            {profile.blocks.map((b: any) => (
-              <BlockRenderer key={b.id} block={b} />
-            ))}
-          </div>
-        )}
-
-        {tools.length > 0 && (
-          <div id="outils" className="mt-12 scroll-mt-20">
-            <h2 className="mb-6 font-serif text-xl font-bold text-foreground md:text-2xl">Outils et compétences</h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {tools.map((group, i) => (
-                <div key={i} className="rounded-lg border border-border bg-card p-5">
-                  <h3 className="mb-3 font-serif text-base font-bold text-foreground">{group.category}</h3>
-                  <ul className="flex flex-wrap gap-1.5">
-                    {group.items.map((item) => (
-                      <li
-                        key={item.name}
-                        className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground"
-                      >
-                        {item.name}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+              {photoUrl && (
+                <img
+                  src={photoUrl}
+                  alt={photoAlt || "Photo de profil de Martine Desmaroux"}
+                  className="h-40 w-40 flex-shrink-0 rounded-full border-4 border-accent object-cover md:h-56 md:w-56"
+                />
+              )}
+              <div>
+                <h1 className="font-serif text-3xl font-bold text-foreground md:text-4xl">
+                  {settings?.hero_title || profile?.project.title || "Profil"}
+                </h1>
+                {settings?.hero_subtitle && (
+                  <p className="mt-1 text-lg font-normal" style={{ color: "#5F5A85" }}>
+                    {settings.hero_subtitle}
+                  </p>
+                )}
+                {profile?.project.tagline && (
+                  <p className="mt-4 text-base text-muted-foreground">{profile.project.tagline}</p>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+
+            {profile?.project.summary && (
+              <p className="mt-8 text-base leading-relaxed text-foreground">{profile.project.summary}</p>
+            )}
+
+            {profile?.blocks && profile.blocks.length > 0 && (
+              <div className="mt-10">
+                {profile.blocks.map((b: any) => (
+                  <BlockRenderer key={b.id} block={b} />
+                ))}
+              </div>
+            )}
+
+            {tools.length > 0 && (
+              <div id="outils" className="mt-12 scroll-mt-20">
+                <h2 className="mb-6 font-serif text-xl font-bold text-foreground md:text-2xl">Outils et compétences</h2>
+                <div className="grid gap-6 md:grid-cols-2">
+                  {tools.map((group, i) => (
+                    <div key={i} className="rounded-lg border border-border bg-card p-5">
+                      <h3 className="mb-3 font-serif text-base font-bold text-foreground">{group.category}</h3>
+                      <ul className="flex flex-wrap gap-1.5">
+                        {group.items.map((item) => (
+                          <li
+                            key={item.name}
+                            className="rounded border border-border bg-background px-2 py-0.5 text-xs text-foreground"
+                          >
+                            {item.name}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
           </div>
 

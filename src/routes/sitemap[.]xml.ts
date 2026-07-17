@@ -2,13 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { getRequestHost, getRequestHeader } from "@tanstack/react-start/server";
 import { listPublishedProjects } from "@/lib/projects.functions";
 
+import { SITE_URL } from "@/config";
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const host = getRequestHost();
-        const proto = getRequestHeader("x-forwarded-proto") ?? "https";
-        const base = `${proto}://${host}`;
+        const base = SITE_URL;
 
         const projects = await listPublishedProjects();
         // Exclude formation_mission (no dedicated page)

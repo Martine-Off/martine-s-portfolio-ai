@@ -108,7 +108,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
           </p>
         )}
         {project.impact && (
-          <p className={cn("font-bold flex items-start gap-1.5", variant === "grid" ? "text-sm" : "text-sm md:text-base")} style={{ color: "#1A1B2E" }}>
+          <p className={cn("font-normal flex items-start gap-1.5", variant === "grid" ? "text-sm" : "text-sm md:text-base")} style={{ color: "#1A1B2E" }}>
             <span aria-hidden="true">✓</span>
             <span>{project.impact}</span>
           </p>

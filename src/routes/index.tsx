@@ -32,7 +32,7 @@ interface SchemaPerson {
 export const Route = createFileRoute("/")({
   head: ({ loaderData }: any) => {
     const data = loaderData as { jobTitle: string | null; linkedinUrl: string | null } | undefined;
-    
+
     const personSchema: SchemaPerson = {
       "@context": "https://schema.org",
       "@type": "Person",
@@ -40,8 +40,8 @@ export const Route = createFileRoute("/")({
       url: "https://martine-desmaroux.lovable.app",
       jobTitle: data?.jobTitle || "Product Manager & Consultante",
       description: "Portfolio professionnel de Martine Desmaroux, spécialisée en Product Management et conseil stratégique.",
-      sameAs: data?.linkedinUrl 
-        ? [data.linkedinUrl] 
+      sameAs: data?.linkedinUrl
+        ? [data.linkedinUrl]
         : ["https://www.linkedin.com/in/martine-desmaroux"]
     };
     return {
@@ -204,7 +204,7 @@ function HomePage() {
   const { data: settings } = useSuspenseQuery(settingsQuery);
   const { data: projects } = useSuspenseQuery(projectsQuery);
   const { data: profile } = useSuspenseQuery(profileQuery);
-  
+
   const photoUrl = profile?.project.photo_profil_url;
   const photoAlt = profile?.project.photo_profil_alt_text;
 
@@ -264,47 +264,47 @@ function HomePage() {
         <div className="relative z-10 mx-auto max-w-6xl px-6 py-16 md:py-24">
           <div className="border-l-4 border-accent pl-6 md:pl-8">
             {(settings?.hero_subtitle || settings?.location) && (
-                <span className="mb-4 inline-block rounded-full bg-accent px-3 py-1 text-sm font-bold uppercase tracking-widest text-foreground">
-                  {[settings?.hero_subtitle, settings?.location].filter(Boolean).join(" · ")}
-                </span>
-              )}
-              <h1 className="font-serif text-2xl font-bold leading-tight text-foreground md:text-4xl">
-                {settings?.hero_title}
-              </h1>
-              <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
-                {settings?.hero_intro}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                {settings?.linkedin_url ? (
-                  <a href={settings.linkedin_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-                  >
-                    Me contacter sur LinkedIn
-                  </a>
-                ) : settings?.contact_email ? (
-                  <a href={`mailto:${settings.contact_email}`}
-                    className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-                  >
-                    Me contacter
-                  </a>
-                ) : null}
-                <Link
-                  to="/profil"
+              <span className="mb-4 inline-block rounded-full bg-accent px-3 py-1 text-sm font-bold uppercase tracking-widest text-foreground">
+                {[settings?.hero_subtitle, settings?.location].filter(Boolean).join(" · ")}
+              </span>
+            )}
+            <h1 className="font-serif text-2xl font-bold leading-tight text-foreground md:text-4xl">
+              {settings?.hero_title}
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-normal text-muted-foreground">
+              {settings?.hero_intro}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              {settings?.linkedin_url ? (
+                <a href={settings.linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                 >
-                  Profil
-                </Link>
-              </div>
+                  Me contacter sur LinkedIn
+                </a>
+              ) : settings?.contact_email ? (
+                <a href={`mailto:${settings.contact_email}`}
+                  className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  Me contacter
+                </a>
+              ) : null}
+              <Link
+                to="/profil"
+                className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Profil
+              </Link>
             </div>
+          </div>
         </div>
       </section>
 
       {/* Projets phares */}
       {featured.length > 0 && (
-        <section id="projets-phares" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-16">
-          <h2 className="mb-8 font-serif text-xl font-bold text-foreground md:text-2xl">
+        <section id="projets-phares" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-12">
+          <h2 className="mb-6 font-serif text-xl font-bold text-foreground md:text-2xl">
             {settings?.featured_section_title}
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

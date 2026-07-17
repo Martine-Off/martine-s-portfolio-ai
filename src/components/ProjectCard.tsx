@@ -88,15 +88,17 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             {project.status_label}
           </span>
         )}
-        <h3
-          className={cn(
-            "font-serif font-bold leading-tight text-foreground",
-            variant === "grid" ? "text-lg" : "text-xl md:text-2xl",
-          )}
-        >
-          {project.emoji ? <span className="mr-1.5">{project.emoji}</span> : null}
-          {project.title}
-        </h3>
+        <div className={variant === "grid" ? "min-h-[2.8125rem]" : undefined}>
+          <h3
+            className={cn(
+              "font-serif font-bold leading-tight text-foreground",
+              variant === "grid" ? "text-lg" : "text-xl md:text-2xl",
+            )}
+          >
+            {project.emoji ? <span className="mr-1.5">{project.emoji}</span> : null}
+            {project.title}
+          </h3>
+        </div>
         {project.project_date && (
           <p className={cn("font-medium text-muted-foreground/80", variant === "grid" ? "text-[11px]" : "text-xs")}>
             {project.project_date}

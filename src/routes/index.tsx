@@ -68,7 +68,9 @@ export const Route = createFileRoute("/")({
     return {
       jobTitle: settings?.hero_subtitle ?? null,
       linkedinUrl: settings?.linkedin_url?.trim() || null,
+      cvUrl: settings?.cv_url?.trim() || null,
     };
+
   },
   component: HomePage,
   errorComponent: ({ error, reset }: any) => (

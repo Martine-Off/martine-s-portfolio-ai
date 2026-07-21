@@ -1,18 +1,13 @@
-import { Link, useLocation } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 import { safeHref } from "@/lib/utils/safe-url";
 
 export function SiteHeader({
   heroTitle,
-  cvUrl,
   linkedinUrl,
 }: {
   heroTitle: string;
-  cvUrl?: string | null;
   linkedinUrl?: string | null;
 }) {
-  const loc = useLocation();
-  const safeCv = safeHref(cvUrl);
   const safeLinkedin = safeHref(linkedinUrl);
   return (
     <header className="border-b border-border bg-background/80 backdrop-blur">
@@ -27,16 +22,6 @@ export function SiteHeader({
           >
             Profil
           </Link>
-          {safeCv && (
-            <a
-              href={safeCv}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground transition-colors hover:text-foreground"
-            >
-              CV
-            </a>
-          )}
           {safeLinkedin && (
             <a
               href={safeLinkedin}

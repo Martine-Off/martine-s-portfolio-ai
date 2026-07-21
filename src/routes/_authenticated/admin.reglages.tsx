@@ -38,6 +38,7 @@ function SettingsPage() {
         cover_image_url: data?.cover_image_url ?? "",
         cover_image_alt_text: data?.cover_image_alt_text ?? "",
         linkedin_url: data?.linkedin_url ?? "",
+        cv_url: (data as any)?.cv_url ?? "",
         location: (data as any)?.location ?? "",
       });
       const initial = (data?.tools_json ?? []) as any[];

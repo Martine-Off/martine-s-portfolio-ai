@@ -379,6 +379,16 @@ function HomePage() {
                 Me contacter sur LinkedIn
               </a>
             )}
+            {cvUrl && (
+              <a
+                href={cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Voir mon CV
+              </a>
+            )}
             {contactEmail && (
               <a
                 href={`mailto:${contactEmail}`}

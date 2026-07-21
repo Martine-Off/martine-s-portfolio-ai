@@ -68,7 +68,9 @@ export const Route = createFileRoute("/")({
     return {
       jobTitle: settings?.hero_subtitle ?? null,
       linkedinUrl: settings?.linkedin_url?.trim() || null,
+      cvUrl: settings?.cv_url?.trim() || null,
     };
+
   },
   component: HomePage,
   errorComponent: ({ error, reset }: any) => (
@@ -255,7 +257,11 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader heroTitle={settings?.hero_title ?? "Martine Desmaroux"} />
+      <SiteHeader
+        heroTitle={settings?.hero_title ?? "Martine Desmaroux"}
+        cvUrl={settings?.cv_url?.trim() ?? null}
+        linkedinUrl={settings?.linkedin_url?.trim() ?? null}
+      />
       <QuickNav sections={navSections} />
 
       {/* Hero */}

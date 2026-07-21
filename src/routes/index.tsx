@@ -259,7 +259,6 @@ function HomePage() {
     <div className="min-h-screen bg-background">
       <SiteHeader
         heroTitle={settings?.hero_title ?? "Martine Desmaroux"}
-        cvUrl={settings?.cv_url?.trim() ?? null}
         linkedinUrl={settings?.linkedin_url?.trim() ?? null}
       />
       <QuickNav sections={navSections} />
@@ -290,8 +289,25 @@ function HomePage() {
               {settings?.hero_intro}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                to="/profil"
+                className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Profil
+              </Link>
+              {settings?.cv_url && safeHref(settings.cv_url) ? (
+                <a
+                  href={safeHref(settings.cv_url)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  Voir mon CV
+                </a>
+              ) : null}
               {settings?.linkedin_url ? (
-                <a href={settings.linkedin_url}
+                <a
+                  href={safeHref(settings.linkedin_url) || settings.linkedin_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
@@ -299,18 +315,13 @@ function HomePage() {
                   Me contacter sur LinkedIn
                 </a>
               ) : settings?.contact_email ? (
-                <a href={`mailto:${settings.contact_email}`}
+                <a
+                  href={`mailto:${settings.contact_email}`}
                   className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                 >
                   Me contacter
                 </a>
               ) : null}
-              <Link
-                to="/profil"
-                className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                Profil
-              </Link>
             </div>
           </div>
         </div>

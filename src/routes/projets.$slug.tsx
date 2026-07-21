@@ -169,7 +169,6 @@ function ProjectPage() {
     <div className="min-h-screen bg-background">
       <SiteHeader
         heroTitle={settings?.hero_title ?? ""}
-        cvUrl={settings?.cv_url?.trim() ?? null}
         linkedinUrl={settings?.linkedin_url?.trim() ?? null}
       />
 

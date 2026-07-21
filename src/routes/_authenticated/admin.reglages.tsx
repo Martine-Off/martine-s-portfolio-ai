@@ -113,6 +113,7 @@ function SettingsPage() {
         <F label="Email de contact"><input type="email" value={s.contact_email} onChange={upd("contact_email")} className={cls} /></F>
         <F label="Texte sous 'Contact'"><textarea rows={2} value={s.contact_text} onChange={upd("contact_text")} className={cls} placeholder="Une idée de projet, une mission à me confier ? Discutons-en." /></F>
         <F label="LinkedIn"><input value={s.linkedin_url} onChange={upd("linkedin_url")} className={cls} /></F>
+        <F label="Lien vers le CV"><input value={s.cv_url} onChange={upd("cv_url")} className={cls} placeholder="https://…" /></F>
         <F label="Localisation (ville)"><input value={s.location} onChange={upd("location")} className={cls} placeholder="ex. Lyon, France" /></F>
 
         <F label="Titre section projets phares"><input value={s.featured_section_title} onChange={upd("featured_section_title")} className={cls} /></F>

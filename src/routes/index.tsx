@@ -238,9 +238,10 @@ function HomePage() {
     }))
     .filter((cat) => cat.items.length > 0);
   const toolsFlat = tools.flatMap((cat) => cat.items);
-  const linkedinUrl = settings?.linkedin_url?.trim() || null;
+  const linkedinUrl = safeHref(settings?.linkedin_url?.trim() || null);
+  const cvUrl = safeHref((settings as any)?.cv_url?.trim() || null);
   const contactEmail = settings?.contact_email?.trim() || null;
-  const hasContact = Boolean(linkedinUrl || contactEmail);
+  const hasContact = Boolean(linkedinUrl || cvUrl || contactEmail);
 
   const navSections: QuickNavSection[] = [
     featured.length > 0 && { id: "projets-phares", label: "Projets" },

@@ -257,7 +257,11 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader heroTitle={settings?.hero_title ?? "Martine Desmaroux"} />
+      <SiteHeader
+        heroTitle={settings?.hero_title ?? "Martine Desmaroux"}
+        cvUrl={settings?.cv_url?.trim() ?? null}
+        linkedinUrl={settings?.linkedin_url?.trim() ?? null}
+      />
       <QuickNav sections={navSections} />
 
       {/* Hero */}

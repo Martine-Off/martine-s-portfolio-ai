@@ -11,6 +11,7 @@ import { QuickNav, type QuickNavSection } from "@/components/QuickNav";
 import { BackToTop } from "@/components/BackToTop";
 import { cn } from "@/lib/utils";
 import { renderInlineMarkdown } from "@/lib/utils/inline-markdown";
+import { safeHref } from "@/lib/utils/safe-url";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const projectsQuery = queryOptions({ queryKey: ["projects", "public"], queryFn: () => listPublishedProjects() });
@@ -238,9 +239,10 @@ function HomePage() {
     }))
     .filter((cat) => cat.items.length > 0);
   const toolsFlat = tools.flatMap((cat) => cat.items);
-  const linkedinUrl = settings?.linkedin_url?.trim() || null;
+  const linkedinUrl = safeHref(settings?.linkedin_url?.trim() || null);
+  const cvUrl = safeHref((settings as any)?.cv_url?.trim() || null);
   const contactEmail = settings?.contact_email?.trim() || null;
-  const hasContact = Boolean(linkedinUrl || contactEmail);
+  const hasContact = Boolean(linkedinUrl || cvUrl || contactEmail);
 
   const navSections: QuickNavSection[] = [
     featured.length > 0 && { id: "projets-phares", label: "Projets" },
@@ -375,6 +377,16 @@ function HomePage() {
                 className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
                 Me contacter sur LinkedIn
+              </a>
+            )}
+            {cvUrl && (
+              <a
+                href={cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Voir mon CV
               </a>
             )}
             {contactEmail && (

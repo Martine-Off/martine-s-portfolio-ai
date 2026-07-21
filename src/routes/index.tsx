@@ -11,6 +11,7 @@ import { QuickNav, type QuickNavSection } from "@/components/QuickNav";
 import { BackToTop } from "@/components/BackToTop";
 import { cn } from "@/lib/utils";
 import { renderInlineMarkdown } from "@/lib/utils/inline-markdown";
+import { safeHref } from "@/lib/utils/safe-url";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const projectsQuery = queryOptions({ queryKey: ["projects", "public"], queryFn: () => listPublishedProjects() });

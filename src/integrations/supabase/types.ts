@@ -164,6 +164,7 @@ export type Database = {
           contact_text: string | null
           cover_image_alt_text: string | null
           cover_image_url: string | null
+          cv_url: string | null
           featured_section_title: string
           footer_text: string
           formations_section_title: string
@@ -184,6 +185,7 @@ export type Database = {
           contact_text?: string | null
           cover_image_alt_text?: string | null
           cover_image_url?: string | null
+          cv_url?: string | null
           featured_section_title?: string
           footer_text?: string
           formations_section_title?: string
@@ -204,6 +206,7 @@ export type Database = {
           contact_text?: string | null
           cover_image_alt_text?: string | null
           cover_image_url?: string | null
+          cv_url?: string | null
           featured_section_title?: string
           footer_text?: string
           formations_section_title?: string

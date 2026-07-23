@@ -114,7 +114,7 @@ function CondensedItemRow({ p }: { p: CondensedItem }) {
           {p.cover_image_url && (
             <img
               src={p.cover_image_url}
-              alt={p.cover_image_alt_text || p.title}
+              alt={p.cover_image_alt_text || p.title.replace(/\|\|/g, " ").replace(/\s+/g, " ").trim()}
               className="mt-2 h-10 w-10 shrink-0 rounded-md border border-border object-cover md:h-12 md:w-12"
               loading="lazy"
             />

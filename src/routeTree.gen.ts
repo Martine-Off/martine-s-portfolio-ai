@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProfilRouteImport } from './routes/profil'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as DebugDiagnosticRouteImport } from './routes/debug-diagnostic'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProjetsSlugDotmdRouteImport } from './routes/projets.$slug[.]md'
 import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -33,6 +36,16 @@ const ProfilRoute = ProfilRouteImport.update({
   path: '/profil',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DebugDiagnosticRoute = DebugDiagnosticRouteImport.update({
+  id: '/debug-diagnostic',
+  path: '/debug-diagnostic',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -45,6 +58,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjetsSlugDotmdRoute = ProjetsSlugDotmdRouteImport.update({
+  id: '/projets/$slug.md',
+  path: '/projets/$slug.md',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjetsSlugRoute = ProjetsSlugRouteImport.update({
@@ -95,11 +113,14 @@ const AuthenticatedAdminProjetsIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
+  '/debug-diagnostic': typeof DebugDiagnosticRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/profil': typeof ProfilRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/projets/$slug': typeof ProjetsSlugRoute
+  '/projets/$slug.md': typeof ProjetsSlugDotmdRoute
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/reglages': typeof AuthenticatedAdminReglagesRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -109,10 +130,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
+  '/debug-diagnostic': typeof DebugDiagnosticRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/profil': typeof ProfilRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/projets/$slug': typeof ProjetsSlugRoute
+  '/projets/$slug.md': typeof ProjetsSlugDotmdRoute
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/reglages': typeof AuthenticatedAdminReglagesRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -124,11 +148,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/debug-diagnostic': typeof DebugDiagnosticRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/profil': typeof ProfilRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/projets/$slug': typeof ProjetsSlugRoute
+  '/projets/$slug.md': typeof ProjetsSlugDotmdRoute
   '/_authenticated/admin/import': typeof AuthenticatedAdminImportRoute
   '/_authenticated/admin/reglages': typeof AuthenticatedAdminReglagesRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -140,11 +167,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/debug-diagnostic'
+    | '/llms.txt'
     | '/profil'
     | '/sitemap.xml'
     | '/admin'
     | '/auth/reset-password'
     | '/projets/$slug'
+    | '/projets/$slug.md'
     | '/admin/import'
     | '/admin/reglages'
     | '/admin/'
@@ -154,10 +184,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/debug-diagnostic'
+    | '/llms.txt'
     | '/profil'
     | '/sitemap.xml'
     | '/auth/reset-password'
     | '/projets/$slug'
+    | '/projets/$slug.md'
     | '/admin/import'
     | '/admin/reglages'
     | '/admin'
@@ -168,11 +201,14 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/debug-diagnostic'
+    | '/llms.txt'
     | '/profil'
     | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/auth/reset-password'
     | '/projets/$slug'
+    | '/projets/$slug.md'
     | '/_authenticated/admin/import'
     | '/_authenticated/admin/reglages'
     | '/_authenticated/admin/'
@@ -184,9 +220,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  DebugDiagnosticRoute: typeof DebugDiagnosticRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   ProfilRoute: typeof ProfilRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ProjetsSlugRoute: typeof ProjetsSlugRoute
+  ProjetsSlugDotmdRoute: typeof ProjetsSlugDotmdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -203,6 +242,20 @@ declare module '@tanstack/react-router' {
       path: '/profil'
       fullPath: '/profil'
       preLoaderRoute: typeof ProfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/debug-diagnostic': {
+      id: '/debug-diagnostic'
+      path: '/debug-diagnostic'
+      fullPath: '/debug-diagnostic'
+      preLoaderRoute: typeof DebugDiagnosticRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -224,6 +277,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projets/$slug.md': {
+      id: '/projets/$slug.md'
+      path: '/projets/$slug.md'
+      fullPath: '/projets/$slug.md'
+      preLoaderRoute: typeof ProjetsSlugDotmdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projets/$slug': {
@@ -329,10 +389,23 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  DebugDiagnosticRoute: DebugDiagnosticRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   ProfilRoute: ProfilRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ProjetsSlugRoute: ProjetsSlugRoute,
+  ProjetsSlugDotmdRoute: ProjetsSlugDotmdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

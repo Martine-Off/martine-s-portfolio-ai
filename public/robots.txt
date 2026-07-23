@@ -1,7 +1,21 @@
 User-agent: *
 Allow: /
-
 Disallow: /admin
 Disallow: /auth
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
 
 Sitemap: https://martine-ia.lovable.app/sitemap.xml

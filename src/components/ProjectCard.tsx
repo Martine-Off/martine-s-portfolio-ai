@@ -49,7 +49,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
         <div className={cn("relative w-full overflow-hidden bg-muted", variant === "grid" ? "aspect-video" : "aspect-video md:aspect-[21/9]")}>
           <img
             src={project.cover_image_url!}
-            alt={project.cover_image_alt_text || project.title}
+            alt={project.cover_image_alt_text || project.title.replace(/\|\|/g, " ").replace(/\s+/g, " ").trim()}
             className="h-full w-full object-cover transition-transform group-hover:scale-[1.02]"
             style={{ objectPosition: project.cover_image_position || "center" }}
             loading="lazy"

@@ -59,7 +59,7 @@ export default {
           const { data: project } = await supabase.from("projects").select("*").eq("slug", slug).single();
           
           if (project) {
-            const { data: blocks } = await supabase.from("project_blocks").select("*").eq("project_id", project.id).order("order_index");
+            const { data: blocks } = await supabase.from("project_blocks").select("*").eq("project_id", project.id).order("display_order", { ascending: true });
             
             let md = `# ${project.title.replace(/\|\|/g, " ").replace(/\s+/g, " ").trim()}\n\n`;
             if (project.tagline) md += `**${project.tagline}**\n\n`;
@@ -69,28 +69,58 @@ export default {
             if (project.status_label) md += `- **Statut :** ${project.status_label}\n`;
             if (project.role) md += `- **Rôle :** ${project.role}\n`;
             if (project.impact) md += `- **Impact :** ${project.impact}\n`;
+            if (project.tags && project.tags.length > 0) md += `- **Tags / Tech :** ${project.tags.join(", ")}\n`;
             
             md += `\n## Contenu détaillé\n\n`;
             
             for (const b of blocks || []) {
-              if (b.block_type === "heading" && b.title) {
-                md += `### ${b.title}\n\n`;
-              } else if (b.block_type === "text" && b.content) {
-                const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
-                md += `${cleanContent}\n\n`;
-              } else if (b.block_type === "quote" && b.content) {
-                const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
-                md += `> "${cleanContent}"\n\n`;
-              } else if (b.block_type === "liste" && b.content) {
-                const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
-                md += `${cleanContent}\n\n`;
-              } else if (b.block_type === "comparatif" && b.content) {
-                const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
-                md += `${cleanContent}\n\n`;
+              if (b.block_type === "heading") {
+                // heading uses content for display text (see BlockRenderer)
+                const headingText = b.content || b.title || "";
+                if (headingText) md += `### ${headingText}\n\n`;
+              } else if (b.block_type === "text") {
+                if (b.title) md += `#### ${b.title}\n\n`;
+                if (b.content) {
+                  const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
+                  md += `${cleanContent}\n\n`;
+                }
+              } else if (b.block_type === "quote") {
+                if (b.title) md += `#### ${b.title}\n\n`;
+                if (b.content) {
+                  const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
+                  md += `> ${cleanContent}\n\n`;
+                }
+              } else if (b.block_type === "liste") {
+                if (b.title) md += `#### ${b.title}\n\n`;
+                if (b.content) {
+                  const items = b.content.split("\n").map((s: string) => s.trim()).filter(Boolean);
+                  for (const item of items) {
+                    md += `- ${item}\n`;
+                  }
+                  md += `\n`;
+                }
+              } else if (b.block_type === "comparatif") {
+                if (b.title) md += `#### ${b.title}\n\n`;
+                if (b.content) {
+                  const cols = b.content.split("||");
+                  for (const col of cols) {
+                    const [colTitle, rest] = col.split(":");
+                    if (colTitle) md += `**${colTitle.trim()}**\n`;
+                    if (rest) {
+                      const items = rest.split(",").map((s: string) => s.trim()).filter(Boolean);
+                      for (const item of items) {
+                        md += `- ${item}\n`;
+                      }
+                    }
+                    md += `\n`;
+                  }
+                }
               } else if (b.block_type === "video") {
+                if (b.title) md += `#### ${b.title}\n\n`;
                 const caption = b.caption || b.alt_text || "Vidéo démonstrative";
                 md += `[Vidéo : ${caption}]\n\n`;
               } else if (b.block_type === "image") {
+                if (b.title) md += `#### ${b.title}\n\n`;
                 const caption = b.caption || b.alt_text || "Image illustrant le projet";
                 md += `[Image : ${caption}]\n\n`;
               }

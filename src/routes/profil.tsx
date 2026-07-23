@@ -106,7 +106,10 @@ function ProfilPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader heroTitle={settings?.hero_title ?? ""} />
+      <SiteHeader
+        heroTitle={settings?.hero_title ?? ""}
+        linkedinUrl={settings?.linkedin_url?.trim() ?? null}
+      />
 
       <div className="mx-auto max-w-[76.5rem] px-6 py-16 md:py-24">
         <div className="lg:grid lg:grid-cols-[minmax(0,56rem)_240px] lg:items-start lg:gap-10">

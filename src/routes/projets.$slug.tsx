@@ -167,7 +167,10 @@ function ProjectPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader heroTitle={settings?.hero_title ?? ""} />
+      <SiteHeader
+        heroTitle={settings?.hero_title ?? ""}
+        linkedinUrl={settings?.linkedin_url?.trim() ?? null}
+      />
 
       <div className="mx-auto max-w-[76.5rem] px-6 py-10">
         <div className="xl:grid xl:grid-cols-[minmax(0,56rem)_240px] xl:items-start xl:gap-10">

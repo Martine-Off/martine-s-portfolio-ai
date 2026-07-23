@@ -11,6 +11,7 @@ import { QuickNav, type QuickNavSection } from "@/components/QuickNav";
 import { BackToTop } from "@/components/BackToTop";
 import { cn } from "@/lib/utils";
 import { renderInlineMarkdown } from "@/lib/utils/inline-markdown";
+import { safeHref } from "@/lib/utils/safe-url";
 
 const settingsQuery = queryOptions({ queryKey: ["site_settings"], queryFn: () => getSiteSettings() });
 const projectsQuery = queryOptions({ queryKey: ["projects", "public"], queryFn: () => listPublishedProjects() });
@@ -67,7 +68,9 @@ export const Route = createFileRoute("/")({
     return {
       jobTitle: settings?.hero_subtitle ?? null,
       linkedinUrl: settings?.linkedin_url?.trim() || null,
+      cvUrl: settings?.cv_url?.trim() || null,
     };
+
   },
   component: HomePage,
   errorComponent: ({ error, reset }: any) => (
@@ -238,9 +241,10 @@ function HomePage() {
     }))
     .filter((cat) => cat.items.length > 0);
   const toolsFlat = tools.flatMap((cat) => cat.items);
-  const linkedinUrl = settings?.linkedin_url?.trim() || null;
+  const linkedinUrl = safeHref(settings?.linkedin_url?.trim() || null);
+  const cvUrl = safeHref((settings as any)?.cv_url?.trim() || null);
   const contactEmail = settings?.contact_email?.trim() || null;
-  const hasContact = Boolean(linkedinUrl || contactEmail);
+  const hasContact = Boolean(linkedinUrl || cvUrl || contactEmail);
 
   const navSections: QuickNavSection[] = [
     featured.length > 0 && { id: "projets-phares", label: "Projets" },
@@ -253,7 +257,10 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader heroTitle={settings?.hero_title ?? "Martine Desmaroux"} />
+      <SiteHeader
+        heroTitle={settings?.hero_title ?? "Martine Desmaroux"}
+        linkedinUrl={settings?.linkedin_url?.trim() ?? null}
+      />
       <QuickNav sections={navSections} />
 
       {/* Hero */}
@@ -282,8 +289,25 @@ function HomePage() {
               {settings?.hero_intro}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                to="/profil"
+                className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Profil
+              </Link>
+              {settings?.cv_url && safeHref(settings.cv_url) ? (
+                <a
+                  href={safeHref(settings.cv_url)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-[44px] items-center rounded-full border border-primary bg-transparent px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-muted"
+                >
+                  Voir mon CV
+                </a>
+              ) : null}
               {settings?.linkedin_url ? (
-                <a href={settings.linkedin_url}
+                <a
+                  href={safeHref(settings.linkedin_url) || settings.linkedin_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
@@ -291,20 +315,14 @@ function HomePage() {
                   Me contacter sur LinkedIn
                 </a>
               ) : settings?.contact_email ? (
-                <a href={`mailto:${settings.contact_email}`}
+                <a
+                  href={`mailto:${settings.contact_email}`}
                   className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                 >
                   Me contacter
                 </a>
               ) : null}
-              <a
-                href="/cv.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-[44px] items-center rounded-full border border-primary bg-transparent px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-muted"
-              >
-                Voir mon CV
-              </a>
+
             </div>
           </div>
         </div>
@@ -379,14 +397,16 @@ function HomePage() {
                 Me contacter sur LinkedIn
               </a>
             )}
-            <a
-              href="/cv.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-primary bg-transparent px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-muted min-h-[44px] flex items-center"
-            >
-              Voir mon CV
-            </a>
+            {cvUrl && (
+              <a
+                href={cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-primary bg-transparent px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-muted min-h-[44px] flex items-center"
+              >
+                Voir mon CV
+              </a>
+            )}
           </div>
         </section>
       )}

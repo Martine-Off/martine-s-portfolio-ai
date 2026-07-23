@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
-import { Route as DebugDiagnosticRouteImport } from './routes/debug-diagnostic'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -39,11 +38,6 @@ const ProfilRoute = ProfilRouteImport.update({
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   id: '/llms.txt',
   path: '/llms.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DebugDiagnosticRoute = DebugDiagnosticRouteImport.update({
-  id: '/debug-diagnostic',
-  path: '/debug-diagnostic',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -113,7 +107,6 @@ const AuthenticatedAdminProjetsIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
-  '/debug-diagnostic': typeof DebugDiagnosticRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/profil': typeof ProfilRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -130,7 +123,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
-  '/debug-diagnostic': typeof DebugDiagnosticRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/profil': typeof ProfilRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -148,7 +140,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
-  '/debug-diagnostic': typeof DebugDiagnosticRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/profil': typeof ProfilRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -167,7 +158,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
-    | '/debug-diagnostic'
     | '/llms.txt'
     | '/profil'
     | '/sitemap.xml'
@@ -184,7 +174,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
-    | '/debug-diagnostic'
     | '/llms.txt'
     | '/profil'
     | '/sitemap.xml'
@@ -201,7 +190,6 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
-    | '/debug-diagnostic'
     | '/llms.txt'
     | '/profil'
     | '/sitemap.xml'
@@ -220,7 +208,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
-  DebugDiagnosticRoute: typeof DebugDiagnosticRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   ProfilRoute: typeof ProfilRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -249,13 +236,6 @@ declare module '@tanstack/react-router' {
       path: '/llms.txt'
       fullPath: '/llms.txt'
       preLoaderRoute: typeof LlmsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/debug-diagnostic': {
-      id: '/debug-diagnostic'
-      path: '/debug-diagnostic'
-      fullPath: '/debug-diagnostic'
-      preLoaderRoute: typeof DebugDiagnosticRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -389,7 +369,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
-  DebugDiagnosticRoute: DebugDiagnosticRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   ProfilRoute: ProfilRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,

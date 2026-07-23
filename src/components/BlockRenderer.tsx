@@ -93,11 +93,10 @@ export function BlockRenderer({ block }: { block: Block }) {
               allowFullScreen
             />
           </div>
-          {block.caption && (
-            <figcaption className="mt-2 whitespace-pre-line text-sm text-muted-foreground">{block.caption}</figcaption>
-          )}
-          {block.alt_text && (
-            <p className="sr-only">{block.alt_text}</p>
+          {(block.caption || block.alt_text) && (
+            <figcaption className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
+              {block.caption || block.alt_text}
+            </figcaption>
           )}
         </figure>
       );

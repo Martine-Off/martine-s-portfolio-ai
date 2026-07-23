@@ -54,6 +54,8 @@ type ProjectHeadData = {
   cover_image_url: string | null;
   tags: string[];
   project_date: string | null;
+  summary: string | null;
+  role: string | null;
 };
 
 interface SchemaCreativeWork {
@@ -67,6 +69,14 @@ interface SchemaCreativeWork {
     name: string;
   };
   url: string;
+  summary?: string;
+  keywords?: string;
+  dateCreated?: string;
+  creator?: {
+    "@type": "Person";
+    name: string;
+    roleName?: string;
+  };
 }
 
 export const Route = createFileRoute("/projets/$slug")({
@@ -95,6 +105,17 @@ export const Route = createFileRoute("/projets/$slug")({
       },
       url: `https://martine-ia.lovable.app/projets/${params.slug}`
     };
+    
+    if (p.summary) projectSchema.summary = p.summary;
+    if (p.tags && p.tags.length > 0) projectSchema.keywords = p.tags.join(", ");
+    if (p.project_date) projectSchema.dateCreated = p.project_date;
+    if (p.role) {
+      projectSchema.creator = {
+        "@type": "Person",
+        name: "Martine Desmaroux",
+        roleName: p.role
+      };
+    }
     return {
       meta: [
         { title: `${cleanTitle} — Martine Desmaroux` },

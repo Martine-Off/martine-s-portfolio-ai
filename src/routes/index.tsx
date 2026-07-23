@@ -371,22 +371,12 @@ function HomePage() {
               : "Une idée de projet, une mission à me confier\u00A0? Discutons-en."}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            {linkedinUrl && (
-              <a
-                href={linkedinUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 min-h-[44px] flex items-center"
-              >
-                Me contacter sur LinkedIn
-              </a>
-            )}
             {cvUrl && (
               <a
                 href={cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-primary bg-transparent px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-muted min-h-[44px] flex items-center"
+                className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 min-h-[44px] flex items-center"
               >
                 Voir mon CV
               </a>

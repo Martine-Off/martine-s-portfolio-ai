@@ -6,8 +6,9 @@ export const Route = createFileRoute("/projets/$slug.md")({
   server: {
     handlers: {
       GET: async ({ params }) => {
-        // Sécurité supplémentaire : on s'assure que .md n'a pas été capturé dans le slug
-        const cleanSlug = params.slug.replace(/\.md$/, "");
+        // Le routeur TanStack peut parser le paramètre comme "slug.md" à cause de l'extension
+        const rawSlug = params.slug || params["slug.md"] || "";
+        const cleanSlug = rawSlug.replace(/\.md$/, "");
         
         try {
           const data = await getProjectBySlug({ data: { slug: cleanSlug } });

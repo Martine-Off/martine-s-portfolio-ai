@@ -139,7 +139,7 @@ function EditProject() {
               form.project_type === "formation_mission" && form.mission_type
                 ? form.mission_type
                 : null,
-            tags_categorises: form.project_type === "profil" ? categories : null,
+            tags_categorises: categories,
           },
           blocks: blocks.map((b, i) => ({ ...b, display_order: i })),
         },

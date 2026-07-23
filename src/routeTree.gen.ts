@@ -15,7 +15,6 @@ import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProjetsSlugDotmdRouteImport } from './routes/projets.$slug[.]md'
 import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -52,11 +51,6 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjetsSlugDotmdRoute = ProjetsSlugDotmdRouteImport.update({
-  id: '/projets/$slug.md',
-  path: '/projets/$slug.md',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjetsSlugRoute = ProjetsSlugRouteImport.update({
@@ -113,7 +107,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/projets/$slug': typeof ProjetsSlugRoute
-  '/projets/$slug.md': typeof ProjetsSlugDotmdRoute
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/reglages': typeof AuthenticatedAdminReglagesRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -128,7 +121,6 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/projets/$slug': typeof ProjetsSlugRoute
-  '/projets/$slug.md': typeof ProjetsSlugDotmdRoute
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/reglages': typeof AuthenticatedAdminReglagesRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -146,7 +138,6 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/projets/$slug': typeof ProjetsSlugRoute
-  '/projets/$slug.md': typeof ProjetsSlugDotmdRoute
   '/_authenticated/admin/import': typeof AuthenticatedAdminImportRoute
   '/_authenticated/admin/reglages': typeof AuthenticatedAdminReglagesRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -164,7 +155,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth/reset-password'
     | '/projets/$slug'
-    | '/projets/$slug.md'
     | '/admin/import'
     | '/admin/reglages'
     | '/admin/'
@@ -179,7 +169,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/auth/reset-password'
     | '/projets/$slug'
-    | '/projets/$slug.md'
     | '/admin/import'
     | '/admin/reglages'
     | '/admin'
@@ -196,7 +185,6 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/auth/reset-password'
     | '/projets/$slug'
-    | '/projets/$slug.md'
     | '/_authenticated/admin/import'
     | '/_authenticated/admin/reglages'
     | '/_authenticated/admin/'
@@ -212,7 +200,6 @@ export interface RootRouteChildren {
   ProfilRoute: typeof ProfilRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ProjetsSlugRoute: typeof ProjetsSlugRoute
-  ProjetsSlugDotmdRoute: typeof ProjetsSlugDotmdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -257,13 +244,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projets/$slug.md': {
-      id: '/projets/$slug.md'
-      path: '/projets/$slug.md'
-      fullPath: '/projets/$slug.md'
-      preLoaderRoute: typeof ProjetsSlugDotmdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projets/$slug': {
@@ -373,7 +353,6 @@ const rootRouteChildren: RootRouteChildren = {
   ProfilRoute: ProfilRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ProjetsSlugRoute: ProjetsSlugRoute,
-  ProjetsSlugDotmdRoute: ProjetsSlugDotmdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

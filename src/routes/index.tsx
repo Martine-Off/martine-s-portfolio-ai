@@ -289,12 +289,7 @@ function HomePage() {
               {settings?.hero_intro}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/profil"
-                className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                Profil
-              </Link>
+
               {settings?.cv_url && safeHref(settings.cv_url) ? (
                 <a
                   href={safeHref(settings.cv_url)}

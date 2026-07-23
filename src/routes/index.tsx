@@ -297,12 +297,14 @@ function HomePage() {
                   Me contacter
                 </a>
               ) : null}
-              <Link
-                to="/profil"
-                className="inline-flex min-h-[44px] items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              <a
+                href="/cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-[44px] items-center rounded-full border border-primary bg-transparent px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-muted"
               >
-                Profil
-              </Link>
+                Voir mon CV
+              </a>
             </div>
           </div>
         </div>
@@ -372,19 +374,19 @@ function HomePage() {
                 href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 min-h-[44px] flex items-center"
               >
                 Me contacter sur LinkedIn
               </a>
             )}
-            {contactEmail && (
-              <a
-                href={`mailto:${contactEmail}`}
-                className="rounded-md border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-              >
-                {contactEmail}
-              </a>
-            )}
+            <a
+              href="/cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-primary bg-transparent px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-muted min-h-[44px] flex items-center"
+            >
+              Voir mon CV
+            </a>
           </div>
         </section>
       )}

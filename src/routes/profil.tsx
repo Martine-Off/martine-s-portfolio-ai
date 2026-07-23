@@ -36,7 +36,7 @@ export const Route = createFileRoute("/profil")({
       name: "Martine Desmaroux",
       url: "https://martine-ia.lovable.app",
       jobTitle: data?.jobTitle || "Product Manager & Consultante",
-      description: data?.bio || "Portfolio professionnel de Martine Desmaroux, spécialisée en Product Management et conseil stratégique.",
+      description: data?.bio || DEFAULT_DESCRIPTION,
       sameAs: data?.linkedinUrl
         ? [data.linkedinUrl]
         : ["https://www.linkedin.com/in/martine-desmaroux"]

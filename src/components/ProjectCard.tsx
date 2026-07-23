@@ -31,6 +31,7 @@ interface Props {
 export function ProjectCard({ project, variant = "grid", linkable = true }: Props) {
   const accent = resolveAccentColor(project.accent_color, project.status_label);
   const hasImage = !!project.cover_image_url;
+  const TitleTag = variant === "detail" ? "h1" : "h3";
 
 
   const inner = (
@@ -97,7 +98,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
             )}
           </div>
         )}
-        <h3
+        <TitleTag
           className={cn(
             "font-serif font-bold leading-tight text-foreground text-balance",
             variant === "grid" ? "text-lg" : "text-xl md:text-2xl",
@@ -110,7 +111,7 @@ export function ProjectCard({ project, variant = "grid", linkable = true }: Prop
               {part.trim()}
             </span>
           ))}
-        </h3>
+        </TitleTag>
 
         {project.tagline && (
           <p className={cn("text-muted-foreground", variant === "grid" ? "text-sm" : "text-sm md:text-base")}>

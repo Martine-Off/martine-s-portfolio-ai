@@ -126,6 +126,19 @@ export default {
               }
             }
             
+            // Section "Outils et compétences" (tags catégorisés)
+            const categorised = project.tags_categorises as { label: string; items: string[] }[] | null;
+            if (categorised && categorised.length > 0) {
+              md += `## Outils et compétences\n\n`;
+              for (const group of categorised) {
+                md += `**${group.label}**\n`;
+                for (const item of group.items) {
+                  md += `- ${item}\n`;
+                }
+                md += `\n`;
+              }
+            }
+            
             return new Response(md, {
               headers: {
                 "Content-Type": "text/markdown; charset=utf-8",

@@ -289,17 +289,6 @@ function HomePage() {
               {settings?.hero_intro}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-
-              {settings?.cv_url && safeHref(settings.cv_url) ? (
-                <a
-                  href={safeHref(settings.cv_url)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center rounded-full border border-primary bg-transparent px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-muted"
-                >
-                  Voir mon CV
-                </a>
-              ) : null}
               {settings?.linkedin_url ? (
                 <a
                   href={safeHref(settings.linkedin_url) || settings.linkedin_url}

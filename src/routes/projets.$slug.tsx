@@ -130,9 +130,66 @@ export const Route = createFileRoute("/projets/$slug")({
     };
   },
   loader: async ({ context, params }: any) => {
+    let slug = params.slug;
+    const isMd = slug.endsWith(".md");
+    if (isMd) {
+      slug = slug.replace(/\.md$/, "");
+    }
+
     await context.queryClient.ensureQueryData(settingsQuery);
-    const project = await context.queryClient.ensureQueryData(projectQuery(params.slug));
-    if (!project) throw notFound();
+    const project = await context.queryClient.ensureQueryData(projectQuery(slug));
+    
+    if (!project || !project.project) throw notFound();
+
+    if (isMd) {
+      const p = project.project;
+      const blocks = project.blocks || [];
+      
+      let md = `# ${p.title.replace(/\|\|/g, " ").replace(/\s+/g, " ").trim()}\n\n`;
+      if (p.tagline) md += `**${p.tagline}**\n\n`;
+      
+      md += `## Informations clés\n`;
+      if (p.project_date) md += `- **Date / Période :** ${p.project_date}\n`;
+      if (p.status_label) md += `- **Statut :** ${p.status_label}\n`;
+      if (p.role) md += `- **Rôle :** ${p.role}\n`;
+      if (p.impact) md += `- **Impact :** ${p.impact}\n`;
+      if (p.tags && p.tags.length > 0) md += `- **Tags / Tech :** ${p.tags.join(", ")}\n`;
+      
+      md += `\n## Contenu détaillé\n\n`;
+      
+      for (const b of blocks as any[]) {
+        if (b.block_type === "heading" && b.title) {
+          md += `### ${b.title}\n\n`;
+        } else if (b.block_type === "text" && b.content) {
+          const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
+          md += `${cleanContent}\n\n`;
+        } else if (b.block_type === "quote" && b.content) {
+          const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
+          md += `> "${cleanContent}"\n\n`;
+        } else if (b.block_type === "liste" && b.content) {
+          const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
+          md += `${cleanContent}\n\n`;
+        } else if (b.block_type === "comparatif" && b.content) {
+          const cleanContent = b.content.replace(/<[^>]*>?/gm, '');
+          md += `${cleanContent}\n\n`;
+        } else if (b.block_type === "video") {
+          const caption = b.caption || b.alt_text || "Vidéo démonstrative";
+          md += `[Vidéo : ${caption}]\n\n`;
+        } else if (b.block_type === "image") {
+          const caption = b.caption || b.alt_text || "Image illustrant le projet";
+          md += `[Image : ${caption}]\n\n`;
+        }
+      }
+
+      // Throw response to bypass React and serve raw markdown
+      throw new Response(md, {
+        headers: {
+          "Content-Type": "text/markdown; charset=utf-8",
+          "Cache-Control": "public, max-age=3600",
+        },
+      });
+    }
+
     return { project };
   },
   component: ProjectPage,

@@ -6,13 +6,6 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-console.log('DEBUG BUILD ENV:', {
-  hasViteUrl: !!process.env.VITE_SUPABASE_URL,
-  hasSupabaseUrl: !!process.env.SUPABASE_URL,
-  hasViteKey: !!process.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-  hasSupabaseKey: !!process.env.SUPABASE_PUBLISHABLE_KEY,
-});
-
 export default defineConfig({
   vite: {
     define: {

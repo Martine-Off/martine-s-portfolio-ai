@@ -9,34 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ProfilRouteImport } from './routes/profil'
-import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
-import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as ProfilRouteImport } from './routes/profil'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
+import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
-import { Route as AuthenticatedAdminReglagesRouteImport } from './routes/_authenticated/admin.reglages'
 import { Route as AuthenticatedAdminImportRouteImport } from './routes/_authenticated/admin.import'
-import { Route as AuthenticatedAdminProjetsNouveauRouteImport } from './routes/_authenticated/admin.projets.nouveau'
+import { Route as AuthenticatedAdminReglagesRouteImport } from './routes/_authenticated/admin.reglages'
 import { Route as AuthenticatedAdminProjetsIdRouteImport } from './routes/_authenticated/admin.projets.$id'
+import { Route as AuthenticatedAdminProjetsNouveauRouteImport } from './routes/_authenticated/admin.projets.nouveau'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfilRoute = ProfilRouteImport.update({
-  id: '/profil',
-  path: '/profil',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
-  id: '/llms.txt',
-  path: '/llms.txt',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -44,57 +38,63 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ProfilRoute = ProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProjetsSlugRoute = ProjetsSlugRouteImport.update({
-  id: '/projets/$slug',
-  path: '/projets/$slug',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => AuthRoute,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+const ProjetsSlugRoute = ProjetsSlugRouteImport.update({
+  id: '/projets/$slug',
+  path: '/projets/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
-const AuthenticatedAdminReglagesRoute =
-  AuthenticatedAdminReglagesRouteImport.update({
-    id: '/reglages',
-    path: '/reglages',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
 const AuthenticatedAdminImportRoute =
   AuthenticatedAdminImportRouteImport.update({
     id: '/import',
     path: '/import',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
-const AuthenticatedAdminProjetsNouveauRoute =
-  AuthenticatedAdminProjetsNouveauRouteImport.update({
-    id: '/projets/nouveau',
-    path: '/projets/nouveau',
+const AuthenticatedAdminReglagesRoute =
+  AuthenticatedAdminReglagesRouteImport.update({
+    id: '/reglages',
+    path: '/reglages',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminProjetsIdRoute =
   AuthenticatedAdminProjetsIdRouteImport.update({
     id: '/projets/$id',
     path: '/projets/$id',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminProjetsNouveauRoute =
+  AuthenticatedAdminProjetsNouveauRouteImport.update({
+    id: '/projets/nouveau',
+    path: '/projets/nouveau',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 
@@ -204,32 +204,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profil': {
-      id: '/profil'
-      path: '/profil'
-      fullPath: '/profil'
-      preLoaderRoute: typeof ProfilRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/llms.txt': {
-      id: '/llms.txt'
-      path: '/llms.txt'
-      fullPath: '/llms.txt'
-      preLoaderRoute: typeof LlmsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -239,26 +218,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/projets/$slug': {
-      id: '/projets/$slug'
-      path: '/projets/$slug'
-      fullPath: '/projets/$slug'
-      preLoaderRoute: typeof ProjetsSlugRouteImport
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/reset-password': {
-      id: '/auth/reset-password'
-      path: '/reset-password'
-      fullPath: '/auth/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordRouteImport
-      parentRoute: typeof AuthRoute
+    '/profil': {
+      id: '/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof ProfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
@@ -267,18 +253,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/projets/$slug': {
+      id: '/projets/$slug'
+      path: '/projets/$slug'
+      fullPath: '/projets/$slug'
+      preLoaderRoute: typeof ProjetsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/reglages': {
-      id: '/_authenticated/admin/reglages'
-      path: '/reglages'
-      fullPath: '/admin/reglages'
-      preLoaderRoute: typeof AuthenticatedAdminReglagesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/import': {
@@ -288,11 +281,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminImportRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/_authenticated/admin/projets/nouveau': {
-      id: '/_authenticated/admin/projets/nouveau'
-      path: '/projets/nouveau'
-      fullPath: '/admin/projets/nouveau'
-      preLoaderRoute: typeof AuthenticatedAdminProjetsNouveauRouteImport
+    '/_authenticated/admin/reglages': {
+      id: '/_authenticated/admin/reglages'
+      path: '/reglages'
+      fullPath: '/admin/reglages'
+      preLoaderRoute: typeof AuthenticatedAdminReglagesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/projets/$id': {
@@ -300,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/projets/$id'
       fullPath: '/admin/projets/$id'
       preLoaderRoute: typeof AuthenticatedAdminProjetsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/projets/nouveau': {
+      id: '/_authenticated/admin/projets/nouveau'
+      path: '/projets/nouveau'
+      fullPath: '/admin/projets/nouveau'
+      preLoaderRoute: typeof AuthenticatedAdminProjetsNouveauRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
   }

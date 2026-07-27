@@ -21,27 +21,42 @@ const projectQuery = (slug: string) =>
   });
 
 const FRENCH_MONTHS: Record<string, string> = {
-  janvier: "01", février: "02", fevrier: "02", mars: "03", avril: "04",
-  mai: "05", juin: "06", juillet: "07", août: "08", aout: "08",
-  septembre: "09", octobre: "10", novembre: "11", décembre: "12", decembre: "12",
+  janvier: "01", janv: "01",
+  février: "02", fevrier: "02", févr: "02", fevr: "02",
+  mars: "03",
+  avril: "04", avr: "04",
+  mai: "05",
+  juin: "06",
+  juillet: "07", juil: "07",
+  août: "08", aout: "08",
+  septembre: "09", sept: "09",
+  octobre: "10", oct: "10",
+  novembre: "11", nov: "11",
+  décembre: "12", decembre: "12", déc: "12", dec: "12",
 };
 
-// project_date is free text ("période : janvier – juin 2026", "octobre 2025", "depuis novembre 2025"...).
-// Convert the common "mois année" / "mois année – mois année" shapes to an ISO 8601
-// date or interval for temporalCoverage; fall back to the raw trimmed text otherwise
-// so the property is still populated even when the pattern doesn't match.
+// project_date is free text as entered in the CMS ("janv – juin 26", "oct 25",
+// "depuis nov 25"...) but also accepts the longer "janvier – juin 2026" /
+// "octobre 2025" shapes. Convert the common "mois année" / "mois année – mois
+// année" shapes to an ISO 8601 date or interval; fall back to the raw trimmed
+// text otherwise so the property is still populated even when the pattern
+// doesn't match.
+function normalizeYear(year: string): string {
+  return year.length === 2 ? `20${year}` : year;
+}
+
 function projectDateToTemporalCoverage(raw: string): string {
   const cleaned = raw.replace(/^\s*(période|periode|depuis)\s*:?\s*/i, "").trim();
-  const monthYear = (m: string, y: string) => `${y}-${FRENCH_MONTHS[m.toLowerCase()]}`;
-  const rangeCrossYear = cleaned.match(/^(\p{L}+)\s+(\d{4})\s*[–-]\s*(\p{L}+)\s+(\d{4})$/u);
+  const monthYear = (m: string, y: string) => `${normalizeYear(y)}-${FRENCH_MONTHS[m.toLowerCase()]}`;
+  const rangeCrossYear = cleaned.match(/^(\p{L}+)\s+(\d{2}|\d{4})\s*[–-]\s*(\p{L}+)\s+(\d{2}|\d{4})$/u);
   if (rangeCrossYear && FRENCH_MONTHS[rangeCrossYear[1].toLowerCase()] && FRENCH_MONTHS[rangeCrossYear[3].toLowerCase()]) {
     return `${monthYear(rangeCrossYear[1], rangeCrossYear[2])}/${monthYear(rangeCrossYear[3], rangeCrossYear[4])}`;
   }
-  const rangeSameYear = cleaned.match(/^(\p{L}+)\s*[–-]\s*(\p{L}+)\s+(\d{4})$/u);
+  const rangeSameYear = cleaned.match(/^(\p{L}+)\s*[–-]\s*(\p{L}+)\s+(\d{2}|\d{4})$/u);
   if (rangeSameYear && FRENCH_MONTHS[rangeSameYear[1].toLowerCase()] && FRENCH_MONTHS[rangeSameYear[2].toLowerCase()]) {
     return `${monthYear(rangeSameYear[1], rangeSameYear[3])}/${monthYear(rangeSameYear[2], rangeSameYear[3])}`;
   }
-  const single = cleaned.match(/^(\p{L}+)\s+(\d{4})$/u);
+  const single = cleaned.match(/^(\p{L}+)\s+(\d{2}|\d{4})$/u);
   if (single && FRENCH_MONTHS[single[1].toLowerCase()]) {
     return monthYear(single[1], single[2]);
   }
@@ -72,6 +87,7 @@ interface SchemaCreativeWork {
   summary?: string;
   keywords?: string;
   dateCreated?: string;
+  temporalCoverage?: string;
   creator?: {
     "@type": "Person";
     name: string;
@@ -108,7 +124,16 @@ export const Route = createFileRoute("/projets/$slug")({
     
     if (p.summary) projectSchema.summary = p.summary;
     if (p.tags && p.tags.length > 0) projectSchema.keywords = p.tags.join(", ");
-    if (p.project_date) projectSchema.dateCreated = p.project_date;
+    if (p.project_date) {
+      const coverage = projectDateToTemporalCoverage(p.project_date);
+      // dateCreated must be a single ISO 8601 Date per schema.org; date ranges
+      // ("2026-01/2026-06") go into temporalCoverage, which accepts intervals.
+      if (coverage.includes("/")) {
+        projectSchema.temporalCoverage = coverage;
+      } else {
+        projectSchema.dateCreated = coverage;
+      }
+    }
     if (p.role) {
       projectSchema.creator = {
         "@type": "Person",

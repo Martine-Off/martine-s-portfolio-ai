@@ -38,14 +38,18 @@ function createSupabaseClient() {
       ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
       ...(!SUPABASE_PUBLISHABLE_KEY ? ['SUPABASE_PUBLISHABLE_KEY'] : []),
     ];
-    const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Connect Supabase in Lovable Cloud.`;
-    console.error(`[Supabase] ${message}`);
-    throw new Error(message);
+    // Warn but do NOT throw — a thrown error here crashes the entire React
+    // hydration and shows a blank/error page instead of the actual content.
+    // Network calls will fail silently later; the page will still render.
+    console.warn(`[Supabase] Missing environment variable(s): ${missing.join(', ')}. Supabase calls will fail until the project is connected in Lovable Cloud.`);
   }
 
-  return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  const url = SUPABASE_URL || 'https://placeholder.supabase.co';
+  const key = SUPABASE_PUBLISHABLE_KEY || 'placeholder-key';
+
+  return createClient<Database>(url, key, {
     global: {
-      fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY),
+      fetch: createSupabaseFetch(key),
     },
     auth: {
       storage: typeof window !== 'undefined' ? localStorage : undefined,

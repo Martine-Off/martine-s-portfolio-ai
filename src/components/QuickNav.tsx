@@ -35,22 +35,27 @@ export function QuickNav({ sections }: { sections: QuickNavSection[] }) {
 
   return (
     <div className="sticky top-0 z-40 border-b border-border bg-card">
-      <div className="mx-auto flex max-w-6xl flex-wrap gap-2 px-6 py-2.5">
-        {sections.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            onClick={() => scrollToSection(s.id)}
-            className={cn(
-              "min-h-[36px] whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
-              active === s.id
-                ? "border-accent text-accent"
-                : "border-border text-muted-foreground hover:border-accent hover:text-accent",
-            )}
-          >
-            {s.label}
-          </button>
-        ))}
+      {/* Relative wrapper needed for the fade-out gradient overlay */}
+      <div className="relative">
+        <div className="mx-auto flex max-w-6xl flex-nowrap gap-2 overflow-x-auto px-6 py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {sections.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => scrollToSection(s.id)}
+              className={cn(
+                "min-h-[36px] whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
+                active === s.id
+                  ? "border-accent text-accent"
+                  : "border-border text-muted-foreground hover:border-accent hover:text-accent",
+              )}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+        {/* Visual fade-out on the right edge to hint at horizontal scroll */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-card to-transparent" />
       </div>
     </div>
   );

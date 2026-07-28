@@ -37,3 +37,6 @@ dist-ssr
 
 # Scratch scripts
 scratch/
+
+# Local data backups (personal data — never commit)
+backups/

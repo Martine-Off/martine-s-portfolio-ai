@@ -39,14 +39,11 @@ export function PageViewTracker() {
     // 3. Pas de tracking de l'admin
     if (pathname.startsWith("/admin") || pathname.startsWith("/auth")) return;
 
-    supabase
-      .from("page_views")
-      .insert({
-        path: pathname,
-        referrer: document.referrer || null,
-        user_agent: navigator.userAgent,
-      })
-      .then(({ error }) => console.log("[track]", pathname, error?.message ?? "ok"));
+    void supabase.from("page_views").insert({
+      path: pathname,
+      referrer: document.referrer || null,
+      user_agent: navigator.userAgent,
+    });
   }, [pathname]);
 
   return null;

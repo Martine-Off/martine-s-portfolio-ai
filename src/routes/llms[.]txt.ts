@@ -45,4 +45,4 @@ export const Route = createFileRoute("/llms.txt")({
       },
     },
   },
-});
+} as never);

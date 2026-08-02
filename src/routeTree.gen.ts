@@ -21,6 +21,7 @@ import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminImportRouteImport } from './routes/_authenticated/admin.import'
 import { Route as AuthenticatedAdminReglagesRouteImport } from './routes/_authenticated/admin.reglages'
+import { Route as AuthenticatedAdminStatsRouteImport } from './routes/_authenticated/admin.stats'
 import { Route as AuthenticatedAdminProjetsIdRouteImport } from './routes/_authenticated/admin.projets.$id'
 import { Route as AuthenticatedAdminProjetsNouveauRouteImport } from './routes/_authenticated/admin.projets.nouveau'
 
@@ -85,6 +86,11 @@ const AuthenticatedAdminReglagesRoute =
     path: '/reglages',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminStatsRoute = AuthenticatedAdminStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminProjetsIdRoute =
   AuthenticatedAdminProjetsIdRouteImport.update({
     id: '/projets/$id',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/projets/$slug': typeof ProjetsSlugRoute
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/reglages': typeof AuthenticatedAdminReglagesRoute
+  '/admin/stats': typeof AuthenticatedAdminStatsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/projets/$id': typeof AuthenticatedAdminProjetsIdRoute
   '/admin/projets/nouveau': typeof AuthenticatedAdminProjetsNouveauRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/projets/$slug': typeof ProjetsSlugRoute
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/reglages': typeof AuthenticatedAdminReglagesRoute
+  '/admin/stats': typeof AuthenticatedAdminStatsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/projets/$id': typeof AuthenticatedAdminProjetsIdRoute
   '/admin/projets/nouveau': typeof AuthenticatedAdminProjetsNouveauRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/projets/$slug': typeof ProjetsSlugRoute
   '/_authenticated/admin/import': typeof AuthenticatedAdminImportRoute
   '/_authenticated/admin/reglages': typeof AuthenticatedAdminReglagesRoute
+  '/_authenticated/admin/stats': typeof AuthenticatedAdminStatsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/projets/$id': typeof AuthenticatedAdminProjetsIdRoute
   '/_authenticated/admin/projets/nouveau': typeof AuthenticatedAdminProjetsNouveauRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/projets/$slug'
     | '/admin/import'
     | '/admin/reglages'
+    | '/admin/stats'
     | '/admin/'
     | '/admin/projets/$id'
     | '/admin/projets/nouveau'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/projets/$slug'
     | '/admin/import'
     | '/admin/reglages'
+    | '/admin/stats'
     | '/admin'
     | '/admin/projets/$id'
     | '/admin/projets/nouveau'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/projets/$slug'
     | '/_authenticated/admin/import'
     | '/_authenticated/admin/reglages'
+    | '/_authenticated/admin/stats'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/projets/$id'
     | '/_authenticated/admin/projets/nouveau'
@@ -288,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminReglagesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/stats': {
+      id: '/_authenticated/admin/stats'
+      path: '/stats'
+      fullPath: '/admin/stats'
+      preLoaderRoute: typeof AuthenticatedAdminStatsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/projets/$id': {
       id: '/_authenticated/admin/projets/$id'
       path: '/projets/$id'
@@ -308,6 +327,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminImportRoute: typeof AuthenticatedAdminImportRoute
   AuthenticatedAdminReglagesRoute: typeof AuthenticatedAdminReglagesRoute
+  AuthenticatedAdminStatsRoute: typeof AuthenticatedAdminStatsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminProjetsIdRoute: typeof AuthenticatedAdminProjetsIdRoute
   AuthenticatedAdminProjetsNouveauRoute: typeof AuthenticatedAdminProjetsNouveauRoute
@@ -316,6 +336,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminImportRoute: AuthenticatedAdminImportRoute,
   AuthenticatedAdminReglagesRoute: AuthenticatedAdminReglagesRoute,
+  AuthenticatedAdminStatsRoute: AuthenticatedAdminStatsRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdminProjetsIdRoute: AuthenticatedAdminProjetsIdRoute,
   AuthenticatedAdminProjetsNouveauRoute: AuthenticatedAdminProjetsNouveauRoute,
@@ -357,13 +378,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

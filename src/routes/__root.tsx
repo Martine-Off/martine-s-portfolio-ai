@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { PageState } from "@/components/PageState";
+import { PageViewTracker } from "@/components/PageViewTracker";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -122,6 +123,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <PageViewTracker />
       <Outlet />
       <Toaster richColors position="top-right" />
     </QueryClientProvider>

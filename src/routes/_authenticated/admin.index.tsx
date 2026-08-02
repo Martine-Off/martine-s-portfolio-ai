@@ -127,6 +127,12 @@ function AdminPage() {
             Réglages du site
           </Link>
           <Link
+            to="/admin/stats"
+            className="min-h-11 inline-flex items-center rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-muted"
+          >
+            Statistiques
+          </Link>
+          <Link
             to="/admin/import"
             className="min-h-11 inline-flex items-center rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-muted"
           >

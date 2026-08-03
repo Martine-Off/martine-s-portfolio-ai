@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { trackPageView } from "@/lib/track.functions";
+
 
 const ADMIN_FLAG = "portfolio_admin";
 

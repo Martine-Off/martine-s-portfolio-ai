@@ -13,6 +13,8 @@ const ADMIN_FLAG = "portfolio_admin";
  */
 export function PageViewTracker() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const track = useServerFn(trackPageView);
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -41,12 +43,17 @@ export function PageViewTracker() {
     // 3. Pas de tracking de l'admin
     if (pathname.startsWith("/admin") || pathname.startsWith("/auth")) return;
 
-    void supabase.from("page_views").insert({
-      path: pathname,
-      referrer: document.referrer || null,
-      user_agent: navigator.userAgent,
+    void track({
+      data: {
+        path: pathname,
+        referrer: document.referrer || null,
+        userAgent: navigator.userAgent.slice(0, 512),
+      },
+    }).catch(() => {
+      /* tracking best-effort */
     });
-  }, [pathname]);
+  }, [pathname, track]);
+
 
   return null;
 }

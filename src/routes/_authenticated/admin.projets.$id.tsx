@@ -222,18 +222,16 @@ function EditProject() {
           <input value={form.angle ?? ""} onChange={(e) => setForm({ ...form, angle: e.target.value })} className={inputCls} placeholder="ex. Audit / poc, Cadrage / gouvernance" />
         </Field>
         <Field label="Statut">
-          <input
-            list="status-suggestions"
-            value={form.status_label}
+          <select
+            value={STATUS_OPTIONS.includes(form.status_label) ? form.status_label : ""}
             onChange={(e) => setForm({ ...form, status_label: e.target.value })}
             className={inputCls}
-            placeholder="Libre — ex. POC validé, MVP en déploiement, Faite"
-          />
-          <datalist id="status-suggestions">
-            {statusSuggestions.map((s: string) => (
-              <option key={s} value={s} />
+          >
+            <option value="">— Sélectionner —</option>
+            {STATUS_OPTIONS.map((s) => (
+              <option key={s} value={s}>{s}</option>
             ))}
-          </datalist>
+          </select>
         </Field>
         {!isLight && (
           <Field label="Couleur d'accent">

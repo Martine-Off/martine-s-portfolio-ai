@@ -88,11 +88,12 @@ function AdminPage() {
     const swapIndex = direction === "up" ? index - 1 : index + 1;
     if (swapIndex < 0 || swapIndex >= visible.length) return;
     const other = visible[swapIndex];
-    const newOrder = direction === "up" ? other.display_order - 1 : other.display_order + 1;
-    await reorder({ data: { id: project.id, display_order: newOrder } });
+    // Swap the two rows' display_order atomically, then refetch from the DB.
+    await reorder({ data: { id: project.id, swapWithId: other.id } });
+    await listQ.refetch();
     toast.success("Ordre mis à jour");
-    listQ.refetch();
   }
+
 
   if (adminQ.isLoading) return <div className="p-8">Chargement…</div>;
   if (!adminQ.data?.isAdmin)

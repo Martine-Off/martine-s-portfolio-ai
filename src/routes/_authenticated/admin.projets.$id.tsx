@@ -1,10 +1,10 @@
 import { createFileRoute, useNavigate, useParams, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { getProjectByIdAdmin, saveProject, listStatusLabels } from "@/lib/projects.functions";
+import { getProjectByIdAdmin, saveProject } from "@/lib/projects.functions";
 import { toast } from "sonner";
 import { ImageUpload } from "@/components/ImageUpload";
-import { resolveAccentColor } from "@/lib/utils/status";
+import { resolveAccentColor, STATUS_OPTIONS } from "@/lib/utils/status";
 import { CoverPositionPicker } from "@/components/CoverPositionPicker";
 
 const BLOCK_LABELS: Record<string, string> = {
@@ -41,8 +41,6 @@ function EditProject() {
   const isNew = id === "nouveau";
   const fetchProj = useServerFn(getProjectByIdAdmin);
   const save = useServerFn(saveProject);
-  const fetchStatuses = useServerFn(listStatusLabels);
-  const [statusSuggestions, setStatusSuggestions] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(!isNew);
   const [busy, setBusy] = useState(false);
@@ -55,7 +53,7 @@ function EditProject() {
     tagline: "",
     project_type: "poc_perso",
     mission_type: "",
-    status_label: "",
+    status_label: STATUS_OPTIONS[0],
     accent_color: "",
     cover_image_url: "",
     cover_image_alt_text: "",
@@ -76,10 +74,6 @@ function EditProject() {
   const [tagsStr, setTagsStr] = useState("");
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    fetchStatuses().then((list) => setStatusSuggestions(list ?? [])).catch(() => {});
-  }, [fetchStatuses]);
 
   useEffect(() => {
     if (isNew) return;
@@ -221,18 +215,19 @@ function EditProject() {
         <Field label="Angle">
           <input value={form.angle ?? ""} onChange={(e) => setForm({ ...form, angle: e.target.value })} className={inputCls} placeholder="ex. Audit / poc, Cadrage / gouvernance" />
         </Field>
-        <Field label="Statut">
-          <select
-            value={STATUS_OPTIONS.includes(form.status_label) ? form.status_label : ""}
-            onChange={(e) => setForm({ ...form, status_label: e.target.value })}
-            className={inputCls}
-          >
-            <option value="">— Sélectionner —</option>
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-        </Field>
+        {form.project_type !== "profil" && (
+          <Field label="Statut">
+            <select
+              value={form.status_label}
+              onChange={(e) => setForm({ ...form, status_label: e.target.value })}
+              className={inputCls}
+            >
+              {STATUS_OPTIONS.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </Field>
+        )}
         {!isLight && (
           <Field label="Couleur d'accent">
             <div className="flex flex-wrap items-center gap-2">

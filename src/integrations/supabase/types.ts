@@ -280,6 +280,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      swap_project_order: {
+        Args: { _a: string; _b: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "user"

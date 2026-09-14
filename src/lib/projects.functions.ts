@@ -330,17 +330,19 @@ export const togglePublished = createServerFn({ method: "POST" })
 export const reorderProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
-    z.object({ id: z.string().uuid(), display_order: z.number() }).parse(data),
+    z.object({ id: z.string().uuid(), swapWithId: z.string().uuid() }).parse(data),
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
-    const { error } = await context.supabase
-      .from("projects")
-      .update({ display_order: data.display_order })
-      .eq("id", data.id);
+    // Atomic swap of display_order between the two rows (single DB statement).
+    const { error } = await context.supabase.rpc("swap_project_order", {
+      _a: data.id,
+      _b: data.swapWithId,
+    });
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
 
 export const createSignedUpload = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

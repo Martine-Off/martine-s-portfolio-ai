@@ -1,6 +1,7 @@
 export const STATUS_OPTIONS: string[] = [
-  "Réalisée",
   "À venir",
+  "En cours",
+  "Réalisé",
   "POC",
   "MVP",
   "En production",
@@ -15,7 +16,7 @@ const ORANGE = "#ECC28F";
 export function getAutoAccentColor(status?: string | null): string {
   const s = (status ?? "").trim().toLowerCase();
   if (!s) return BLUE;
-  const green = ["réalisée", "realisee", "déployé", "deploye", "production", "faite", "produit", "terminé", "termine"];
+  const green = ["réalisé", "realise", "déployé", "deploye", "production", "faite", "produit", "terminé", "termine"];
   const blue = ["mvp"];
   const orange = ["poc", "à venir", "a venir", "en cours", "cadrage", "audit"];
   for (const kw of green) if (s.includes(kw)) return GREEN;

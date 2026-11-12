@@ -1,0 +1,2 @@
+- [x] Statut : liste fermée + migration des 15 fiches
+- [x] Décrire la charte couleurs dans le chat

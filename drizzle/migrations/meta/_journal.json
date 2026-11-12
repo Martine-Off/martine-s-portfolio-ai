@@ -8,6 +8,13 @@
       "when": 1794488325954,
       "tag": "0000_site_settings_scoped_read",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794492326727,
+      "tag": "0001_project_images_no_public_listing",
+      "breakpoints": true
     }
   ]
 }
